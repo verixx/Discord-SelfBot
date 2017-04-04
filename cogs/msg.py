@@ -70,7 +70,7 @@ class OnMessage:
             if message.guild.id in self.logging.get('guild', []) or message.channel.id in self.logging.get('channel', []):
                 mention = name = ping = False
                 msg = re.sub('[,.!?]', '', message.content.lower())
-                if any(map(lambda v: v in msg.split(), self.logging.get('key-blocked', []))):
+                if any(map(lambda v: v in msg.split(), self.logging.get('block-key', []))):
                     return
                 if (message.guild.get_member(self.config.get('me', [])).mentioned_in(message)):
                     em = discord.Embed(title='\N{BELL} MENTION', colour=0x9b59b6)
@@ -79,7 +79,7 @@ class OnMessage:
                     if hasattr(self.bot, 'mention_count'):
                         self.bot.mention_count += 1
                     for role in message.role_mentions:
-                        if utils.find(message.author.roles, id=role.id):
+                        if utils.get(message.author.roles, id=role.id):
                             role = True
                             em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=0x9b59b6)
                             log.info("Role Mention from #%s, %s" % (message.channel, message.guild))
