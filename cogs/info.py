@@ -124,7 +124,7 @@ class Userinfo:
             await send(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found",  ttl=20)
 
     # Serverinfo on Server
-    @commands.group(aliases=["server"])
+    @commands.command(aliases=["server"])
     @commands.guild_only()
     async def guild(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -151,7 +151,8 @@ class Userinfo:
             await send(ctx, embed=em, ttl=20)
 
     # Server roles on Server
-    @guild.command()
+    @commands.command()
+    @commands.guild_only()
     async def roles(self, ctx):
         serv = ctx.message.guild
         em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
@@ -159,8 +160,33 @@ class Userinfo:
                      value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
         await send(ctx, embed=em, ttl=20)
 
+    # Channel on Server
+    @commands.command()
+    @commands.guild_only()
+    async def channel(self, ctx):
+        if 1 == len(ctx.message.channel_mentions):
+            channel = ctx.message.channel_mentions[0]
+        elif getwithoutInvoke(ctx).strip() != '':
+            channel = utils.find(lambda c: getwithoutInvoke(ctx).strip().lower() in c.name.lower(), ctx.message.guild.text_channels)
+        else:
+            channel = ctx.message.channel
+        if channel is not None:
+            em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
+            em.add_field(name='Name',
+                         value=channel.name, inline=True)
+            em.add_field(name='ID',
+                         value=channel.id, inline=True)
+            em.add_field(name='Created On',
+                         value='{}\n{}'.format(channel.created_at.__format__('%d/%m/%Y'), getAgo(channel.created_at)), inline=True)
+            em.add_field(name='Topic',
+                         value=channel.topic if channel.topic != "" else "None",  inline=False)
+            await send(ctx, embed=em, ttl=20)
+        else:
+            await send(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found",  ttl=20)
+
     # Emotes from Server
-    @guild.command()
+    @commands.command()
+    @commands.guild_only()
     async def emotes(self, ctx):
         unique_emojis = set(ctx.message.guild.emojis)
         em = discord.Embed(timestamp=ctx.message.created_at, title='Emotes [%s]' % len(unique_emojis), colour=ctx.message.author.colour)
