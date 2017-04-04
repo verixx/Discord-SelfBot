@@ -6,7 +6,6 @@ from .utils import config
 from .utils.allmsgs import quickcmds, custom
 from .utils.checks import permEmbed, me
 from datetime import datetime
-from discord import utils
 
 log = logging.getLogger('LOG')
 
@@ -73,17 +72,14 @@ class OnMessage:
                 if any(map(lambda v: v in msg.split(), self.logging.get('block-key', []))):
                     return
                 if (message.guild.get_member(self.config.get('me', [])).mentioned_in(message)):
-                    em = discord.Embed(title='\N{BELL} MENTION', colour=0x9b59b6)
-                    ping = True
-                    role = False
                     if hasattr(self.bot, 'mention_count'):
                         self.bot.mention_count += 1
-                    for role in message.role_mentions:
-                        if utils.get(message.author.roles, id=role.id):
-                            role = True
-                            em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=0x9b59b6)
-                            log.info("Role Mention from #%s, %s" % (message.channel, message.guild))
-                    if not role:
+                    ping = True
+                    if message.role_mentions != []:
+                        em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=0x9b59b6)
+                        log.info("Role Mention from #%s, %s" % (message.channel, message.guild))
+                    else:
+                        em = discord.Embed(title='\N{BELL} MENTION', colour=0x9b59b6)
                         log.info("Mention from #%s, %s" % (message.channel, message.guild))
                 else:
                     for word in self.logging.get('key', []):
