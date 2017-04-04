@@ -1,7 +1,8 @@
 {
-    "key-blocked": [],
-    "block-server": [],
+    "block-key": [],
     "block-user": [],
     "block-channel": [],
-    "key": []
+    "key": [],
+    "guild": [],
+    "channel": []
 }
