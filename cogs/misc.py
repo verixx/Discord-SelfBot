@@ -5,30 +5,10 @@ import logging
 import random
 
 from discord.ext import commands
-from enum import Enum
 from random import choice
 from .utils.checks import send
 
 log = logging.getLogger('LOG')
-
-
-class RPS(Enum):
-    rock = "\N{MOYAI}"
-    paper = "\N{PAGE FACING UP}"
-    scissors = "\N{BLACK SCISSORS}"
-
-
-class RPSParser:
-    def __init__(self, argument):
-        argument = argument.lower()
-        if argument == "rock":
-            self.choice = RPS.rock
-        elif argument == "paper":
-            self.choice = RPS.paper
-        elif argument == "scissors":
-            self.choice = RPS.scissors
-        else:
-            raise
 
 
 class Misc:
@@ -67,31 +47,6 @@ class Misc:
             await send(ctx, content="`" + choice(self.ball) + "`", delete=False)
         else:
             await send(ctx, content="That doesn't look like a question.", ttl=3)
-
-    # RPS
-    @commands.command()
-    async def rps(self, ctx, your_choice: RPSParser):
-        player_choice = your_choice.choice
-        bot_choice = choice((RPS.rock, RPS.paper, RPS.scissors))
-        cond = {
-                (RPS.rock,     RPS.paper): False,
-                (RPS.rock,     RPS.scissors): True,
-                (RPS.paper,    RPS.rock): True,
-                (RPS.paper,    RPS.scissors): False,
-                (RPS.scissors, RPS.rock): False,
-                (RPS.scissors, RPS.paper): True
-               }
-        if bot_choice == player_choice:
-            outcome = None
-        else:
-            outcome = cond[(player_choice, bot_choice)]
-
-        if outcome is True:
-            await send(ctx, content="{} You win!".format(bot_choice.value), delete=False)
-        elif outcome is False:
-            await send(ctx, content="{} You lose!".format(bot_choice.value), delete=False)
-        else:
-            await send(ctx, content="{} We're square!".format(bot_choice.value), delete=False)
 
     # Urbandictionary
     @commands.command()
