@@ -126,13 +126,21 @@ class Tools:
             msg = search.split(" | ")
             search = msg[0]
             content = msg[1]
-        async for message in ctx.message.channel.history(limit=500):
-            if message.id != ctx.message.id and search in message.content:
-                em = discord.Embed(description=message.clean_content, timestamp=message.created_at, colour=0x33CC66)
-                em.set_author(name=message.author.display_name, icon_url=message.author.avatar_url)
-                await send(ctx, content=content, embed=em)
-                return
-        await send(ctx, 'Message not found!', ttl=3)
+        mess = None
+        if search.isdigit():
+            async for message in ctx.message.channel.history(limit=500):
+                if message.id == int(search):
+                    mess = message
+        else:
+            async for message in ctx.message.channel.history(limit=500):
+                if message.id != ctx.message.id and search in message.content:
+                    mess = message
+        if mess is not None:
+            em = discord.Embed(description=mess.clean_content, timestamp=mess.created_at, colour=0x33CC66)
+            em.set_author(name=mess.author.display_name, icon_url=mess.author.avatar_url)
+            await send(ctx, content=content, embed=em)
+        else:
+            await send(ctx, 'Message not found!', ttl=3)
 
     # Deletes messages from Channel History - only number for own, number and "all" to delete every message and not only the own
     @commands.command()
