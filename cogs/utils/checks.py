@@ -24,16 +24,19 @@ async def send(ctx, content=None, embed=None, delete=True, ttl=None, file=None):
 # edit thingy
 async def edit(ctx, content=None, embed=None, ttl=None):
     perms = ctx.channel.permissions_for(ctx.me).embed_links if embed is not None else True
-    if ttl is not None and perms is True:
-        await ctx.message.edit(content=content, embed=embed)
-        await asyncio.sleep(ttl)
-        await ctx.message.delete()
-    elif ttl is None and perms is True:
-        await ctx.message.edit(content=content, embed=embed)
-    elif embed is None:
-        await ctx.message.edit(content=content, embed=embed)
-    elif embed is not None and perms is False:
-        await ctx.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
+    try:
+        if ttl is not None and perms is True:
+            await ctx.message.edit(content=content, embed=embed)
+            await asyncio.sleep(ttl)
+            await ctx.message.delete()
+        elif ttl is None and perms is True:
+            await ctx.message.edit(content=content, embed=embed)
+        elif embed is None:
+            await ctx.message.edit(content=content, embed=embed)
+        elif embed is not None and perms is False:
+            await ctx.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
+    except:
+        await send(ctx, content=content, embed=embed, delete=False, ttl=ttl, file=None)
 
 
 # Check if me
