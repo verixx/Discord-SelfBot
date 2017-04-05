@@ -20,7 +20,7 @@ class Userinfo:
         self.emoji_reg = re.compile(r'<:.+?:([0-9]{15,21})>')
 
     # About this Selfbot
-    @commands.command()
+    @commands.command(aliases=["About"])
     async def about(self, ctx):
         embed = discord.Embed()
         embed.set_author(name="Igneel's SelfBot", url="https://github.com/IgneelDxD/Discord-SelfBot")
@@ -39,7 +39,7 @@ class Userinfo:
         await edit(ctx, embed=embed)
 
     # User info on Server
-    @commands.command()
+    @commands.command(aliases=["User"])
     async def user(self, ctx):
         mem = getUser(ctx, getwithoutInvoke(ctx))
         if mem:
@@ -83,7 +83,7 @@ class Userinfo:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=20)
 
     # User Avi on Server
-    @commands.command()
+    @commands.command(aliases=["Avi"])
     async def avi(self, ctx):
         mem = getUser(ctx, getwithoutInvoke(ctx))
         if mem is not None:
@@ -96,7 +96,7 @@ class Userinfo:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=5)
 
     # Roleinfo on Server
-    @commands.command()
+    @commands.command(aliases=["Role"])
     @commands.guild_only()
     async def role(self, ctx):
         role = None
@@ -124,7 +124,7 @@ class Userinfo:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found",  ttl=20)
 
     # Serverinfo on Server
-    @commands.command(aliases=["server"])
+    @commands.command(aliases=["server", "Guild", "Server"])
     @commands.guild_only()
     async def guild(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -151,7 +151,7 @@ class Userinfo:
             await edit(ctx, embed=em, ttl=20)
 
     # Server roles on Server
-    @commands.command()
+    @commands.command(aliases=["Roles"])
     @commands.guild_only()
     async def roles(self, ctx):
         serv = ctx.message.guild
@@ -161,7 +161,7 @@ class Userinfo:
         await edit(ctx, embed=em, ttl=20)
 
     # Channel on Server
-    @commands.command()
+    @commands.command(aliases=["Channel"])
     @commands.guild_only()
     async def channel(self, ctx):
         if 1 == len(ctx.message.channel_mentions):
@@ -185,7 +185,7 @@ class Userinfo:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found",  ttl=20)
 
     # Emotes from Server
-    @commands.command()
+    @commands.command(aliases=["Emotes"])
     @commands.guild_only()
     async def emotes(self, ctx):
         unique_emojis = set(ctx.message.guild.emojis)
@@ -211,7 +211,7 @@ class Userinfo:
         await edit(ctx, embed=em, ttl=20)
 
     # Jumbo Emote
-    @commands.command()
+    @commands.command(aliases=["Jumbo"])
     async def jumbo(self, ctx):
         e = self.emoji_reg.findall(ctx.message.content)
         if e:
@@ -227,7 +227,7 @@ class Userinfo:
             await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only Emotes...', ttl=3)
 
     # Info of Custom or Unicode Emotes
-    @commands.command()
+    @commands.command(aliases=["Emote"])
     async def emote(self, ctx, emote: str):
         e = self.emoji_reg.findall(ctx.message.content)
         if e:

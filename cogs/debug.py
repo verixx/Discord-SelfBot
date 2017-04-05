@@ -22,7 +22,7 @@ class Debug:
         self._last_result = None
 
     # DEBUG
-    @commands.command()
+    @commands.command(aliases=["Debug", "d", "D"])
     async def debug(self, ctx, *, code: str):
         code = code.strip('` ')
         python = '```ocaml\n>>> Input: {}\n{}\n```'
@@ -73,7 +73,7 @@ class Debug:
         return '```py\n{0.text}{1:>{0.offset}}\n{2}: {0}```'.format(e, '^', type(e).__name__)
 
     # Eval Command
-    @commands.command(name='eval')
+    @commands.command(name='eval', aliases=["Eval", "e", "E"])
     async def _eval(self, ctx, *, body: str):
         env = {
             'bot': self.bot,

@@ -17,7 +17,7 @@ class Tools:
         self.config = config.Config('config.json')
 
     # Command usage stats
-    @commands.command()
+    @commands.command(aliases=["Cmdstats"])
     async def cmdstats(self, ctx):
         await ctx.message.delete()
         p = commands.Paginator()
@@ -31,7 +31,7 @@ class Tools:
         for page in p.pages:
             await ctx.send(page, delete_after=20)
 
-    @commands.command()
+    @commands.command(aliases=["Socketstats"])
     async def socketstats(self, ctx):
         delta = datetime.datetime.utcnow() - self.bot.uptime
         minutes = delta.total_seconds() / 60
@@ -42,7 +42,7 @@ class Tools:
         await edit(ctx, content=fmt % (total, cpm, self.bot.socket_stats))
 
     # Ping Time
-    @commands.command()
+    @commands.command(aliases=["Ping"])
     async def ping(self, ctx):
         before = datetime.datetime.utcnow()
         await (await self.bot.ws.ping())
@@ -53,7 +53,7 @@ class Tools:
         await edit(ctx, embed=pong, ttl=5)
 
     # Time Since Bot is running
-    @commands.command()
+    @commands.command(aliases=["Uptime"])
     async def uptime(self, ctx):
         embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=discord.Color.purple())
         embed.add_field(name='﻿ ', value=getTimeDiff(self.bot.uptime), inline=False)
@@ -61,7 +61,7 @@ class Tools:
         await edit(ctx, embed=embed, ttl=20)
 
     # Various stat about the bot since startup
-    @commands.command()
+    @commands.command(aliases=["Stats"])
     async def stats(self, ctx):
         unique_online = len(dict((m.id, m) for m in self.bot.get_all_members() if m.status != discord.Status.offline))
         voice = sum(len(g.voice_channels) for g in self.bot.guilds)
@@ -92,7 +92,7 @@ class Tools:
         await edit(ctx, embed=embed, ttl=20)
 
     # Host System Infos
-    @commands.command()
+    @commands.command(aliases=["Sysinfo"])
     async def sysinfo(self, ctx):
         process = psutil.Process(os.getpid())
         memory_usage = process.memory_full_info().uss / 1024**2
@@ -112,13 +112,13 @@ class Tools:
         await edit(ctx, embed=embed, ttl=20)
 
     # Change Gamestatus - blank is no game
-    @commands.command()
+    @commands.command(aliases=["Game"])
     async def game(self, ctx):
         await self.config.put('gamestatus', getwithoutInvoke(ctx))
         await edit(ctx, 'Now playing: ``%s``' % self.config.get('gamestatus', []),  ttl=5)
 
     # Find message with specific Text in Channel History...    Search Term(s) | Text
-    @commands.command()
+    @commands.command(aliases=["Quote"])
     async def quote(self, ctx):
         search = getwithoutInvoke(ctx)
         content = '\U0000200d'
@@ -143,7 +143,7 @@ class Tools:
             await edit(ctx, 'Message not found!', ttl=3)
 
     # Deletes messages from Channel History - only number for own, number and "all" to delete every message and not only the own
-    @commands.command()
+    @commands.command(aliases=["Clean"])
     async def clean(self, ctx, limit: int=25):
         msg_amt = 0
         async for message in ctx.message.channel.history(limit=limit):

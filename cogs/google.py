@@ -178,7 +178,7 @@ class Google:
         return card, entries
 
     # Google Command
-    @commands.command(aliases=['google'])
+    @commands.command(aliases=['google', 'G', 'Google'])
     async def g(self, ctx, *, query):
         try:
             card, entries = await self.get_google_entries(query)
@@ -201,7 +201,7 @@ class Google:
             await edit(ctx, content=msg)
 
     # Google Image Search (100 per day)
-    @commands.command()
+    @commands.command(aliases=["I", "image", "Image"])
     async def i(self, ctx, *, query):
         async with aiohttp.ClientSession() as cs:
             async with cs.get("https://www.googleapis.com/customsearch/v1?q=" + query.replace(' ', '+') + "&start=" + '1' + "&key=" + self.config.get('google_api_key', []) + "&cx=" + self.config.get('custom_search_engine', []) + "&searchType=image") as resp:
@@ -214,7 +214,7 @@ class Google:
                 else:
                     await edit(ctx, content=result['items'][0]['link'])
 
-    @commands.command()
+    @commands.command(aliases=["t", "T", "Translate"])
     async def translate(self, ctx, lang, *, text):
         gs = goslate.Goslate()
         if len(lang) != 2:

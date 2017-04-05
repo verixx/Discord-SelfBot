@@ -14,7 +14,7 @@ class Customcmds:
         self.bot = bot
 
     # List all custom commands without links
-    @commands.group()
+    @commands.group(aliases=["Cmds"])
     async def cmds(self, ctx):
         if ctx.invoked_subcommand is None:
             p = commands.Paginator(prefix='```css')
@@ -32,7 +32,7 @@ class Customcmds:
             await ctx.message.delete()
 
     # List all custom commands with Links
-    @cmds.command()
+    @cmds.command(aliases=["Long"])
     async def long(self, ctx):
         p = commands.Paginator(prefix='```css')
         with open('config/commands.json', 'r') as com:
@@ -46,7 +46,7 @@ class Customcmds:
         await ctx.message.delete()
 
     # Add a custom command
-    @commands.command()
+    @commands.command(aliases=["Add"])
     async def add(self, ctx, *, msg: str):
         words = msg.strip()
 
@@ -116,7 +116,7 @@ class Customcmds:
         await msg.delete()
 
     # Remove a custom command
-    @commands.command()
+    @commands.command(aliases=["Remove"])
     async def remove(self, ctx, *, msg: str):
         words = msg.strip()
 

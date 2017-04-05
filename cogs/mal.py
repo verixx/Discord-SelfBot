@@ -96,7 +96,7 @@ class Mal:
         return e
 
     # MyAnimelist Anime
-    @commands.command()
+    @commands.command(aliases=["Anime"])
     async def anime(self, ctx, *, query):
         await edit(ctx, content='Searching...')
         try:
@@ -118,7 +118,7 @@ class Mal:
                     await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
 
     # MyAnimelist Anime
-    @commands.command()
+    @commands.command(aliases=["Manga"])
     async def manga(self, ctx, *, query):
         await edit(ctx, content='Searching...')
         try:

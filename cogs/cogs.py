@@ -17,7 +17,7 @@ class Cogs:
         self.config = config.Config('config.json')
 
     # Loads a module
-    @commands.command()
+    @commands.command(aliases=["Load"])
     async def load(self, ctx, *, module: str):
         try:
             self.bot.load_extension(module)
@@ -29,7 +29,7 @@ class Cogs:
             log.info('Loaded %s' % module)
 
     # Unloads a module
-    @commands.command()
+    @commands.command(aliases=["Unload"])
     async def unload(self, ctx, *, module: str):
         try:
             self.bot.unload_extension(module)
@@ -41,7 +41,7 @@ class Cogs:
             log.info('Unloaded %s' % module)
 
     # Reloads a module.
-    @commands.command()
+    @commands.command(aliases=["Reload"])
     async def reload(self, ctx, module: str = None):
         if not module:
             utils = []
@@ -72,7 +72,7 @@ class Cogs:
                 log.info('Reloaded %s' % module)
 
     # Shutdown Bot
-    @commands.command()
+    @commands.command(aliases=["Quit"])
     async def quit(self, ctx):
         await edit(ctx, content='Bot has been killed.', ttl=2)
         log.warning('Bot has been killed.')
@@ -81,7 +81,7 @@ class Cogs:
         exit()
 
     # Restart selfbot
-    @commands.command()
+    @commands.command(aliases=["Restart"])
     async def restart(self, ctx):
         await self.config.put('restart', 'true')
         await self.config.put('restart_channel', ctx.message.channel.id)

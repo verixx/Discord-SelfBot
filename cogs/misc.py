@@ -20,7 +20,7 @@ class Misc:
                      "Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
 
     # Sends a googleitfor.me link with the specified tags
-    @commands.command()
+    @commands.command(aliases=["L2g"])
     async def l2g(self, ctx, *, msg: str):
         lmgtfy = 'http://googleitfor.me/?q='
         words = msg.lower().strip().split(' ')
@@ -29,7 +29,7 @@ class Misc:
         await edit(ctx, content=lmgtfy[:-1])
 
     # Picks a random answer from a list of options
-    @commands.command()
+    @commands.command(aliases=["Choose"])
     async def choose(self, ctx, *, choices: str):
         choiceslist = choices.split("|")
         choice = random.choice(choiceslist)
@@ -48,7 +48,7 @@ class Misc:
             await edit(ctx, content="That doesn't look like a question.", ttl=3)
 
     # Urbandictionary
-    @commands.command()
+    @commands.command(aliases=["Urban"])
     async def urban(self, ctx, *, search_terms: str, definition_number: int=1):
         search_terms = search_terms.split(" ")
         try:
@@ -82,7 +82,7 @@ class Misc:
         except:
             await edit(ctx, content="Error.", ttl=3)
 
-    @commands.command()
+    @commands.command(aliases=["Gif"])
     async def gif(self, ctx, *text):
         if text:
             if len(text[0]) > 1 and len(text[0]) < 20:
