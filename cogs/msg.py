@@ -67,31 +67,30 @@ class OnMessage:
             if message.channel.id in self.logging.get('block-channel', []):
                 return
             if message.guild.id in self.logging.get('guild', []) or message.channel.id in self.logging.get('channel', []):
-                mention = name = ping = False
                 msg = re.sub('[,.!?]', '', message.content.lower())
                 if any(map(lambda v: v in msg.split(), self.logging.get('block-key', []))):
                     return
+                notify = False
                 if (message.guild.get_member(self.config.get('me', [])).mentioned_in(message)):
-                    if hasattr(self.bot, 'mention_count'):
-                        self.bot.mention_count += 1
-                    ping = True
+                    notify = True
                     if message.role_mentions != []:
                         em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=discord.Color.dark_blue())
                         log.info("Role Mention from #%s, %s" % (message.channel, message.guild))
                     else:
                         em = discord.Embed(title='\N{BELL} MENTION', colour=discord.Color.dark_gold())
                         log.info("Mention from #%s, %s" % (message.channel, message.guild))
+                    if hasattr(self.bot, 'mention_count'):
+                        self.bot.mention_count += 1
                 else:
                     for word in self.logging.get('key', []):
                         if word in msg.split():
+                            notify = True
                             em = discord.Embed(title='\N{HEAVY EXCLAMATION MARK SYMBOL} %s MENTION' % word.upper(), colour=discord.Color.dark_red())
-                            mention = name = True
                             log.info("%s Mention in #%s, %s" % (word.title(), message.channel, message.guild))
+                            if hasattr(self.bot, 'mention_count_name'):
+                                self.bot.mention_count_name += 1
                             break
-                if mention or ping:
-                    if name:
-                        if hasattr(self.bot, 'mention_count_name'):
-                            self.bot.mention_count_name += 1
+                if notify:
                     em.set_author(name=message.author, icon_url=message.author.avatar_url)
                     em.add_field(name='In',
                                  value="#%s, ``%s``" % (message.channel, message.guild), inline=False)
@@ -101,6 +100,13 @@ class OnMessage:
                                  value="%s" % message.clean_content, inline=False)
                     em.set_thumbnail(url=message.author.avatar_url)
                     await self.bot.get_channel(self.config.get('log_channel', [])).send(embed=em)
+
+    async def on_message_edit(self, before, after):
+        if me(before):
+            if before.content != after.content:
+                del before
+                await self.on_message(after)
+                await self.bot.process_commands(after)
 
 
 def setup(bot):
