@@ -1,9 +1,6 @@
-import datetime
 import discord
 import inspect
 import io
-import os
-import pytz
 import textwrap
 import traceback
 
@@ -11,6 +8,7 @@ from .utils.checks import getUser, edit
 from .utils import config
 from contextlib import redirect_stdout
 from discord.ext import commands
+from PythonGists import PythonGists
 
 
 class Debug:
@@ -51,13 +49,8 @@ class Debug:
             await edit(ctx, content=python.format(code, '>>> %s' % type(e).__name__ + ': ' + str(e)))
             return
         if len(str(code) + '>>> Output:' + str(result)) > 2000:
-            time = datetime.datetime.now(pytz.timezone('CET'))
-            result_file = 'result_%s_at_%s.txt' % (time.strftime('%x').replace('/', '_'), time.strftime('%X').replace(':', '_'))
-            with open(result_file, 'w') as file:
-                file.write(str(result))
-            with open(result_file, 'rb') as file:
-                await edit(ctx, content=python.format(code, '>>> Output: See attached file!'), file=file)
-            os.remove(result_file)
+            link = PythonGists.Gist(description='SelfBot Python Debug', content=result, name='debug.py')
+            await edit(ctx, content=python.format(code, '>>> Output: See link below..')+'\n<{}>'.format(link))
         else:
             await edit(ctx, content=python.format(code, '>>> Output: %s' % result))
 
@@ -119,10 +112,18 @@ class Debug:
 
             if ret is None:
                 if value:
-                    await ctx.send('```py\n%s\n```' % value)
+                    if len(value) > 1985:
+                        link = PythonGists.Gist(description='SelfBot Python Eval', content=str(value), name='eval.py')
+                        await ctx.send(content='\N{ROBOT FACE} I uploaded that for you!\n<{}>'.format(link))
+                    else:
+                        await ctx.send('```py\n%s\n```' % value)
             else:
                 self._last_result = ret
-                await ctx.send('```py\n%s%s\n```' % (value, ret))
+                if len(value+ret) > 1985:
+                    link = PythonGists.Gist(description='SelfBot Python Eval', content=str(value)+'\n'+str(ret), name='eval.py')
+                    await ctx.send(content='\N{ROBOT FACE} I uploaded that for you!\n<{}>'.format(link))
+                else:
+                    await ctx.send('```py\n%s%s\n```' % (value, ret))
 
 
 def setup(bot):
