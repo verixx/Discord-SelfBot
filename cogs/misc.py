@@ -36,8 +36,10 @@ class Misc:
         if len(choiceslist) < 2:
             await edit(ctx, content="2+ Options, separated with ``|``",  ttl=5)
         else:
-            message = "Options:| {1} |\n<:robot:273922151856209923> | My Answer is ``{0}``"
-            await edit(ctx, content=message.format(choice, choices))
+            em = discord.Embed(colour=discord.Color.purple())
+            em.add_field(name="Options", value=choices, inline=False)
+            em.add_field(name="Choice", value="<:robot:273922151856209923> | My Answer is ``{}``".format(choice))
+            await edit(ctx, embed=em)
 
     # 8ball
     @commands.command(name="8", aliases=["8ball"])
@@ -93,8 +95,7 @@ class Misc:
                         async with cs.get(search) as r:
                             result = json.loads(await r.text())
                             if result["data"] != []:
-                                url = result["data"][0]["images"]["original"]["url"]
-                                await edit(ctx, content=url)
+                                await edit(ctx, embed=discord.Embed(color=discord.Color.purple()).set_image(url=result["data"][0]["images"]["original"]["url"]))
                             else:
                                 await edit(ctx, content="Your search terms gave no results.", ttl=3)
                 except:
