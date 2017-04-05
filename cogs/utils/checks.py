@@ -58,8 +58,10 @@ def getwithoutInvoke(ctx):
     return ctx.message.content[len(ctx.prefix + ctx.command.qualified_name + ' '):]
 
 
-def getTimeDiff(t):
-    delta = datetime.datetime.utcnow() - t
+def getTimeDiff(t, now=None):
+    if now is None:
+        now = datetime.datetime.utcnow()
+    delta = now - t
     hours, remainder = divmod(int(delta.total_seconds()), 3600)
     minutes, seconds = divmod(remainder, 60)
     days, hours = divmod(hours, 24)

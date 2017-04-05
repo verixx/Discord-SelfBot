@@ -102,7 +102,7 @@ class Tools:
         sys = '%s %s' % (platform.linux_distribution(full_distribution_name=1)[0].title(), platform.linux_distribution(full_distribution_name=1)[1])
         embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Host Info', colour=discord.Color.purple())
         embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME',
-                        value=getTimeDiff(datetime.datetime.fromtimestamp(int(process.create_time()))))
+                        value=getTimeDiff(datetime.datetime.fromtimestamp(int(process.create_time())), datetime.datetime.now()))
         embed.add_field(name='\N{DESKTOP COMPUTER} SYSTEM',
                         value='{0}, {1}'.format(platform.system(), sys, platform.release()))
         embed.add_field(name='\N{FLOPPY DISK} MEMORY',
