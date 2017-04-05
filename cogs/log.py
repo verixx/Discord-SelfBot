@@ -89,7 +89,7 @@ class Logging:
     # Show Logging Infosconfig
     @log.command()
     async def show(self, ctx):
-        em = discord.Embed(title='Logging Info', colour=0x9b59b6)
+        em = discord.Embed(title='Logging Info', colour=discord.Color.purple())
 
         keys = ', '.join(self.logging.get('key', {}))
         if keys is not '':

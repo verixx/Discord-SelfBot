@@ -20,7 +20,7 @@ class Google:
         if node is None:
             return None
 
-        e = discord.Embed(colour=0x0057e7)
+        e = discord.Embed(colour=discord.Color.blue())
 
         # check if it's a calculator card:
         calculator = node.find(".//table/tr/td/span[@class='nobr']/h2[@class='r']")
@@ -208,7 +208,7 @@ class Google:
                 if resp.status != 200:
                     await send(ctx, content='Google somehow failed to respond.', ttl=3)
                 result = json.loads(await resp.text())
-                em = discord.Embed(colour=0x0057e7)
+                em = discord.Embed(colour=discord.Color.blue())
                 if permEmbed(ctx.message):
                     await send(ctx, content=None, embed=em.set_image(url=result['items'][0]['link']))
                 else:
@@ -221,7 +221,7 @@ class Google:
             return await send(ctx, "Please enter the short name for languages.\nFor example, `EN` is English.", ttl=3)
         else:
             result = gs.translate(text, lang.lower())
-            em = discord.Embed(colour=0x0057e7, timestamp=ctx.message.created_at)
+            em = discord.Embed(colour=discord.Color.blue(), timestamp=ctx.message.created_at)
             em.set_author(name="Google Translate", url="https://translate.google.com/#{source_lang}/{target_lang}/{text}".format(source_lang=gs.detect(text), target_lang=lang, text=text.replace(" ", "%20")), icon_url="https://upload.wikimedia.org/wikipedia/commons/d/db/Google_Translate_Icon.png")
             em.add_field(name="Source Text", value=text, inline=False)
             em.add_field(name="Result", value=result, inline=False)

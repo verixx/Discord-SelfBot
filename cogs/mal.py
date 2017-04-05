@@ -76,7 +76,7 @@ class Mal:
             end = 'Unknown'
         else:
             end = mal.raw_data.end_date.text
-        e = discord.Embed(colour=0x0057e7, description='**Alternative:** {}'.format(mal.english))
+        e = discord.Embed(colour=discord.Color.blue(), description='**Alternative:** {}'.format(mal.english))
         e.set_author(name=mal.title, icon_url='https://myanimelist.cdn-dena.com/img/sp/icon/apple-touch-icon-256.png')
         e.set_thumbnail(url=mal.image_url)
         e.add_field(name='Synopsis', value=synnew.replace('[Written by MAL Rewrite].', '')+' [[more]](https://myanimelist.net/anime/{}/)'.format(mal.id), inline=False)

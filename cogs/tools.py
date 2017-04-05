@@ -47,7 +47,7 @@ class Tools:
         before = datetime.datetime.utcnow()
         await (await self.bot.ws.ping())
         ping = (datetime.datetime.utcnow() - before) * 1000
-        pong = discord.Embed(title='Pong!', colour=0x9b59b6)
+        pong = discord.Embed(title='Pong!', colour=discord.Color.purple())
         pong.add_field(name="Response Time:", value='{:.2f}ms'.format(ping.total_seconds()))
         pong.set_thumbnail(url='http://i.imgur.com/SKEmkvf.png')
         await send(ctx, embed=pong, ttl=5)
@@ -55,7 +55,7 @@ class Tools:
     # Time Since Bot is running
     @commands.command()
     async def uptime(self, ctx):
-        embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=0x9b59b6)
+        embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=discord.Color.purple())
         embed.add_field(name='﻿ ', value=getTimeDiff(self.bot.uptime), inline=False)
         embed.set_thumbnail(url='http://i.imgur.com/mfxd06f.gif')
         await send(ctx, embed=embed, ttl=20)
@@ -66,7 +66,7 @@ class Tools:
         unique_online = len(dict((m.id, m) for m in self.bot.get_all_members() if m.status != discord.Status.offline))
         voice = sum(len(g.voice_channels) for g in self.bot.guilds)
         text = sum(len(g.text_channels) for g in self.bot.guilds)
-        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Bot Info', colour=0x9b59b6)
+        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Bot Info', colour=discord.Color.purple())
         embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME',
                         value=getTimeDiff(self.bot.uptime), inline=True)
         embed.add_field(name='\N{INBOX TRAY} Messages Received',
@@ -100,7 +100,7 @@ class Tools:
         mepro = process.memory_percent()
         prosys = psutil.cpu_percent()
         sys = '%s %s' % (platform.linux_distribution(full_distribution_name=1)[0].title(), platform.linux_distribution(full_distribution_name=1)[1])
-        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Host Info', colour=0x9b59b6)
+        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Host Info', colour=discord.Color.purple())
         embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME',
                         value=getTimeDiff(datetime.datetime.fromtimestamp(int(process.create_time()))))
         embed.add_field(name='\N{DESKTOP COMPUTER} SYSTEM',

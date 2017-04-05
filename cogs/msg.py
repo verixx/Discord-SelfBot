@@ -37,7 +37,7 @@ class OnMessage:
                 else:
                     if response[0] == 'embed':
                         if permEmbed(message):
-                            await message.channel.send(content='%s' % response[2], embed=discord.Embed(colour=0x9b59b6).set_image(url=response[1]))
+                            await message.channel.send(content='%s' % response[2], embed=discord.Embed(colour=discord.Color.purple()).set_image(url=response[1]))
                         else:
                             await message.channel.send('{0}\n{1}'.format(response[2], response[1]))
                     else:
@@ -76,15 +76,15 @@ class OnMessage:
                         self.bot.mention_count += 1
                     ping = True
                     if message.role_mentions != []:
-                        em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=0x9b59b6)
+                        em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=discord.Color.dark_blue())
                         log.info("Role Mention from #%s, %s" % (message.channel, message.guild))
                     else:
-                        em = discord.Embed(title='\N{BELL} MENTION', colour=0x9b59b6)
+                        em = discord.Embed(title='\N{BELL} MENTION', colour=discord.Color.dark_gold())
                         log.info("Mention from #%s, %s" % (message.channel, message.guild))
                 else:
                     for word in self.logging.get('key', []):
                         if word in msg.split():
-                            em = discord.Embed(title='\N{HEAVY EXCLAMATION MARK SYMBOL} %s MENTION' % word.upper(), colour=0x9b59b6)
+                            em = discord.Embed(title='\N{HEAVY EXCLAMATION MARK SYMBOL} %s MENTION' % word.upper(), colour=discord.Color.dark_red())
                             mention = name = True
                             log.info("%s Mention in #%s, %s" % (word.title(), message.channel, message.guild))
                             break

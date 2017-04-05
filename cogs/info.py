@@ -25,7 +25,7 @@ class Userinfo:
         embed = discord.Embed()
         embed.set_author(name="Igneel's SelfBot", url="https://github.com/IgneelDxD/Discord-SelfBot")
         embed.description = "https://github.com/IgneelDxD/Discord-SelfBot\nThis is a Selfbot written by IgneelDxD\nFor support or feedback you can join my [Server](https://discord.gg/DJK8h3n)"
-        embed.colour = 0x9b59b6
+        embed.colour = discord.Color.purple()
 
         async with aiohttp.ClientSession() as cs:
             async with cs.get("https://api.github.com/repos/IgneelDxD/Discord-SelfBot/commits") as resp:
@@ -44,7 +44,7 @@ class Userinfo:
         mem = getUser(ctx, getwithoutInvoke(ctx))
         if mem:
             em = discord.Embed(timestamp=ctx.message.created_at)
-            em.colour = mem.colour if ctx.guild else 0x9b59b6
+            em.colour = mem.colour if ctx.guild else discord.Color.purple()
             em.add_field(name='User ID', value=mem.id, inline=True)
             if ctx.guild:
                 if mem.game:
@@ -88,7 +88,7 @@ class Userinfo:
         mem = getUser(ctx, getwithoutInvoke(ctx))
         if mem is not None:
             em = discord.Embed(timestamp=ctx.message.created_at)
-            em.colour = mem.colour if ctx.guild else 0x9b59b6
+            em.colour = mem.colour if ctx.guild else discord.Color.purple()
             em.set_image(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
             await send(ctx, embed=em, ttl=20)
@@ -220,7 +220,7 @@ class Userinfo:
             else:
                 emo = utils.get(self.bot.emojis, id=int(e[0]))
                 if emo:
-                    em = discord.Embed(colour=0x9b59b6)
+                    em = discord.Embed(colour=discord.Color.purple())
                     em.set_image(url=emo.url)
                     await send(ctx, embed=em)
         else:
@@ -237,13 +237,13 @@ class Userinfo:
                 emo = utils.get(self.bot.emojis, id=int(e[0]))
                 if emo:
                     date = emo.created_at.__format__('%d/%m/%Y')
-                    e = discord.Embed(title='Custom Emote', colour=0x9b59b6)
+                    e = discord.Embed(title='Custom Emote', colour=discord.Color.purple())
                     e.description = '**Name: **{1}\n**ID: **{2}\n**Server: **{0}\n**Created at: **{3}, {4}\n**Image: **[link]({5})'.format(emo.guild.name, emo.name, emo.id, date, getAgo(emo.created_at), emo.url)
                     e.set_thumbnail(url=emo.url)
                     await send(ctx, embed=e)
         else:
             split = '\n'.join(emote).split('\n')
-            e = discord.Embed(title='Unicode Emote {}'.format(emote), colour=0x9b59b6)
+            e = discord.Embed(title='Unicode Emote {}'.format(emote), colour=discord.Color.purple())
             desc = ''
             if len(split) > 1:
                 desc += '**Parts:**\n'

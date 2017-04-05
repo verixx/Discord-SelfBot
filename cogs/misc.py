@@ -72,7 +72,7 @@ class Misc:
                         definition = result['list'][pos]['definition']
                         example = result['list'][pos]['example']
                         defs = len(result['list'])
-                        embed = discord.Embed(title='Definition #{} out of {}'.format(pos+1, defs), description=definition, colour=0x9b59b6)
+                        embed = discord.Embed(title='Definition #{} out of {}'.format(pos+1, defs), description=definition, colour=discord.Color.purple())
                         embed.set_author(name=search_terms, icon_url='https://i.imgur.com/bLf4CYz.png')
                         embed.add_field(name="Example:", value=example, inline=False)
                         await send(ctx, embed=embed)
