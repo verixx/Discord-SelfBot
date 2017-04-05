@@ -6,7 +6,7 @@ import random
 
 from discord.ext import commands
 from random import choice
-from .utils.checks import send
+from .utils.checks import edit
 
 log = logging.getLogger('LOG')
 
@@ -26,7 +26,7 @@ class Misc:
         words = msg.lower().strip().split(' ')
         for word in words:
             lmgtfy += word + '+'
-        await send(ctx, content=lmgtfy[:-1])
+        await edit(ctx, content=lmgtfy[:-1])
 
     # Picks a random answer from a list of options
     @commands.command()
@@ -34,19 +34,18 @@ class Misc:
         choiceslist = choices.split("|")
         choice = random.choice(choiceslist)
         if len(choiceslist) < 2:
-            await send(ctx, content="2+ Options, separated with ``|``",  ttl=5)
+            await edit(ctx, content="2+ Options, separated with ``|``",  ttl=5)
         else:
-            message = "<:robot:273922151856209923> | My Answer is ``{0}``"
-            await send(ctx, content=message.format(choice), delete=False)
-        await ctx.message.edit(content='Options:| %s |' % choices)
+            message = "Options:| {1} |\n<:robot:273922151856209923> | My Answer is ``{0}``"
+            await edit(ctx, content=message.format(choice, choices))
 
     # 8ball
     @commands.command(name="8", aliases=["8ball"])
     async def _8ball(self, ctx, *, question: str):
         if question.endswith("?") and question != "?":
-            await send(ctx, content="`" + choice(self.ball) + "`", delete=False)
+            await edit(ctx, content="`" + choice(self.ball) + "`")
         else:
-            await send(ctx, content="That doesn't look like a question.", ttl=3)
+            await edit(ctx, content="That doesn't look like a question.", ttl=3)
 
     # Urbandictionary
     @commands.command()
@@ -75,13 +74,13 @@ class Misc:
                         embed = discord.Embed(title='Definition #{} out of {}'.format(pos+1, defs), description=definition, colour=discord.Color.purple())
                         embed.set_author(name=search_terms, icon_url='https://i.imgur.com/bLf4CYz.png')
                         embed.add_field(name="Example:", value=example, inline=False)
-                        await send(ctx, embed=embed)
+                        await edit(ctx, embed=embed)
                     else:
-                        await send(ctx, content="Your search terms gave no results.", ttl=3)
+                        await edit(ctx, content="Your search terms gave no results.", ttl=3)
         except IndexError:
-            await send(ctx, content="There is no definition #{}".format(pos+1), ttl=3)
+            await edit(ctx, content="There is no definition #{}".format(pos+1), ttl=3)
         except:
-            await send(ctx, content="Error.", ttl=3)
+            await edit(ctx, content="Error.", ttl=3)
 
     @commands.command()
     async def gif(self, ctx, *text):
@@ -95,15 +94,15 @@ class Misc:
                             result = json.loads(await r.text())
                             if result["data"] != []:
                                 url = result["data"][0]["images"]["original"]["url"]
-                                await send(ctx, content=url)
+                                await edit(ctx, content=url)
                             else:
-                                await send(ctx, content="Your search terms gave no results.", ttl=3)
+                                await edit(ctx, content="Your search terms gave no results.", ttl=3)
                 except:
-                    await send(ctx, content="Error.", ttl=3)
+                    await edit(ctx, content="Error.", ttl=3)
             else:
-                await send(ctx, content="Invalid search.", ttl=3)
+                await edit(ctx, content="Invalid search.", ttl=3)
         else:
-            await send(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Specify Search", ttl=3)
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Specify Search", ttl=3)
 
 
 def setup(bot):

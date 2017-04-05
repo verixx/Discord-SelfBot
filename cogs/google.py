@@ -7,7 +7,7 @@ from discord.ext import commands
 from lxml import etree
 from urllib.parse import parse_qs
 from .utils import config
-from .utils.checks import permEmbed, send
+from .utils.checks import permEmbed, edit
 
 
 class Google:
@@ -183,22 +183,22 @@ class Google:
         try:
             card, entries = await self.get_google_entries(query)
         except RuntimeError as e:
-            await send(ctx, content=str(e), ttl=3)
+            await edit(ctx, content=str(e), ttl=3)
         else:
             if card:
                 value = '\n'.join(entries[:3])
                 if value:
                     card.add_field(name='Search Results', value=value, inline=False)
-                return await send(ctx, embed=card)
+                return await edit(ctx, embed=card)
             if len(entries) == 0:
-                return await send(ctx, content='No results found... sorry.', ttl=3)
+                return await edit(ctx, content='No results found... sorry.', ttl=3)
             next_two = entries[1:3]
             if next_two:
                 formatted = '\n'.join(map(lambda x: '<%s>' % x, next_two))
                 msg = '{}\n\n**See also:**\n{}'.format(entries[0], formatted)
             else:
                 msg = entries[0]
-            await send(ctx, content=msg)
+            await edit(ctx, content=msg)
 
     # Google Image Search (100 per day)
     @commands.command()
@@ -206,26 +206,26 @@ class Google:
         async with aiohttp.ClientSession() as cs:
             async with cs.get("https://www.googleapis.com/customsearch/v1?q=" + query.replace(' ', '+') + "&start=" + '1' + "&key=" + self.config.get('google_api_key', []) + "&cx=" + self.config.get('custom_search_engine', []) + "&searchType=image") as resp:
                 if resp.status != 200:
-                    await send(ctx, content='Google somehow failed to respond.', ttl=3)
+                    await edit(ctx, content='Google somehow failed to respond.', ttl=3)
                 result = json.loads(await resp.text())
                 em = discord.Embed(colour=discord.Color.blue())
                 if permEmbed(ctx.message):
-                    await send(ctx, content=None, embed=em.set_image(url=result['items'][0]['link']))
+                    await edit(ctx, content=None, embed=em.set_image(url=result['items'][0]['link']))
                 else:
-                    await send(ctx, content=result['items'][0]['link'])
+                    await edit(ctx, content=result['items'][0]['link'])
 
     @commands.command()
     async def translate(self, ctx, lang, *, text):
         gs = goslate.Goslate()
         if len(lang) != 2:
-            return await send(ctx, "Please enter the short name for languages.\nFor example, `EN` is English.", ttl=3)
+            return await edit(ctx, "Please enter the short name for languages.\nFor example, `EN` is English.", ttl=3)
         else:
             result = gs.translate(text, lang.lower())
             em = discord.Embed(colour=discord.Color.blue(), timestamp=ctx.message.created_at)
             em.set_author(name="Google Translate", url="https://translate.google.com/#{source_lang}/{target_lang}/{text}".format(source_lang=gs.detect(text), target_lang=lang, text=text.replace(" ", "%20")), icon_url="https://upload.wikimedia.org/wikipedia/commons/d/db/Google_Translate_Icon.png")
             em.add_field(name="Source Text", value=text, inline=False)
             em.add_field(name="Result", value=result, inline=False)
-            await send(ctx, embed=em)
+            await edit(ctx, embed=em)
 
 
 def setup(bot):

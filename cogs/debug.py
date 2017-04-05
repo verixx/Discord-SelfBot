@@ -7,7 +7,7 @@ import pytz
 import textwrap
 import traceback
 
-from .utils.checks import getUser, send
+from .utils.checks import getUser, edit
 from .utils import config
 from contextlib import redirect_stdout
 from discord.ext import commands
@@ -30,6 +30,7 @@ class Debug:
         env = {
             'bot': self.bot,
             'say': ctx.send,
+            'edit': ctx.message.edit,
             'ctx': ctx,
             'message': ctx.message,
             'guild': ctx.message.guild,
@@ -47,7 +48,7 @@ class Debug:
             if inspect.isawaitable(result):
                 result = await result
         except Exception as e:
-            await send(ctx, content=python.format(code, '>>> %s' % type(e).__name__ + ': ' + str(e)))
+            await edit(ctx, content=python.format(code, '>>> %s' % type(e).__name__ + ': ' + str(e)))
             return
         if len(str(code) + '>>> Output:' + str(result)) > 2000:
             time = datetime.datetime.now(pytz.timezone('CET'))
@@ -55,10 +56,10 @@ class Debug:
             with open(result_file, 'w') as file:
                 file.write(str(result))
             with open(result_file, 'rb') as file:
-                await send(ctx, content=python.format(code, '>>> Output: See attached file!'), file=file)
+                await edit(ctx, content=python.format(code, '>>> Output: See attached file!'), file=file)
             os.remove(result_file)
         else:
-            await send(ctx, content=python.format(code, '>>> Output: %s' % result))
+            await edit(ctx, content=python.format(code, '>>> Output: %s' % result))
 
     def cleanup_code(self, content):
         if content.startswith('```') and content.endswith('```'):
@@ -77,6 +78,7 @@ class Debug:
         env = {
             'bot': self.bot,
             'say': ctx.send,
+            'edit': ctx.message.edit,
             'ctx': ctx,
             'message': ctx.message,
             'guild': ctx.message.guild,

@@ -8,7 +8,7 @@ import unicodedata
 from dateutil import parser
 from discord import utils
 from discord.ext import commands
-from .utils.checks import getwithoutInvoke, getUser, send, getAgo
+from .utils.checks import getwithoutInvoke, getUser, edit, getAgo
 
 log = logging.getLogger('LOG')
 
@@ -36,7 +36,7 @@ class Userinfo:
                 embed.add_field(name='Latest Changes', value=f'{com0}\n{com1}')
         embed.set_thumbnail(url="https://i.imgur.com/cD51k3R.png")
         embed.set_footer(text='Made with discord.py | rewrite is the future!', icon_url='https://i.imgur.com/MyEXmz8.png')
-        await send(ctx, embed=embed)
+        await edit(ctx, embed=embed)
 
     # User info on Server
     @commands.command()
@@ -78,9 +78,9 @@ class Userinfo:
                              value='%s' % guildlist, inline=True)
             em.set_thumbnail(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
-            await send(ctx, embed=em, ttl=20)
+            await edit(ctx, embed=em, ttl=20)
         else:
-            await send(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=20)
+            await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=20)
 
     # User Avi on Server
     @commands.command()
@@ -91,9 +91,9 @@ class Userinfo:
             em.colour = mem.colour if ctx.guild else discord.Color.purple()
             em.set_image(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
-            await send(ctx, embed=em, ttl=20)
+            await edit(ctx, embed=em, ttl=20)
         else:
-            await send(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=5)
+            await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=5)
 
     # Roleinfo on Server
     @commands.command()
@@ -119,9 +119,9 @@ class Userinfo:
             em.add_field(name='Members [%s]' % len(role.members),
                          value='%s Online' % sum(1 for m in role.members if m.status != discord.Status.offline), inline=True)
             em.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(role.colour).replace("#", ""))
-            await send(ctx, embed=em, ttl=20)
+            await edit(ctx, embed=em, ttl=20)
         else:
-            await send(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found",  ttl=20)
+            await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found",  ttl=20)
 
     # Serverinfo on Server
     @commands.command(aliases=["server"])
@@ -148,7 +148,7 @@ class Userinfo:
                          value='%s Online' % sum(1 for m in serv.members if m.status != discord.Status.offline), inline=True)
             em.add_field(name='Channels [%s]' % len(serv.channels),
                          value='%s Text | %s Voice' % (len(serv.text_channels), len(serv.voice_channels)), inline=True)
-            await send(ctx, embed=em, ttl=20)
+            await edit(ctx, embed=em, ttl=20)
 
     # Server roles on Server
     @commands.command()
@@ -158,7 +158,7 @@ class Userinfo:
         em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
         em.add_field(name='Roles [%s]' % (len(serv.roles)-1),
                      value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
-        await send(ctx, embed=em, ttl=20)
+        await edit(ctx, embed=em, ttl=20)
 
     # Channel on Server
     @commands.command()
@@ -180,9 +180,9 @@ class Userinfo:
                          value='{}\n{}'.format(channel.created_at.__format__('%d/%m/%Y'), getAgo(channel.created_at)), inline=True)
             em.add_field(name='Topic',
                          value=channel.topic if channel.topic != "" else "None",  inline=False)
-            await send(ctx, embed=em, ttl=20)
+            await edit(ctx, embed=em, ttl=20)
         else:
-            await send(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found",  ttl=20)
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found",  ttl=20)
 
     # Emotes from Server
     @commands.command()
@@ -208,7 +208,7 @@ class Userinfo:
             em.add_field(name='﻿', value=i, inline=False)
         if unique_emojis is None:
             em.add_field(name='Emotes', value='Not Found \N{HEAVY EXCLAMATION MARK SYMBOL}', inline=False)
-        await send(ctx, embed=em, ttl=20)
+        await edit(ctx, embed=em, ttl=20)
 
     # Jumbo Emote
     @commands.command()
@@ -216,15 +216,15 @@ class Userinfo:
         e = self.emoji_reg.findall(ctx.message.content)
         if e:
             if len(e) > 1:
-                await send(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
+                await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
             else:
                 emo = utils.get(self.bot.emojis, id=int(e[0]))
                 if emo:
                     em = discord.Embed(colour=discord.Color.purple())
                     em.set_image(url=emo.url)
-                    await send(ctx, embed=em)
+                    await edit(ctx, embed=em)
         else:
-            await send(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only Emotes...', ttl=3)
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only Emotes...', ttl=3)
 
     # Info of Custom or Unicode Emotes
     @commands.command()
@@ -232,7 +232,7 @@ class Userinfo:
         e = self.emoji_reg.findall(ctx.message.content)
         if e:
             if len(e) > 1:
-                await send(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
+                await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
             else:
                 emo = utils.get(self.bot.emojis, id=int(e[0]))
                 if emo:
@@ -240,7 +240,7 @@ class Userinfo:
                     e = discord.Embed(title='Custom Emote', colour=discord.Color.purple())
                     e.description = '**Name: **{1}\n**ID: **{2}\n**Server: **{0}\n**Created at: **{3}, {4}\n**Image: **[link]({5})'.format(emo.guild.name, emo.name, emo.id, date, getAgo(emo.created_at), emo.url)
                     e.set_thumbnail(url=emo.url)
-                    await send(ctx, embed=e)
+                    await edit(ctx, embed=e)
         else:
             split = '\n'.join(emote).split('\n')
             e = discord.Embed(title='Unicode Emote {}'.format(emote), colour=discord.Color.purple())
@@ -253,9 +253,9 @@ class Userinfo:
                 desc += '{0} - `\\U{1:>08}`\nhttp://www.fileformat.info/info/unicode/char/{1}\n'.format(unicodedata.name(split[0]), format(ord(split[0]), 'x'))
             e.description = desc
             if len(emote) > 20:
-                await send(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Come on, only 20 chars...', ttl=3)
+                await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Come on, only 20 chars...', ttl=3)
             else:
-                await send(ctx, embed=e)
+                await edit(ctx, embed=e)
 
 
 def setup(bot):

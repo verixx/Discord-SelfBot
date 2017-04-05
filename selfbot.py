@@ -82,10 +82,6 @@ async def on_command_error(error, ctx):
     if isinstance(error, commands.NoPrivateMessage):
         await ctx.message.delete()
         await ctx.send('\N{HEAVY EXCLAMATION MARK SYMBOL} Only usable on Servers', delete_after=3)
-    elif isinstance(error, commands.CommandNotFound):
-        await ctx.message.delete()
-        log.warning('{0.message.content} is an invalid command or usercommand!'.format(ctx))
-        pass
     elif isinstance(error, commands.CommandInvokeError):
         log.error('In {0.command.qualified_name}:\n{1}'.format(ctx, ''.join(traceback.format_list(traceback.extract_tb(error.original.__traceback__)))))
         log.error('{0.__class__.__name__}: {0}'.format(error.original))
@@ -93,7 +89,7 @@ async def on_command_error(error, ctx):
 
 # Increase use count and log to logger
 @bot.event
-async def on_command_completion(ctx):
+async def on_command(ctx):
     bot.commands_triggered[ctx.command.qualified_name] += 1
     message = ctx.message
     destination = None

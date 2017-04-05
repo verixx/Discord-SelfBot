@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import json
 
@@ -18,6 +19,21 @@ async def send(ctx, content=None, embed=None, delete=True, ttl=None, file=None):
         await ctx.send(content=content, embed=embed, file=file, delete_after=ttl)
     elif perms is False:
         await ctx.send(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
+
+
+# edit thingy
+async def edit(ctx, content=None, embed=None, ttl=None):
+    perms = ctx.channel.permissions_for(ctx.me).embed_links if embed is not None else True
+    if ttl is not None and perms is True:
+        await ctx.message.edit(content=content, embed=embed)
+        await asyncio.sleep(ttl)
+        await ctx.message.delete()
+    elif ttl is None and perms is True:
+        await ctx.message.edit(content=content, embed=embed)
+    elif embed is None:
+        await ctx.message.edit(content=content, embed=embed)
+    elif embed is not None and perms is False:
+        await ctx.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
 
 
 # Check if me

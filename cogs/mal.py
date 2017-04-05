@@ -8,7 +8,7 @@ from discord.ext import commands
 from lxml import etree
 from urllib.parse import parse_qs
 from .utils import config
-from .utils.checks import permEmbed, send
+from .utils.checks import permEmbed, edit
 
 
 class Mal:
@@ -98,48 +98,46 @@ class Mal:
     # MyAnimelist Anime
     @commands.command()
     async def anime(self, ctx, *, query):
-        se = await ctx.send(content='Searching...')
+        await edit(ctx, content='Searching...')
         try:
             content = await self.loop.run_in_executor(None, self.get_google_entries, query, 'anime')
             await content
         except RuntimeError as e:
-            await send(ctx, content=str(e), ttl=3)
+            await edit(ctx, content=str(e), ttl=3)
         else:
             if content is None:
-                await send(ctx, content='No results found... sorry.', ttl=3)
+                await edit(ctx, content='No results found... sorry.', ttl=3)
             else:
                 em = await self.loop.run_in_executor(None, self.parse_content, self.malid, 'anime')
                 try:
                     if permEmbed(ctx.message):
-                        await send(ctx, embed=em)
+                        await edit(ctx, embed=em)
                     else:
-                        await send(ctx, content='https://myanimelist.net/anime/{}'+content)
+                        await edit(ctx, content='https://myanimelist.net/anime/{}'+content)
                 except:
-                    await send(ctx, content='Error!, Embed might have failed you', ttl=3, delete=False)
-        await se.delete()
+                    await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
 
-    # MyAnimelist Manga
+    # MyAnimelist Anime
     @commands.command()
     async def manga(self, ctx, *, query):
-        se = await ctx.send(content='Searching...')
+        await edit(ctx, content='Searching...')
         try:
-            i, link = await self.get_google_entries(query, 'manga')
+            content = await self.loop.run_in_executor(None, self.get_google_entries, query, 'manga')
+            await content
         except RuntimeError as e:
-            await send(ctx, content=str(e), ttl=3)
+            await edit(ctx, content=str(e), ttl=3)
         else:
-            if (i is None) or (not i.isdigit()):
-                await se.delete()
-                return await send(ctx, content='No results found... sorry.', ttl=3)
+            if content is None:
+                await edit(ctx, content='No results found... sorry.', ttl=3)
             else:
-                em = await self.parse_content(i, link, 'manga')
+                em = await self.loop.run_in_executor(None, self.parse_content, self.malid, 'manga')
                 try:
                     if permEmbed(ctx.message):
-                        await send(ctx, embed=em)
+                        await edit(ctx, embed=em)
                     else:
-                        await send(ctx, content=link)
+                        await edit(ctx, content='https://myanimelist.net/anime/{}'+content)
                 except:
-                    await send(ctx, content='Error!, Embed might have failed you', ttl=3)
-                await se.delete()
+                    await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
 
 
 def setup(bot):

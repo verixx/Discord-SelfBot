@@ -5,7 +5,7 @@ import os
 import platform
 import psutil
 
-from .utils.checks import me, send, getwithoutInvoke, getTimeDiff
+from .utils.checks import me, send, getwithoutInvoke, getTimeDiff, edit
 from .utils import config
 from discord.ext import commands
 
@@ -39,7 +39,7 @@ class Tools:
         cpm = total / minutes
 
         fmt = '%s socket events observed (%.2f/minute):\n%s'
-        await send(ctx, content=fmt % (total, cpm, self.bot.socket_stats))
+        await edit(ctx, content=fmt % (total, cpm, self.bot.socket_stats))
 
     # Ping Time
     @commands.command()
@@ -50,7 +50,7 @@ class Tools:
         pong = discord.Embed(title='Pong!', colour=discord.Color.purple())
         pong.add_field(name="Response Time:", value='{:.2f}ms'.format(ping.total_seconds()))
         pong.set_thumbnail(url='http://i.imgur.com/SKEmkvf.png')
-        await send(ctx, embed=pong, ttl=5)
+        await edit(ctx, embed=pong, ttl=5)
 
     # Time Since Bot is running
     @commands.command()
@@ -58,7 +58,7 @@ class Tools:
         embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=discord.Color.purple())
         embed.add_field(name='﻿ ', value=getTimeDiff(self.bot.uptime), inline=False)
         embed.set_thumbnail(url='http://i.imgur.com/mfxd06f.gif')
-        await send(ctx, embed=embed, ttl=20)
+        await edit(ctx, embed=embed, ttl=20)
 
     # Various stat about the bot since startup
     @commands.command()
@@ -89,7 +89,7 @@ class Tools:
         except:
             embed.add_field(name='\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS} Most Used',
                             value='﻿None')
-        await send(ctx, embed=embed, ttl=20)
+        await edit(ctx, embed=embed, ttl=20)
 
     # Host System Infos
     @commands.command()
@@ -109,13 +109,13 @@ class Tools:
                         value='{:.2f} MiB / {:.2f} MiB\nBot uses: {:.2f}%'.format(memory_usage, avai, mepro))
         embed.add_field(name='\N{DVD} CPU',
                         value='{:.2f}%'.format(prosys))
-        await send(ctx, embed=embed, ttl=20)
+        await edit(ctx, embed=embed, ttl=20)
 
     # Change Gamestatus - blank is no game
     @commands.command()
     async def game(self, ctx):
         await self.config.put('gamestatus', getwithoutInvoke(ctx))
-        await send(ctx, 'Now playing: ``%s``' % self.config.get('gamestatus', []),  ttl=5)
+        await edit(ctx, 'Now playing: ``%s``' % self.config.get('gamestatus', []),  ttl=5)
 
     # Find message with specific Text in Channel History...    Search Term(s) | Text
     @commands.command()
@@ -138,9 +138,9 @@ class Tools:
         if mess is not None:
             em = discord.Embed(description=mess.clean_content, timestamp=mess.created_at, colour=0x33CC66)
             em.set_author(name=mess.author.display_name, icon_url=mess.author.avatar_url)
-            await send(ctx, content=content, embed=em)
+            await edit(ctx, content=content, embed=em)
         else:
-            await send(ctx, 'Message not found!', ttl=3)
+            await edit(ctx, 'Message not found!', ttl=3)
 
     # Deletes messages from Channel History - only number for own, number and "all" to delete every message and not only the own
     @commands.command()
