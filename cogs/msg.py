@@ -35,6 +35,9 @@ class OnMessage:
                 if response is None:
                     pass
                 else:
+                    self.bot.commands_triggered[response[3]] += 1
+                    destination = 'DM with {0.channel.recipient}'.format(message) if isinstance(message.channel, discord.DMChannel) else '#{0.channel.name},({0.guild.name})'.format(message)
+                    log.info('In {1}:{0.content}'.format(message, destination))
                     if response[0] == 'embed':
                         if permEmbed(message):
                             await message.edit(content='%s' % response[2], embed=discord.Embed(colour=discord.Color.purple()).set_image(url=response[1]))
@@ -42,24 +45,13 @@ class OnMessage:
                             await message.edit('{0}\n{1}'.format(response[2], response[1]))
                     else:
                         await message.edit('{0}\n{1}'.format(response[2], response[1]))
-                    self.bot.commands_triggered[response[3]] += 1
-                    destination = None
-                    if isinstance(message.channel, discord.DMChannel):
-                        destination = 'Private Message'
-                    else:
-                        destination = '#{0.channel.name},({0.guild.name})'.format(message)
-                    log.info('In {1}:{0.content}'.format(message, destination))
             else:
                 response = quickcmds(message.content.lower().strip())
                 if response:
                     self.bot.commands_triggered[response[1]] += 1
-                    await message.edit(content=response[0])
-                    destination = None
-                    if isinstance(message.channel, discord.DMChannel):
-                        destination = 'DM with {0.channel.recipient}'.format(message)
-                    else:
-                        destination = '#{0.channel.name},({0.guild.name})'.format(message)
+                    destination = 'DM with {0.channel.recipient}'.format(message) if isinstance(message.channel, discord.DMChannel) else '#{0.channel.name},({0.guild.name})'.format(message)
                     log.info('In {1}:{0.content}'.format(message, destination))
+                    await message.edit(content=response[0])
         elif (message.guild is not None) and (self.config.get('setlog', []) == 'on'):
             if message.author.id in self.logging.get('block-user', []):
                 return

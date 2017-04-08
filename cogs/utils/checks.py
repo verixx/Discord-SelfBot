@@ -30,6 +30,7 @@ async def send(ctx, content=None, embed=None, delete=True, ttl=None, file=None):
 # edit thingy
 async def edit(ctx, content=None, embed=None, ttl=None):
     perms = ctx.channel.permissions_for(ctx.me).embed_links if embed is not None else True
+    ttl = ttl if ctx.bot.stay is False else None
     try:
         if ttl is not None and perms is True:
             await ctx.message.edit(content=content, embed=embed)

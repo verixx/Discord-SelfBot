@@ -70,7 +70,6 @@ async def on_ready():
     bot.mention_count_name = 0
     bot.refresh_time = time.time()
     bot.game = None
-    bot.stay = False
     if config.get('restart', []) == 'true':
         await bot.get_channel(config.get('restart_channel', [])).send(':wave: Back Running!', delete_after=2)
         await config.put('restart', 'false')
@@ -93,7 +92,6 @@ async def on_command_error(error, ctx):
 async def on_command(ctx):
     bot.commands_triggered[ctx.command.qualified_name] += 1
     message = ctx.message
-    destination = None
     if isinstance(message.channel, discord.DMChannel):
         destination = 'DM with {0.channel.recipient}'.format(message)
     else:
