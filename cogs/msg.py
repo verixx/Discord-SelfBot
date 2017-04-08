@@ -65,8 +65,10 @@ class OnMessage:
                 return
             if message.channel.id in self.logging.get('block-channel', []):
                 return
+            if message.author.is_blocked():
+                return
             if message.guild.id in self.logging.get('guild', []) or message.channel.id in self.logging.get('channel', []):
-                msg = re.sub('[,.!?]', '', message.content.lower())
+                msg = re.sub('[,.!?-_"^()/]', ' ', message.content.lower())
                 if any(map(lambda v: v in msg.split(), self.logging.get('block-key', []))):
                     return
                 notify = False
