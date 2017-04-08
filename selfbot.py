@@ -19,7 +19,7 @@ log.setLevel(logging.INFO)
 fileFormatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
 consoleFormatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%H:%M:%S')
 
-selfFile = logging.FileHandler(filename='Logs/SelfBot.log', encoding='utf-8', mode='w')
+selfFile = logging.FileHandler(filename='Logs/SelfBot' + datetime.datetime.now().strftime("%Y-%m-%d") + '.log', encoding='utf-8', mode='a')
 selfFile.setFormatter(fileFormatter)
 log.addHandler(selfFile)
 
@@ -30,7 +30,7 @@ log.addHandler(selfConsole)
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
 
-discordFile = logging.FileHandler(filename='Logs/Discord.log', encoding='utf-8', mode='w')
+discordFile = logging.FileHandler(filename='Logs/Discord' + datetime.datetime.now().strftime("%Y-%m-%d") + '.log', encoding='utf-8', mode='a')
 discordFile.setFormatter(fileFormatter)
 logger.addHandler(discordFile)
 
@@ -94,7 +94,7 @@ async def on_command(ctx):
     message = ctx.message
     destination = None
     if isinstance(message.channel, discord.DMChannel):
-        destination = 'Private Message'
+        destination = 'DM with {0.channel.recipient}'.format(message)
     else:
         destination = '#{0.channel.name},({0.guild.name})'.format(message)
     log.info('In {1}:{0.content}'.format(message, destination))

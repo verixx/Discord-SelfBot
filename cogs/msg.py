@@ -56,7 +56,7 @@ class OnMessage:
                     await message.edit(content=response[0])
                     destination = None
                     if isinstance(message.channel, discord.DMChannel):
-                        destination = 'Private Message'
+                        destination = 'DM with {0.channel.recipient}'.format(message)
                     else:
                         destination = '#{0.channel.name},({0.guild.name})'.format(message)
                     log.info('In {1}:{0.content}'.format(message, destination))
