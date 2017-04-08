@@ -69,7 +69,7 @@ async def on_ready():
     bot.mention_count = 0
     bot.mention_count_name = 0
     bot.refresh_time = time.time()
-    bot.game = None
+    bot.gamename = config.get('gamestatus', [])
     if config.get('restart', []) == 'true':
         await bot.get_channel(config.get('restart_channel', [])).send(':wave: Back Running!', delete_after=2)
         await config.put('restart', 'false')
@@ -107,14 +107,19 @@ async def on_socket_response(msg):
 
 # Gamestatus
 async def status(bot):
+    gamename = ''
     while not bot.is_closed():
         if bot.is_ready():
-            loginfo = bot.game
-            bot.game = discord.Game(name=config.get('gamestatus', [])) if config.get('gamestatus', []) != '' else None
-            await bot.change_presence(game=bot.game, status=discord.Status.invisible, afk=True)
-            if str(loginfo) != str(bot.game):
-                log.info('Game changed to playing {}'.format(bot.game))
-
+            if bot.gamename:
+                if bot.gamename != gamename:
+                    log.info('Game changed to playing {}'.format(bot.gamename))
+                    gamename = bot.gamename
+                await bot.change_presence(game=discord.Game(name=bot.gamename), status=discord.Status.invisible, afk=True)
+            else:
+                if bot.gamename != gamename:
+                    log.info('Removed Game Status')
+                    gamename = bot.gamename
+                await bot.change_presence(status=discord.Status.invisible, afk=True)
         await asyncio.sleep(20)
 
 # Load Extensions / Logger / Runbot

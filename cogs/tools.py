@@ -114,8 +114,14 @@ class Tools:
     # Change Gamestatus - blank is no game
     @commands.command(aliases=["Game"])
     async def game(self, ctx):
-        await self.config.put('gamestatus', getwithoutInvoke(ctx))
-        await edit(ctx, 'Now playing: ``%s``' % self.config.get('gamestatus', []),  ttl=5)
+        if getwithoutInvoke(ctx) == '':
+            await self.config.put('gamestatus', None)
+            self.bot.gamename = None
+            await edit(ctx, '\N{VIDEO GAME} Removed Game Status',  ttl=5)
+        else:
+            await self.config.put('gamestatus', getwithoutInvoke(ctx))
+            self.bot.gamename = getwithoutInvoke(ctx)
+            await edit(ctx, '\N{VIDEO GAME} Now playing: ``%s``' % self.bot.gamename,  ttl=5)
 
     # Find message with specific Text in Channel History...    Search Term(s) | Text
     @commands.command(aliases=["Quote"])
