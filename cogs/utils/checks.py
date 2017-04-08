@@ -1,9 +1,11 @@
 import asyncio
 import datetime
 import json
+import logging
 
 from discord import utils
 
+log = logging.getLogger('LOG')
 
 with open('config/config.json', 'r') as f:
     config = json.load(f)
@@ -13,7 +15,11 @@ with open('config/config.json', 'r') as f:
 async def send(ctx, content=None, embed=None, delete=True, ttl=None, file=None):
     perms = ctx.channel.permissions_for(ctx.me).embed_links if embed is not None else True
     if delete is True and perms is True:
-        await ctx.message.delete()
+        try:
+            await ctx.message.delete()
+        except:
+            log.error('Failed to delete Message in {}, #{}'.format(ctx.guild.name, ctx.channel.name))
+            pass
         await ctx.send(content=content, embed=embed, file=file, delete_after=ttl)
     elif delete is False and perms is True:
         await ctx.send(content=content, embed=embed, file=file, delete_after=ttl)
@@ -28,7 +34,11 @@ async def edit(ctx, content=None, embed=None, ttl=None):
         if ttl is not None and perms is True:
             await ctx.message.edit(content=content, embed=embed)
             await asyncio.sleep(ttl)
-            await ctx.message.delete()
+            try:
+                await ctx.message.delete()
+            except:
+                log.error('Failed to delete Message in {}, #{}'.format(ctx.guild.name, ctx.channel.name))
+                pass
         elif ttl is None and perms is True:
             await ctx.message.edit(content=content, embed=embed)
         elif embed is None:
