@@ -72,8 +72,9 @@ async def on_ready():
     bot.game = None
     bot.stay = False
     if config.get('restart', []) == 'true':
-        await config.put('restart', '')
         await bot.get_channel(config.get('restart_channel', [])).send(':wave: Back Running!', delete_after=2)
+        await config.put('restart', 'false')
+        await config.put('restart_channel', [])
 
 
 # Command Errors
