@@ -197,23 +197,24 @@ class Userinfo:
         ttl = None if ctx.message.content.endswith(' stay') else 20
         unique_emojis = set(ctx.message.guild.emojis)
         em = discord.Embed(timestamp=ctx.message.created_at, title='Emotes [%s]' % len(unique_emojis), colour=ctx.message.author.colour)
-        allWords = []
-        splitmsg = ''
-        count = 0
-        for blocks in unique_emojis:
-            if (len(splitmsg + str(blocks) + ' ')) <= 1024:
-                splitmsg += str(blocks) + ' '
-                count += 1
-                if count == len(unique_emojis):
+        if unique_emojis:
+            allWords = []
+            splitmsg = ''
+            count = 0
+            for blocks in unique_emojis:
+                if (len(splitmsg + str(blocks) + ' ')) <= 1024:
+                    splitmsg += str(blocks) + ' '
+                    count += 1
+                    if count == len(unique_emojis):
+                        allWords.append(splitmsg)
+                else:
                     allWords.append(splitmsg)
-            else:
-                allWords.append(splitmsg)
-                splitmsg = ''
-                splitmsg += str(blocks) + ' '
-                count += 1
-        for i in allWords:
-            em.add_field(name='﻿', value=i, inline=False)
-        if unique_emojis is None:
+                    splitmsg = ''
+                    splitmsg += str(blocks) + ' '
+                    count += 1
+            for i in allWords:
+                em.add_field(name='﻿', value=i, inline=False)
+        else:
             em.add_field(name='Emotes', value='Not Found \N{HEAVY EXCLAMATION MARK SYMBOL}', inline=False)
         await edit(ctx, embed=em, ttl=ttl)
 

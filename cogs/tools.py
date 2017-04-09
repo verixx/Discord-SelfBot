@@ -19,17 +19,12 @@ class Tools:
     # Command usage stats
     @commands.command(aliases=["Cmdstats"])
     async def cmdstats(self, ctx):
-        await ctx.message.delete()
-        p = commands.Paginator()
         counter = self.bot.commands_triggered
         width = len(max(counter, key=len))
         total = sum(counter.values())
         fmt = '{0:<{width}}: {1}'
-        p.add_line(fmt.format('Total', total, width=width))
-        for key, count in counter.most_common():
-            p.add_line(fmt.format(key, count, width=width))
-        for page in p.pages:
-            await ctx.send(page, delete_after=20)
+        output = '\n'.join(fmt.format(key, count, width=width) for key, count in counter.most_common())
+        await edit(ctx, content='```{}\n{}```'.format(fmt.format('Total', total, width=width), output))
 
     @commands.command(aliases=["Socketstats"])
     async def socketstats(self, ctx):
