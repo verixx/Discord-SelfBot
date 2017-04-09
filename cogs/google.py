@@ -1,4 +1,5 @@
 import aiohttp
+import datetime
 import discord
 import goslate
 import json
@@ -150,7 +151,7 @@ class Google:
     async def get_google_entries(self, query):
         params = {
             'q': query,
-            'cr': 'countryAT'
+            'cr': 'countryUS'
             }
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64)'
@@ -193,12 +194,18 @@ class Google:
             if len(entries) == 0:
                 return await edit(ctx, content='No results found... sorry.', ttl=3)
             next_two = entries[1:3]
+            before = entries[0]
+            before = before[:-1] + '%29' if before[-1] == ')' else before
+
+            e = discord.Embed(colour=discord.Color.blue(), timestamp=datetime.datetime.now())
+            e.set_author(name="Google Search", url="https://www.google.com/search?q="+query.replace(" ", "+"), icon_url="https://cdn.discordapp.com/attachments/278603491520544768/300645219626647564/Google-logo-2015-G-icon.png")
             if next_two:
                 formatted = '\n'.join(map(lambda x: '<%s>' % x, next_two))
-                msg = '{}\n\n**See also:**\n{}'.format(entries[0], formatted)
+                e.add_field(name="Search Result", value=before)
+                e.add_field(name="More", value=formatted, inline=False)
             else:
-                msg = entries[0]
-            await edit(ctx, content=msg)
+                e.add_field(name="Search Result", value=before)
+            await edit(ctx, embed=e)
 
     # Google Image Search (100 per day)
     @commands.command(aliases=["I", "image", "Image"])
