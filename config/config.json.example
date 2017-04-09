@@ -11,5 +11,6 @@
     "mal_password": "",
     "custom_search_engine": "",
     "restart_channel": ,
-    "restart": ""
+    "restart": "",
+    "webhook_token":""
 }

@@ -6,6 +6,7 @@ from .utils import config
 from .utils.allmsgs import quickcmds, custom
 from .utils.checks import permEmbed, me
 from datetime import datetime
+from discord_webhooks import Webhook
 
 log = logging.getLogger('LOG')
 
@@ -15,6 +16,9 @@ class OnMessage:
         self.bot = bot
         self.config = config.Config('config.json')
         self.logging = config.Config('log.json')
+        self.webhook_class = Webhook(self.bot)
+        self.request_webhook = self.webhook_class.request_webhook
+        self.webhook_token = self.config.get('webhook_token', [])[42:]
 
     async def on_message(self, message):
         # Increase Message Count
@@ -65,7 +69,7 @@ class OnMessage:
                     return
                 notify = False
                 if (message.guild.get_member(self.config.get('me', [])).mentioned_in(message)):
-                    notify = True
+                    notify = mention = True
                     if message.role_mentions != []:
                         em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=discord.Color.dark_blue())
                         log.info("Role Mention from #%s, %s" % (message.channel, message.guild))
@@ -78,6 +82,7 @@ class OnMessage:
                     for word in self.logging.get('key', []):
                         if word in msg.split():
                             notify = True
+                            mention = False
                             em = discord.Embed(title='\N{HEAVY EXCLAMATION MARK SYMBOL} %s MENTION' % word.upper(), colour=discord.Color.dark_red())
                             log.info("%s Mention in #%s, %s" % (word.title(), message.channel, message.guild))
                             if hasattr(self.bot, 'mention_count_name'):
@@ -92,7 +97,13 @@ class OnMessage:
                     em.add_field(name='Message',
                                  value="%s" % message.clean_content, inline=False)
                     em.set_thumbnail(url=message.author.avatar_url)
-                    await self.bot.get_channel(self.config.get('log_channel', [])).send(embed=em)
+                    if self.webhook_token and not mention:
+                        try:
+                            await self.request_webhook(self.webhook_token, embeds=[em.to_dict()])
+                        except:
+                            await self.bot.get_channel(self.config.get('log_channel', [])).send(embed=em)
+                    else:
+                        await self.bot.get_channel(self.config.get('log_channel', [])).send(embed=em)
 
     async def on_message_edit(self, before, after):
         if me(before):
