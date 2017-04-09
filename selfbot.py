@@ -51,7 +51,7 @@ extensions = ['cogs.cmds',
               'cogs.tools'
               ]
 
-bot = commands.Bot(command_prefix=config.get('prefix', []), description='''Selfbot''', self_bot=True)
+bot = commands.Bot(command_prefix=config.get('prefix', []), description='''IgneelDxD's Selfbot''', self_bot=True)
 
 
 # Startup
