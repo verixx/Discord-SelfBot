@@ -44,25 +44,28 @@ class Tools:
     # Ping Time
     @commands.command(aliases=["Ping"])
     async def ping(self, ctx):
+        ttl = None if ctx.message.content.endswith(' stay') else 10
         before = datetime.datetime.utcnow()
         await (await self.bot.ws.ping())
         ping = (datetime.datetime.utcnow() - before) * 1000
         pong = discord.Embed(title='Pong!', colour=discord.Color.purple())
         pong.add_field(name="Response Time:", value='{:.2f}ms'.format(ping.total_seconds()))
         pong.set_thumbnail(url='http://i.imgur.com/SKEmkvf.png')
-        await edit(ctx, embed=pong, ttl=5)
+        await edit(ctx, embed=pong, ttl=ttl)
 
     # Time Since Bot is running
     @commands.command(aliases=["Uptime"])
     async def uptime(self, ctx):
+        ttl = None if ctx.message.content.endswith(' stay') else 20
         embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=discord.Color.purple())
         embed.add_field(name='﻿ ', value=getTimeDiff(self.bot.uptime), inline=False)
         embed.set_thumbnail(url='http://i.imgur.com/mfxd06f.gif')
-        await edit(ctx, embed=embed, ttl=20)
+        await edit(ctx, embed=embed, ttl=ttl)
 
     # Various stat about the bot since startup
     @commands.command(aliases=["Stats"])
     async def stats(self, ctx):
+        ttl = None if ctx.message.content.endswith(' stay') else 20
         unique_online = len(dict((m.id, m) for m in self.bot.get_all_members() if m.status != discord.Status.offline))
         voice = sum(len(g.voice_channels) for g in self.bot.guilds)
         text = sum(len(g.text_channels) for g in self.bot.guilds)
@@ -89,11 +92,12 @@ class Tools:
         except:
             embed.add_field(name='\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS} Most Used',
                             value='﻿None')
-        await edit(ctx, embed=embed, ttl=20)
+        await edit(ctx, embed=embed, ttl=ttl)
 
     # Host System Infos
     @commands.command(aliases=["Sysinfo"])
     async def sysinfo(self, ctx):
+        ttl = None if ctx.message.content.endswith(' stay') else 20
         process = psutil.Process(os.getpid())
         memory_usage = process.memory_full_info().uss / 1024**2
         avai = psutil.virtual_memory().total / 1024**2
@@ -109,19 +113,21 @@ class Tools:
                         value='{:.2f} MiB / {:.2f} MiB\nBot uses: {:.2f}%'.format(memory_usage, avai, mepro))
         embed.add_field(name='\N{DVD} CPU',
                         value='{:.2f}%'.format(prosys))
-        await edit(ctx, embed=embed, ttl=20)
+        await edit(ctx, embed=embed, ttl=ttl)
 
     # Change Gamestatus - blank is no game
     @commands.command(aliases=["Game"])
     async def game(self, ctx):
-        if getwithoutInvoke(ctx) == '':
+        ttl = None if ctx.message.content.endswith(' stay') else 5
+        game = getwithoutInvoke(ctx)
+        if game == '':
             await self.config.put('gamestatus', None)
             self.bot.gamename = None
-            await edit(ctx, '\N{VIDEO GAME} Removed Game Status',  ttl=5)
+            await edit(ctx, '\N{VIDEO GAME} Removed Game Status',  ttl=ttl)
         else:
-            await self.config.put('gamestatus', getwithoutInvoke(ctx))
-            self.bot.gamename = getwithoutInvoke(ctx)
-            await edit(ctx, '\N{VIDEO GAME} Now playing: ``%s``' % self.bot.gamename,  ttl=5)
+            await self.config.put('gamestatus', game)
+            self.bot.gamename = game
+            await edit(ctx, '\N{VIDEO GAME} Now playing: ``%s``' % self.bot.gamename,  ttl=ttl)
 
     # Find message with specific Text in Channel History...    Search Term(s) | Text
     @commands.command(aliases=["Quote"])

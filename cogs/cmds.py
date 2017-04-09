@@ -17,6 +17,7 @@ class Customcmds:
     @commands.group(aliases=["Cmds"])
     async def cmds(self, ctx):
         if ctx.invoked_subcommand is None:
+            ttl = None if ctx.message.content.endswith(' stay') else 20
             p = commands.Paginator(prefix='```css')
             with open('config/commands.json', 'r') as com:
                 cmds = json.load(com)
@@ -28,12 +29,13 @@ class Customcmds:
                     p.add_line(', '.join(x for x in msg))
                     msg = []
             for page in p.pages:
-                await ctx.send(page, delete_after=20)
+                await ctx.send(page, delete_after=ttl)
             await ctx.message.delete()
 
     # List all custom commands with Links
     @cmds.command(aliases=["Long"])
     async def long(self, ctx):
+        ttl = None if ctx.message.content.endswith(' stay') else 20
         p = commands.Paginator(prefix='```css')
         with open('config/commands.json', 'r') as com:
             cmds = json.load(com)
@@ -42,7 +44,7 @@ class Customcmds:
         for cmd in sorted(cmds):
             p.add_line('{0:<{width}}| {1}'.format(cmd, cmds.get(cmd), width=width))
         for page in p.pages:
-            await ctx.send(page, delete_after=20)
+            await ctx.send(page, delete_after=ttl)
         await ctx.message.delete()
 
     # Add a custom command

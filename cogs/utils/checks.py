@@ -65,7 +65,11 @@ def permEmbed(message):
 
 
 def getwithoutInvoke(ctx):
-    return ctx.message.content[len(ctx.prefix + ctx.command.qualified_name + ' '):]
+    message = ctx.message.content
+    if message.endswith(' stay'):
+        return message[len(ctx.prefix + ctx.command.qualified_name + ' '):-5]
+    else:
+        return message[len(ctx.prefix + ctx.command.qualified_name + ' '):]
 
 
 def getTimeDiff(t, now=None):

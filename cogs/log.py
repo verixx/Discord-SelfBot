@@ -89,6 +89,7 @@ class Logging:
     # Show Logging Infosconfig
     @log.command(aliases=["Show"])
     async def show(self, ctx):
+        ttl = None if ctx.message.content.endswith(' stay') else 20
         em = discord.Embed(title='Logging Info', colour=discord.Color.purple())
 
         keys = ', '.join(self.logging.get('key', {}))
@@ -139,7 +140,7 @@ class Logging:
         if channel2 is not '':
             em.add_field(name="Logged Channels[%s]" % len(self.logging.get('channel', {})), value=channel2, inline=False)
 
-        await edit(ctx, embed=em, ttl=20)
+        await edit(ctx, embed=em, ttl=ttl)
 
     @log.group(aliases=["Blacklist"])
     @commands.guild_only()
