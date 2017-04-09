@@ -2,6 +2,7 @@ import aiohttp
 import asyncio
 import discord
 import spice_api as spice
+import gc
 
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -109,6 +110,7 @@ class Mal:
                 await edit(ctx, content='No results found... sorry.', ttl=3)
             else:
                 em = await self.loop.run_in_executor(None, self.parse_content, self.malid, 'anime')
+                gc.collect()
                 try:
                     if permEmbed(ctx.message):
                         await edit(ctx, embed=em)
@@ -117,7 +119,7 @@ class Mal:
                 except:
                     await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
 
-    # MyAnimelist Anime
+    # MyAnimelist Manga
     @commands.command(aliases=["Manga"])
     async def manga(self, ctx, *, query):
         await edit(ctx, content='Searching...')
@@ -131,6 +133,7 @@ class Mal:
                 await edit(ctx, content='No results found... sorry.', ttl=3)
             else:
                 em = await self.loop.run_in_executor(None, self.parse_content, self.malid, 'manga')
+                gc.collect()
                 try:
                     if permEmbed(ctx.message):
                         await edit(ctx, embed=em)
