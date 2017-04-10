@@ -61,12 +61,12 @@ class Userinfo:
                 em.add_field(name='Partnership',
                              value=str(mem.relationship.type)[17:].title() if mem.relationship is not None else None,  inline=True)
                 em.add_field(name='Nitro',
-                             value='{}, {}'.format(pro.premium_since.__format__('%d/%m/%Y'), getAgo(pro.premium_since)) if pro.premium is True else None,  inline=True)
+                             value='{}\n{}'.format(pro.premium_since.__format__('%d/%m/%Y'), getAgo(pro.premium_since)) if pro.premium is True else None,  inline=True)
             em.add_field(name='Account Created',
-                         value='%s, %s' % (mem.created_at.__format__('%d/%m/%Y'), getAgo(mem.created_at)), inline=True)
+                         value='%s\n%s' % (mem.created_at.__format__('%d/%m/%Y'), getAgo(mem.created_at)), inline=True)
             if ctx.guild:
                 em.add_field(name='Join Date',
-                             value='%s, %s' % (mem.joined_at.__format__('%d/%m/%Y'), getAgo(mem.joined_at)), inline=True)
+                             value='%s\n%s' % (mem.joined_at.__format__('%d/%m/%Y'), getAgo(mem.joined_at)), inline=True)
 
                 rolelist = ', '.join(r.name for r in mem.roles)
                 if rolelist[11:]:
@@ -114,11 +114,11 @@ class Userinfo:
             em.add_field(name='ID',
                          value=role.id, inline=True)
             em.add_field(name='Created On',
-                         value='{}, {}'.format(role.created_at.__format__('%d/%m/%Y'), getAgo(role.created_at)), inline=True)
+                         value='{}\n{}'.format(role.created_at.__format__('%d/%m/%Y'), getAgo(role.created_at)), inline=True)
+            em.add_field(name='Color',
+                         value='{}\n{}'.format(str(role.colour).upper(), str(role.colour.to_tuple())[1:-1]), inline=True)
             em.add_field(name='Mentionable',
                          value=role.mentionable,  inline=True)
-            em.add_field(name='Color',
-                         value=str(role.colour).upper(), inline=True)
             em.add_field(name='Members [%s]' % len(role.members),
                          value='%s Online' % sum(1 for m in role.members if m.status != discord.Status.offline), inline=True)
             em.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(role.colour).replace("#", ""))
@@ -139,7 +139,7 @@ class Userinfo:
             em.add_field(name='Owner',
                          value='%s' % serv.owner,  inline=True)
             em.add_field(name='Created On',
-                         value='{}, {}'.format(serv.created_at.__format__('%d/%m/%Y'), getAgo(serv.created_at)), inline=True)
+                         value='{}\n{}'.format(serv.created_at.__format__('%d/%m/%Y'), getAgo(serv.created_at)), inline=True)
             em.add_field(name='Region',
                          value=serv.region, inline=True)
             em.add_field(name='ID',
