@@ -46,9 +46,9 @@ class OnMessage:
                         if permEmbed(message):
                             await message.edit(content='%s' % response[2], embed=discord.Embed(colour=discord.Color.purple()).set_image(url=response[1]))
                         else:
-                            await message.edit('{0}\n{1}'.format(response[2], response[1]))
+                            await message.edit(content='{0}\n{1}'.format(response[2], response[1]))
                     else:
-                        await message.edit('{0}\n{1}'.format(response[2], response[1]))
+                        await message.edit(content='{0}\n{1}'.format(response[2], response[1]))
             else:
                 response = quickcmds(message.content.lower().strip())
                 if response:
