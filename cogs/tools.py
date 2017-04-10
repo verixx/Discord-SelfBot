@@ -1,11 +1,10 @@
-import asyncio
 import datetime
 import discord
 import os
 import platform
 import psutil
 
-from .utils.checks import me, send, getwithoutInvoke, getTimeDiff, edit
+from .utils.checks import getwithoutInvoke, getTimeDiff, edit
 from .utils import config
 from discord.ext import commands
 
@@ -148,27 +147,6 @@ class Tools:
             await edit(ctx, content=content, embed=em)
         else:
             await edit(ctx, 'Message not found!', ttl=3)
-
-    # Deletes messages from Channel History - only number for own, number and "all" to delete every message and not only the own
-    @commands.command(aliases=["Clean"])
-    async def clean(self, ctx, limit: int=25):
-        msg_amt = 0
-        async for message in ctx.message.channel.history(limit=limit):
-                if me(message):
-                    try:
-                        await message.delete()
-                    except:
-                        pass
-                    await asyncio.sleep(0.25)
-                    msg_amt += 1
-                elif ctx.message.content.endswith('all') and ctx.message.author.permissions_in(ctx.message.channel).manage_messages:
-                    try:
-                        await message.delete()
-                    except:
-                        pass
-                    await asyncio.sleep(0.25)
-                    msg_amt += 1
-        await send(ctx, f'Cleaned `{msg_amt}` messages out of `{limit}` that were checked.', ttl=3, delete=False)
 
 
 def setup(bot):

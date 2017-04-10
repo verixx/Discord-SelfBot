@@ -47,6 +47,7 @@ extensions = ['cogs.cmds',
               'cogs.log',
               'cogs.mal',
               'cogs.misc',
+              'cogs.mod',
               'cogs.msg',
               'cogs.tools'
               ]

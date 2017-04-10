@@ -11,27 +11,11 @@ with open('config/config.json', 'r') as f:
     config = json.load(f)
 
 
-# Send made easier
-async def send(ctx, content=None, embed=None, delete=True, ttl=None, file=None):
-    perms = ctx.channel.permissions_for(ctx.me).embed_links if embed is not None else True
-    if delete is True and perms is True:
-        try:
-            await ctx.message.delete()
-        except:
-            log.error('Failed to delete Message in {}, #{}'.format(ctx.guild.name, ctx.channel.name))
-            pass
-        await ctx.send(content=content, embed=embed, file=file, delete_after=ttl)
-    elif delete is False and perms is True:
-        await ctx.send(content=content, embed=embed, file=file, delete_after=ttl)
-    elif perms is False:
-        await ctx.send(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
-
-
-# edit thingy
+# Edit thingy
 async def edit(ctx, content=None, embed=None, ttl=None):
-    perms = ctx.channel.permissions_for(ctx.me).embed_links if embed is not None else True
+    perms = ctx.channel.permissions_for(ctx.me).embed_links
     try:
-        if ttl is not None and perms is True:
+        if ttl and perms:
             await ctx.message.edit(content=content, embed=embed)
             await asyncio.sleep(ttl)
             try:
@@ -39,14 +23,14 @@ async def edit(ctx, content=None, embed=None, ttl=None):
             except:
                 log.error('Failed to delete Message in {}, #{}'.format(ctx.guild.name, ctx.channel.name))
                 pass
-        elif ttl is None and perms is True:
+        elif ttl is None and perms:
             await ctx.message.edit(content=content, embed=embed)
         elif embed is None:
             await ctx.message.edit(content=content, embed=embed)
-        elif embed is not None and perms is False:
+        elif embed and not perms:
             await ctx.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
     except:
-        await send(ctx, content=content, embed=embed, delete=False, ttl=ttl, file=None)
+        await ctx.sendsend(content=content, embed=embed, delete_after=ttl, file=None)
 
 
 # Check if me
@@ -64,6 +48,7 @@ def permEmbed(message):
     return message.channel.permissions_for(message.author).embed_links
 
 
+# Get Message without inokation prefix and space after invokation
 def getwithoutInvoke(ctx):
     message = ctx.message.content
     if message.endswith(' stay'):
@@ -72,6 +57,7 @@ def getwithoutInvoke(ctx):
         return message[len(ctx.prefix + ctx.command.qualified_name + ' '):]
 
 
+# Get time difference obviously
 def getTimeDiff(t, now=None):
     if now is None:
         now = datetime.datetime.utcnow()
@@ -82,6 +68,8 @@ def getTimeDiff(t, now=None):
     return '{d}:{h}:{m}:{s}'.format(d=days, h=hours, m=minutes, s=seconds)
 
 
+# Returns time that has passed since the given time(datetime) in seconds, minuts, hours or days
+# Fuck Years, who cars, days is more intersting for comparison.
 def getAgo(time):
     sec = int((datetime.datetime.utcnow() - time).total_seconds())
     if 120 > sec:
@@ -103,6 +91,8 @@ def getUser(ctx, msg):
             return utils.find(lambda m: msg.lower() in m.name.lower(), ctx.bot.users)
         elif 1 == len(ctx.message.mentions):
             return ctx.message.mentions[0]
+    elif msg.isdigit():
+        return ctx.guild.get_member(int(msg))
     elif 1 == len(ctx.message.mentions):
         return ctx.message.mentions[0]
     elif ctx.message.guild.get_member_named(msg):
