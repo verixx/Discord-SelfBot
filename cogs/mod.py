@@ -1,3 +1,4 @@
+import datetime
 import discord
 
 from .utils.checks import edit, getUser, getwithoutInvoke
@@ -23,7 +24,6 @@ class Mod:
     @commands.group(aliases=['purge'])
     @commands.guild_only()
     async def clean(self, ctx):
-        """Clean up message History, info for all Commands"""
         if ctx.invoked_subcommand is None:
             pass
 
@@ -127,6 +127,21 @@ class Mod:
         else:
             e = discord.Embed(color=colour)
             e.set_author(name="Changed Role Color of: " + str(role))
+            await edit(ctx, embed=e)
+
+    @commands.command()
+    @commands.guild_only()
+    async def permissions(self, ctx):
+        member = getUser(ctx, getwithoutInvoke(ctx))
+        if member:
+            true = '\n'.join(name.replace('_', ' ').title() for name, value in ctx.channel.permissions_for(member) if value is True)
+            false = '\n'.join(name.replace('_', ' ').title() for name, value in ctx.channel.permissions_for(member) if value is False)
+
+            e = discord.Embed(title="Permissions", color=discord.Color.purple(), timestamp=datetime.datetime.now())
+            e.set_author(name=member, icon_url=member.avatar_url)
+            e.add_field(name="True", value=true, inline=False)
+            e.add_field(name="False", value=false, inline=False)
+
             await edit(ctx, embed=e)
 
 
