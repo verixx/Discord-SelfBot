@@ -57,6 +57,7 @@ class Logging:
 
     # log Guild
     @log.command(aliases=["Guild"])
+    @commands.guild_only()
     async def guild(self, ctx):
         guilds = self.logging.get('guild', {})
         guild = ctx.message.guild.id
@@ -71,6 +72,7 @@ class Logging:
 
     # Log Channel
     @log.command(aliases=["Channel"])
+    @commands.guild_only()
     async def channel(self, ctx):
         channels = self.logging.get('channel', {})
         channel = ctx.message.channel.id
@@ -166,6 +168,7 @@ class Logging:
 
     # Blacklist Channel
     @blacklist.command(name="channel", aliases=["Channel"])
+    @commands.guild_only()
     async def _channel(self, ctx):
         channels = self.logging.get('block-channel', {})
         channel = ctx.message.channel.id
