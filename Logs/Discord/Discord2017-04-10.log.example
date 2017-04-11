@@ -1,0 +1,24 @@
+2017-04-10 20:23:57 [INFO] on_ready has successfully been registered as an event
+2017-04-10 20:23:57 [INFO] on_command_error has successfully been registered as an event
+2017-04-10 20:23:57 [INFO] on_command has successfully been registered as an event
+2017-04-10 20:23:57 [INFO] on_socket_response has successfully been registered as an event
+2017-04-10 20:23:57 [INFO] logging in using static token
+2017-04-10 20:23:57 [INFO] Created websocket connected to wss://gateway.discord.gg?encoding=json&v=6
+2017-04-10 20:23:57 [INFO] sent the identify payload to create the websocket
+2017-04-10 20:23:59 [INFO] processed a chunk for 32 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 809 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:23:59 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:24:00 [INFO] processed a chunk for 1000 members.
+2017-04-10 20:24:00 [INFO] processed a chunk for 1000 members.
+.
+.
+.
