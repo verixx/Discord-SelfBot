@@ -78,7 +78,7 @@ class Mod:
 
     # Ban a Member
     @commands.group(aliases=['Ban'])
-    @commands.has_permissions(kick_members=True)
+    @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def ban(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -98,7 +98,7 @@ class Mod:
 
     # SoftBan a Member (ban, delelte messagea and unban)
     @ban.command(aliases=['Soft'])
-    @commands.has_permissions(kick_members=True)
+    @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def soft(self, ctx):
         member = getUser(ctx, getwithoutInvoke(ctx))
