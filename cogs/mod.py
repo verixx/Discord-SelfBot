@@ -116,7 +116,7 @@ class Mod:
                              name="Soft Banned: " + str(member))
                 await edit(ctx, embed=e)
 
-    @commands.command(name="role color", aliases=['role colour', 'Role Colour', 'Role Color'])
+    @commands.command(name="role-color", aliases=['role-colour', 'Role-Colour', 'Role-Color'])
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def _colour(self, ctx, colour: discord.Colour, role: discord.Role):
