@@ -21,44 +21,44 @@ class Mod:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Don't forget to give the amount you wanna delte".format(len(deleted), limit), ttl=5)
 
     # Purge group
-    @commands.group(aliases=['purge'])
+    @commands.group(aliases=['purge', 'Purge', 'Clean'])
     @commands.guild_only()
     async def clean(self, ctx):
         if ctx.invoked_subcommand is None:
             pass
 
     # Remove embeds
-    @clean.command()
+    @clean.command(aliases=['Embed', 'embed', 'Embeds'])
     @commands.has_permissions(manage_messages=True)
     async def embeds(self, ctx, search: int = None):
         await self.do_purge(ctx, search, lambda e: len(e.embeds))
 
     # Remove images/attachments
-    @clean.command()
+    @clean.command(aliases=['Attachments', 'Attachment', 'attachment'])
     @commands.has_permissions(manage_messages=True)
     async def attachments(self, ctx, search: int = None):
         await self.do_purge(ctx, search, lambda e: len(e.attachments))
 
     # Remove all
-    @clean.command(name='all')
+    @clean.command(name='all', aliases=['All'])
     @commands.has_permissions(manage_messages=True)
     async def _all(self, ctx, search: int = None):
         await self.do_purge(ctx, search, lambda e: True)
 
     # Remove from specific user
-    @clean.command()
+    @clean.command(aliases=['User'])
     @commands.has_permissions(manage_messages=True)
     async def user(self, ctx, mem: str, search: int = None):
         member = getUser(ctx, mem)
         await self.do_purge(ctx, search, lambda e: e.author == member)
 
     # remove your own message, works everywhere not like all other purges.
-    @clean.command()
+    @clean.command(aliases=['Mine'])
     async def mine(self, ctx, search: int = None):
         await self.do_purge(ctx, search, lambda e: e.author == ctx.author)
 
     # Kick a Member
-    @commands.command()
+    @commands.command(aliases=['Kick'])
     @commands.has_permissions(kick_members=True)
     @commands.guild_only()
     async def kick(self, ctx):
@@ -77,7 +77,7 @@ class Mod:
                 await edit(ctx, embed=e)
 
     # Ban a Member
-    @commands.group()
+    @commands.group(aliases=['Ban'])
     @commands.has_permissions(kick_members=True)
     @commands.guild_only()
     async def ban(self, ctx):
@@ -97,7 +97,7 @@ class Mod:
                     await edit(ctx, embed=e)
 
     # SoftBan a Member (ban, delelte messagea and unban)
-    @ban.command()
+    @ban.command(aliases=['Soft'])
     @commands.has_permissions(kick_members=True)
     @commands.guild_only()
     async def soft(self, ctx):
@@ -116,10 +116,10 @@ class Mod:
                              name="Soft Banned: " + str(member))
                 await edit(ctx, embed=e)
 
-    @commands.command(aliases=['color'])
+    @commands.command(name="role color", aliases=['role colour', 'Role Colour', 'Role Color'])
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
-    async def colour(self, ctx, colour: discord.Colour, role: discord.Role):
+    async def _colour(self, ctx, colour: discord.Colour, role: discord.Role):
         try:
             await role.edit(colour=colour)
         except discord.HTTPException:
@@ -129,7 +129,7 @@ class Mod:
             e.set_author(name="Changed Role Color of: " + str(role))
             await edit(ctx, embed=e)
 
-    @commands.command()
+    @commands.command(aliases=['Permissions'])
     @commands.guild_only()
     async def permissions(self, ctx):
         member = getUser(ctx, getwithoutInvoke(ctx))
