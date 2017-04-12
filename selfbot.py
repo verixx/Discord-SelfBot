@@ -115,12 +115,13 @@ async def status(bot):
                 if bot.gamename != gamename:
                     log.info('Game changed to playing {}'.format(bot.gamename))
                     gamename = bot.gamename
-                await bot.change_presence(game=discord.Game(name=bot.gamename), status=discord.Status.invisible, afk=True)
+                game = discord.Game(name=bot.gamename)
             else:
                 if bot.gamename != gamename:
                     log.info('Removed Game Status')
                     gamename = bot.gamename
-                await bot.change_presence(status=discord.Status.invisible, afk=True)
+                game = None
+            await bot.change_presence(game=game, status=discord.Status.invisible, afk=True)
         await asyncio.sleep(20)
 
 # Load Extensions / Logger / Runbot
