@@ -30,7 +30,7 @@ async def edit(ctx, content=None, embed=None, ttl=None):
         elif embed and not perms:
             await ctx.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
     except:
-        await ctx.sendsend(content=content, embed=embed, delete_after=ttl, file=None)
+        await ctx.send(content=content, embed=embed, delete_after=ttl, file=None)
 
 
 # Check if me
