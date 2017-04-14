@@ -108,7 +108,7 @@ def getUser(ctx, msg):
 # Find Guild
 def getGuild(ctx, msg):
     if msg == '':
-        return ctx.guild.id
+        return ctx.guild
     elif msg.isdigit():
         return ctx.bot.get_guild(int(msg))
     else:
