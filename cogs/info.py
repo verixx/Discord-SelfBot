@@ -176,7 +176,7 @@ class Userinfo:
     @commands.guild_only()
     async def channel(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        channel = getChannel(ctx, getwithoutInvoke)
+        channel = getChannel(ctx, getwithoutInvoke(ctx))
         if channel:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
             em.add_field(name='Name',

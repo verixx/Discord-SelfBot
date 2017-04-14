@@ -129,7 +129,7 @@ class Mod:
             e.set_author(name="Changed Role Color of: " + str(role))
             await edit(ctx, embed=e)
 
-    @commands.command(aliases=['Permissions'])
+    @commands.command(aliases=['Permissions', 'Perms', 'perms'])
     @commands.guild_only()
     async def permissions(self, ctx):
         member = getUser(ctx, getwithoutInvoke(ctx))
