@@ -72,7 +72,7 @@ class OnMessage:
                 notify = False
                 if (message.guild.get_member(self.config.get('me', [])).mentioned_in(message)):
                     notify = mention = True
-                    if message.role_mentions != []:
+                    if message.role_mentions != [] or message.mention_everyone:
                         em = discord.Embed(title='\N{SPEAKER WITH THREE SOUND WAVES} ROLE MENTION', colour=discord.Color.dark_blue())
                         log.info("Role Mention from #%s, %s" % (message.channel, message.guild))
                     else:
