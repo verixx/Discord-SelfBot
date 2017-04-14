@@ -6,6 +6,7 @@ import psutil
 
 from .utils.checks import getwithoutInvoke, getTimeDiff, edit
 from .utils import config
+from colour import Color
 from discord.ext import commands
 
 
@@ -117,11 +118,11 @@ class Tools:
         if game == '':
             await self.config.put('gamestatus', None)
             self.bot.gamename = None
-            await edit(ctx, '\N{VIDEO GAME} Removed Game Status',  ttl=ttl)
+            await edit(ctx, content='\N{VIDEO GAME} Removed Game Status',  ttl=ttl)
         else:
             await self.config.put('gamestatus', game)
             self.bot.gamename = game
-            await edit(ctx, '\N{VIDEO GAME} Now playing: ``%s``' % self.bot.gamename,  ttl=ttl)
+            await edit(ctx, content='\N{VIDEO GAME} Now playing: ``%s``' % self.bot.gamename,  ttl=ttl)
 
     # Find message with specific Text in Channel History...    Search Term(s) | Text
     @commands.command(aliases=["Quote"])
@@ -146,7 +147,45 @@ class Tools:
             em.set_author(name=mess.author.display_name, icon_url=mess.author.avatar_url)
             await edit(ctx, content=content, embed=em)
         else:
-            await edit(ctx, 'Message not found!', ttl=3)
+            await edit(ctx, content='Message not found!', ttl=3)
+
+    # Colours
+    @commands.command(aliases=['colour', 'Colour', 'Color'])
+    async def color(self, ctx):
+        incolor = getwithoutInvoke(ctx).strip()
+        outcolor = None
+        if ',' in incolor:
+            incolor = incolor.split(',')
+            if len(incolor) == 3:
+                try:
+                    if float(incolor[0]) > 1.0 or float(incolor[1]) > 1.0 or float(incolor[2]) > 1.0:
+                        red = float(int(incolor[0])/255)
+                        blue = float(int(incolor[1])/255)
+                        green = float(int(incolor[2])/255)
+                    else:
+                        red = incolor[0]
+                        blue = incolor[1]
+                        green = incolor[2]
+                    outcolor = Color(rgb=(float(red), float(green), float(blue)))
+                except:
+                    return await edit(ctx, '\N{HEAVY EXCLAMATION MARK SYMBOL} Could not find color', ttl=3)
+        else:
+            try:
+                outcolor = Color(incolor)
+            except:
+                return await edit(ctx, '\N{HEAVY EXCLAMATION MARK SYMBOL} Could not find color', ttl=3)
+
+        if outcolor:
+            value = outcolor.hex_l.strip('#')
+            lv = len(value)
+            rgb = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+
+            e = discord.Embed(title=outcolor.web.title(), colour=int(str(outcolor.hex_l).strip('#'), 16))
+            e.url = 'http://www.colorhexa.com/{}'.format(str(outcolor.hex_l).strip('#'))
+            e.add_field(name='HEX', value=outcolor.hex_l, inline=False)
+            e.add_field(name='RGB', value=rgb, inline=False)
+            e.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(outcolor.hex_l).strip('#'))
+            await edit(ctx, embed=e)
 
 
 def setup(bot):
