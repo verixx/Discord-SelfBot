@@ -91,6 +91,7 @@ class Logging:
     # Show Logging Infosconfig
     @log.command(aliases=["Show"])
     async def show(self, ctx):
+        self.logging = config.Config('log.json')
         ttl = None if ctx.message.content.endswith(' stay') else 20
         em = discord.Embed(title='Logging Info', colour=discord.Color.purple())
 
@@ -138,7 +139,7 @@ class Logging:
         if channel is not '':
             em.add_field(name="Blocked Channels[%s]" % len(self.logging.get('block-channel', {})), value=channel, inline=False)
 
-        channel2 = ', '.join(str(self.bot.get_channel(i)) for i in self.logging.get('block-channel', {}))
+        channel2 = ', '.join(str(self.bot.get_channel(i)) for i in self.logging.get('channel', {}))
         if channel2 is not '':
             em.add_field(name="Logged Channels[%s]" % len(self.logging.get('channel', {})), value=channel2, inline=False)
 

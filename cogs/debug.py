@@ -49,7 +49,7 @@ class Debug:
             await edit(ctx, content=python.format(code, '>>> %s' % type(e).__name__ + ': ' + str(e)))
             return
         if len(str(code) + '>>> Output:' + str(result)) > 2000:
-            link = PythonGists.Gist(description='SelfBot Python Debug', content=result, name='debug.py')
+            link = PythonGists.Gist(description='SelfBot Python Debug', content=str(result), name='debug.py')
             await edit(ctx, content=python.format(code, '>>> Output: See link below..')+'\n<{}>'.format(link))
         else:
             await edit(ctx, content=python.format(code, '>>> Output: %s' % result))
@@ -119,7 +119,7 @@ class Debug:
                         await ctx.send('```py\n%s\n```' % value)
             else:
                 self._last_result = ret
-                if len(value+ret) > 1985:
+                if len(str(value+ret)) > 1985:
                     link = PythonGists.Gist(description='SelfBot Python Eval', content=str(value)+'\n'+str(ret), name='eval.py')
                     await ctx.send(content='\N{ROBOT FACE} I uploaded that for you!\n<{}>'.format(link))
                 else:
