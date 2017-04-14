@@ -3,7 +3,7 @@ import logging
 
 from discord.ext import commands
 from .utils import config
-from .utils.checks import getUser, edit, getwithoutInvoke
+from .utils.checks import getUser, edit, getwithoutInvoke, getGuild, getChannel
 
 log = logging.getLogger('LOG')
 
@@ -60,8 +60,8 @@ class Logging:
     @commands.guild_only()
     async def guild(self, ctx):
         guilds = self.logging.get('guild', {})
-        guild = ctx.guild.id if getwithoutInvoke(ctx) == '' else getwithoutInvoke(ctx)
-        if [True for x in self.bot.get_all_channels() if guild == x.id] != []:
+        guild = getGuild(ctx, getwithoutInvoke(ctx))
+        if guild:
             if guild in guilds:
                 guilds.remove(guild)
                 await self.logging.put('guild', guilds)
@@ -78,8 +78,8 @@ class Logging:
     @commands.guild_only()
     async def channel(self, ctx):
         channels = self.logging.get('channel', {})
-        channel = ctx.channel.id if getwithoutInvoke(ctx) == '' else getwithoutInvoke(ctx)
-        if [True for x in self.bot.get_all_channels() if channel == x.id] != []:
+        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        if channel:
             if channel in self.logging.get('block-channel', {}):
                 await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
                 return
@@ -178,8 +178,8 @@ class Logging:
     @commands.guild_only()
     async def _channel(self, ctx):
         channels = self.logging.get('block-channel', {})
-        channel = ctx.channel.id if getwithoutInvoke(ctx) == '' else getwithoutInvoke(ctx)
-        if [True for x in self.bot.get_all_channels() if channel == x.id] != []:
+        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        if channel:
             if channel in self.logging.get('channel', {}):
                 await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
                 return

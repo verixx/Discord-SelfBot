@@ -86,15 +86,12 @@ def getAgo(time):
 def getUser(ctx, msg):
     if '' is msg:
         return ctx.message.author
-    elif not ctx.guild:
-        if utils.find(lambda m: msg.lower() in m.name.lower(), ctx.bot.users):
-            return utils.find(lambda m: msg.lower() in m.name.lower(), ctx.bot.users)
-        elif 1 == len(ctx.message.mentions):
-            return ctx.message.mentions[0]
-    elif msg.isdigit():
-        return ctx.guild.get_member(int(msg))
     elif 1 == len(ctx.message.mentions):
         return ctx.message.mentions[0]
+    elif not ctx.guild:
+        return utils.find(lambda m: msg.lower() in m.name.lower(), ctx.bot.users)
+    elif msg.isdigit():
+        return ctx.guild.get_member(int(msg))
     elif ctx.message.guild.get_member_named(msg):
         return ctx.message.guild.get_member_named(msg)
     elif utils.find(lambda m: msg.lower() in m.name.lower(), ctx.message.guild.members):
@@ -105,4 +102,30 @@ def getUser(ctx, msg):
                 if msg.lower() in member.nick.lower():
                     return member
                     break
+    return None
+
+
+# Find Guild
+def getGuild(ctx, msg):
+    if msg == '':
+        return ctx.guild.id
+    elif msg.isdigit():
+        return ctx.bot.get_guild(int(msg))
+    else:
+        return utils.find(lambda g: msg.lower() in g.name.lower(), ctx.bot.guilds)
+    return None
+
+
+# Find Channel
+def getChannel(ctx, msg):
+    if msg == '':
+        return ctx.channel.id
+    elif 1 == len(ctx.message.channel_mentions):
+        return ctx.message.channel_mentions[0]
+    elif msg.isdigit():
+        return ctx.bot.get_channel(int(msg))
+    elif utils.find(lambda c: msg.lower() in c.name.lower(), ctx.guild.text_channels):
+        return utils.find(lambda c: msg.lower() in c.name.lower(), ctx.guild.text_channels)
+    else:
+        return utils.find(lambda c: msg.lower() in c.name.lower(), ctx.bot.get_all_channels)
     return None

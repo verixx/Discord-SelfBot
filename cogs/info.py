@@ -8,7 +8,7 @@ import unicodedata
 from dateutil import parser
 from discord import utils
 from discord.ext import commands
-from .utils.checks import getwithoutInvoke, getUser, edit, getAgo
+from .utils.checks import getwithoutInvoke, getUser, edit, getAgo, getGuild, getChannel
 
 log = logging.getLogger('LOG')
 
@@ -132,51 +132,52 @@ class Userinfo:
     async def guild(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
         if ctx.invoked_subcommand is None:
-            serv = ctx.message.guild
-            em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
-            em.set_author(name=serv.name, icon_url='https://i.imgur.com/RHagTDg.png')
-            em.set_thumbnail(url=serv.icon_url)
-            em.add_field(name='Owner',
-                         value='%s' % serv.owner,  inline=True)
-            em.add_field(name='Created On',
-                         value='{}\n{}'.format(serv.created_at.__format__('%d/%m/%Y'), getAgo(serv.created_at)), inline=True)
-            em.add_field(name='Region',
-                         value=serv.region, inline=True)
-            em.add_field(name='ID',
-                         value=serv.id, inline=True)
-            em.add_field(name='Verification Level',
-                         value=serv.verification_level, inline=True)
-            em.add_field(name='2FA Requirement',
-                         value="True" if serv.mfa_level == 1 else "False", inline=True)
-            em.add_field(name='Members [%s]' % serv.member_count,
-                         value='%s Online' % sum(1 for m in serv.members if m.status != discord.Status.offline), inline=True)
-            em.add_field(name='Channels [%s]' % len(serv.channels),
-                         value='%s Text | %s Voice' % (len(serv.text_channels), len(serv.voice_channels)), inline=True)
-            await edit(ctx, embed=em, ttl=ttl)
+            serv = getGuild(ctx, getwithoutInvoke(ctx))
+            if serv:
+                em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
+                em.set_author(name=serv.name, icon_url='https://i.imgur.com/RHagTDg.png')
+                em.set_thumbnail(url=serv.icon_url)
+                em.add_field(name='Owner',
+                             value='%s' % serv.owner,  inline=True)
+                em.add_field(name='Created On',
+                             value='{}\n{}'.format(serv.created_at.__format__('%d/%m/%Y'), getAgo(serv.created_at)), inline=True)
+                em.add_field(name='Region',
+                             value=serv.region, inline=True)
+                em.add_field(name='ID',
+                             value=serv.id, inline=True)
+                em.add_field(name='Verification Level',
+                             value=serv.verification_level, inline=True)
+                em.add_field(name='2FA Requirement',
+                             value="True" if serv.mfa_level == 1 else "False", inline=True)
+                em.add_field(name='Members [%s]' % serv.member_count,
+                             value='%s Online' % sum(1 for m in serv.members if m.status != discord.Status.offline), inline=True)
+                em.add_field(name='Channels [%s]' % len(serv.channels),
+                             value='%s Text | %s Voice' % (len(serv.text_channels), len(serv.voice_channels)), inline=True)
+                await edit(ctx, embed=em, ttl=ttl)
+            else:
+                await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Guild not found",  ttl=5)
 
     # Server roles on Server
     @commands.command(aliases=["Roles"])
     @commands.guild_only()
     async def roles(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        serv = ctx.message.guild
-        em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
-        em.add_field(name='Roles [%s]' % (len(serv.roles)-1),
-                     value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
-        await edit(ctx, embed=em, ttl=ttl)
+        serv = getGuild(ctx, getwithoutInvoke(ctx))
+        if serv:
+            em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
+            em.add_field(name='Roles [%s]' % (len(serv.roles)-1),
+                         value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
+            await edit(ctx, embed=em, ttl=ttl)
+        else:
+            await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Guild not found",  ttl=5)
 
     # Channel on Server
     @commands.command(aliases=["Channel"])
     @commands.guild_only()
     async def channel(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        if 1 == len(ctx.message.channel_mentions):
-            channel = ctx.message.channel_mentions[0]
-        elif getwithoutInvoke(ctx).strip() != '':
-            channel = utils.find(lambda c: getwithoutInvoke(ctx).strip().lower() in c.name.lower(), ctx.message.guild.text_channels)
-        else:
-            channel = ctx.message.channel
-        if channel is not None:
+        channel = getChannel(ctx, getwithoutInvoke)
+        if channel:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
             em.add_field(name='Name',
                          value=channel.name, inline=True)
