@@ -3,7 +3,7 @@ import logging
 
 from discord.ext import commands
 from .utils import config
-from .utils.checks import getUser, edit
+from .utils.checks import getUser, edit, getwithoutInvoke
 
 log = logging.getLogger('LOG')
 
@@ -60,33 +60,39 @@ class Logging:
     @commands.guild_only()
     async def guild(self, ctx):
         guilds = self.logging.get('guild', {})
-        guild = ctx.message.guild.id
-        if guild in guilds:
-            guilds.remove(guild)
-            await self.logging.put('guild', guilds)
-            await edit(ctx, content='\N{HEAVY CHECK MARK} Removed guild with ID ``%s`` from logger' % guild,  ttl=5)
+        guild = ctx.guild.id if getwithoutInvoke(ctx) == '' else getwithoutInvoke(ctx)
+        if [True for x in self.bot.get_all_channels() if guild == x.id] != []:
+            if guild in guilds:
+                guilds.remove(guild)
+                await self.logging.put('guild', guilds)
+                await edit(ctx, content='\N{HEAVY CHECK MARK} Removed guild with ID ``%s`` from logger' % guild,  ttl=5)
+            else:
+                guilds.append(guild)
+                await self.logging.put('guild', guilds)
+                await edit(ctx, content='\N{HEAVY CHECK MARK} Added guild with ID ``%s`` to logger' % guild,  ttl=5)
         else:
-            guilds.append(guild)
-            await self.logging.put('guild', guilds)
-            await edit(ctx, content='\N{HEAVY CHECK MARK} Added guild with ID ``%s`` to logger' % guild,  ttl=5)
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Guild found',  ttl=5)
 
     # Log Channel
     @log.command(aliases=["Channel"])
     @commands.guild_only()
     async def channel(self, ctx):
         channels = self.logging.get('channel', {})
-        channel = ctx.message.channel.id
-        if channel in self.logging.get('block-channel', {}):
-            await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
-            return
-        if channel in channels:
-            channels.remove(channel)
-            await self.logging.put('channel', channels)
-            await edit(ctx, content='\N{HEAVY CHECK MARK} Removed Channel with ID ``%s`` from logger' % channel,  ttl=5)
+        channel = ctx.channel.id if getwithoutInvoke(ctx) == '' else getwithoutInvoke(ctx)
+        if [True for x in self.bot.get_all_channels() if channel == x.id] != []:
+            if channel in self.logging.get('block-channel', {}):
+                await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
+                return
+            if channel in channels:
+                channels.remove(channel)
+                await self.logging.put('channel', channels)
+                await edit(ctx, content='\N{HEAVY CHECK MARK} Removed Channel with ID ``%s`` from logger' % channel,  ttl=5)
+            else:
+                channels.append(channel)
+                await self.logging.put('channel', channels)
+                await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to logger' % channel,  ttl=5)
         else:
-            channels.append(channel)
-            await self.logging.put('channel', channels)
-            await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to logger' % channel,  ttl=5)
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Chnnael found',  ttl=5)
 
     # Show Logging Infosconfig
     @log.command(aliases=["Show"])
@@ -172,18 +178,21 @@ class Logging:
     @commands.guild_only()
     async def _channel(self, ctx):
         channels = self.logging.get('block-channel', {})
-        channel = ctx.message.channel.id
-        if channel in self.logging.get('channel', {}):
-            await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
-            return
-        if channel in channels:
-            channels.remove(channel)
-            await self.logging.put('block-channel', channels)
-            await edit(ctx, content='\N{HEAVY CHECK MARK} Removed Channel with ID ``%s`` from blacklist' % channel,  ttl=5)
+        channel = ctx.channel.id if getwithoutInvoke(ctx) == '' else getwithoutInvoke(ctx)
+        if [True for x in self.bot.get_all_channels() if channel == x.id] != []:
+            if channel in self.logging.get('channel', {}):
+                await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
+                return
+            if channel in channels:
+                channels.remove(channel)
+                await self.logging.put('block-channel', channels)
+                await edit(ctx, content='\N{HEAVY CHECK MARK} Removed Channel with ID ``%s`` from blacklist' % channel,  ttl=5)
+            else:
+                channels.append(channel)
+                await self.logging.put('block-channel', channels)
+                await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to blacklist' % channel,  ttl=5)
         else:
-            channels.append(channel)
-            await self.logging.put('block-channel', channels)
-            await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to blacklist' % channel,  ttl=5)
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Chnnael found',  ttl=5)
 
     # Blacklist user
     @blacklist.command(aliases=["User"])
