@@ -121,7 +121,7 @@ class Userinfo:
                          value=role.mentionable,  inline=True)
             em.add_field(name='Members [%s]' % len(role.members),
                          value='%s Online' % sum(1 for m in role.members if m.status != discord.Status.offline), inline=True)
-            em.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(role.colour).replace("#", ""))
+            em.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(role.colour).strip("#"))
             await edit(ctx, embed=em, ttl=ttl)
         else:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found",  ttl=5)

@@ -119,7 +119,7 @@ class Debug:
                         await ctx.send('```py\n%s\n```' % value)
             else:
                 self._last_result = ret
-                if len(str(value+ret)) > 1985:
+                if len(str(value)+str(ret)) > 1985:
                     link = PythonGists.Gist(description='SelfBot Python Eval', content=str(value)+'\n'+str(ret), name='eval.py')
                     await ctx.send(content='\N{ROBOT FACE} I uploaded that for you!\n<{}>'.format(link))
                 else:
