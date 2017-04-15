@@ -1,9 +1,14 @@
+import asyncio
 import datetime
 import discord
+import logging
 
 from .utils.checks import edit, getUser, getwithoutInvoke
 from .utils import config
 from discord.ext import commands
+from discord import utils
+
+log = logging.getLogger('LOG')
 
 
 class Mod:
@@ -16,7 +21,8 @@ class Mod:
     async def do_purge(self, ctx, limit, predicate):
         if limit:
             deleted = await ctx.channel.purge(limit=limit, before=ctx.message, check=predicate)
-            await edit(ctx, content='Cleaned `{}` messages out of `{}` that were checked.'.format(len(deleted), limit), ttl=5)
+            await edit(ctx, content='Cleaned `{}` messages out of `{}` checked.'.format(len(deleted), limit), ttl=5)
+            log.info('Pruned {} messages out of {} checked'.format(len(deleted), limit))
         else:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Don't forget to give the amount you wanna delte".format(len(deleted), limit), ttl=5)
 
@@ -56,6 +62,58 @@ class Mod:
     @clean.command(aliases=['Mine'])
     async def mine(self, ctx, search: int = None):
         await self.do_purge(ctx, search, lambda e: e.author == ctx.author)
+
+    # Mute a Member
+    @commands.command(aliases=['Mute'])
+    @commands.has_permissions(manage_roles=True)
+    @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
+    async def mute(self, ctx, mem: str):
+        member = getUser(ctx, mem)
+        if member:
+            if not utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles):
+                perms = utils.find(lambda r: "@everyone" == r.name, ctx.message.guild.roles).permissions
+                role = await ctx.guild.create_role(name="Muted", permissions=perms)
+                log.info('Created role: Muted')
+                for channel in ctx.guild.text_channels:
+                    await channel.set_permissions(role, overwrite=discord.PermissionOverwrite(send_messages=False, add_reactions=False))
+                for channel in ctx.guild.voice_channels:
+                    await channel.set_permissions(role, overwrite=discord.PermissionOverwrite(speak=False))
+                log.info('Prepared Mute role for mutes in channels')
+            if utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles) not in member.roles:
+                role = utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles)
+                roles = member.roles
+                roles.append(role)
+                await member.edit(roles=roles)
+                log.info(f'Muted {member}')
+
+                e = discord.Embed(color=discord.Color.purple())
+                e.set_author(name="\N{SPEAKER WITH CANCELLATION STROKE} Muted " + str(member))
+                await edit(ctx, embed=e)
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Already muted", ttl=5)
+
+    # Mute a Member
+    @commands.command(aliases=['Unmute'])
+    @commands.has_permissions(manage_roles=True)
+    @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
+    async def unmute(self, ctx, mem: str):
+        member = getUser(ctx, mem)
+        if member:
+            if utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles) in member.roles:
+                role = utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles)
+                roles = member.roles
+                roles.remove(role)
+                asyncio.sleep(0.5)
+                await member.edit(roles=roles)
+                log.info(f'Unmuted {member}')
+
+                e = discord.Embed(color=discord.Color.purple())
+                e.set_author(name="\N{SPEAKER} Unmuted " + str(member))
+                await edit(ctx, embed=e)
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member is not muted", ttl=5)
 
     # Kick a Member
     @commands.command(aliases=['Kick'])
