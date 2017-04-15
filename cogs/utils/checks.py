@@ -119,7 +119,7 @@ def getGuild(ctx, msg):
 # Find Channel
 def getChannel(ctx, msg):
     if msg == '':
-        return ctx.channel.id
+        return ctx.channel
     elif 1 == len(ctx.message.channel_mentions):
         return ctx.message.channel_mentions[0]
     elif msg.isdigit():

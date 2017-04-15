@@ -3,7 +3,7 @@ import datetime
 import discord
 import logging
 
-from .utils.checks import edit, getUser, getwithoutInvoke, getRole
+from .utils.checks import edit, getUser, getwithoutInvoke, getRole, getChannel
 from .utils import config
 from discord.ext import commands
 from discord import utils
@@ -256,6 +256,47 @@ class Mod:
         else:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member and Role not found", ttl=5)
 
+    # Add or remove a role to a Member
+    @commands.command(aliases=['Lock'])
+    @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
+    async def lock(self, ctx):
+        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        if channel:
+            if channel in ctx.guild.text_channels:
+                perms = channel.overwrites_for(ctx.guild.default_role)
+                perms.send_messages = False
+                await channel.set_permissions(ctx.guild.default_role, overwrite=perms)
+                log.info(f'Locked down channel #{ctx.channel}')
+
+                e = discord.Embed(color=discord.Color.purple())
+                e.set_author(name=f'Locked down channel #{ctx.channel}')
+                await edit(ctx, embed=e)
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Selected Channel is not in this guild", ttl=5)
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found", ttl=5)
+
+    # Add or remove a role to a Member
+    @commands.command(aliases=['Unlock'])
+    @commands.has_permissions(manage_channels=True)
+    @commands.guild_only()
+    async def unlock(self, ctx):
+        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        if channel:
+            if channel in ctx.guild.text_channels:
+                perms = channel.overwrites_for(ctx.guild.default_role)
+                perms.send_messages = True
+                await channel.set_permissions(ctx.guild.default_role, send_messages=True)
+                log.info(f'Unlocked channel #{ctx.channel}')
+
+                e = discord.Embed(color=discord.Color.purple())
+                e.set_author(name=f'Unlocked channel #{ctx.channel}')
+                await edit(ctx, embed=e)
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Selected Channel is not in this guild", ttl=5)
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found", ttl=5)
 
 
 def setup(bot):
