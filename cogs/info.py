@@ -8,7 +8,7 @@ import unicodedata
 from dateutil import parser
 from discord import utils
 from discord.ext import commands
-from .utils.checks import getwithoutInvoke, getUser, edit, getAgo, getGuild, getChannel
+from .utils.checks import getwithoutInvoke, getUser, edit, getAgo, getGuild, getChannel, getRole
 
 log = logging.getLogger('LOG')
 
@@ -102,11 +102,7 @@ class Userinfo:
     @commands.guild_only()
     async def role(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        role = None
-        if 1 == len(ctx.message.role_mentions):
-            role = ctx.message.role_mentions[0]
-        else:
-            role = utils.find(lambda r: getwithoutInvoke(ctx).strip().lower() in r.name.lower(), ctx.message.guild.roles)
+        role = getRole(ctx, getwithoutInvoke(ctx))
         if role is not None:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=role.colour)
             em.add_field(name='Name',

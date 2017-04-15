@@ -129,3 +129,16 @@ def getChannel(ctx, msg):
     else:
         return utils.find(lambda c: msg.lower() in c.name.lower(), ctx.bot.get_all_channels)
     return None
+
+
+# Find Role
+def getRole(ctx, msg):
+    if msg == '':
+        return ctx.guild.default_role
+    if 1 == len(ctx.message.role_mentions):
+        return ctx.message.role_mentions[0]
+    elif msg.isdigit():
+        return utils.find(lambda r: msg.strip() == r.id, ctx.guild.roles)
+    else:
+        return utils.find(lambda r: msg.strip().lower() in r.name.lower(), ctx.guild.roles)
+    return None
