@@ -3,7 +3,7 @@ import datetime
 import discord
 import logging
 
-from .utils.checks import edit, getUser, getwithoutInvoke
+from .utils.checks import edit, getUser, getwithoutInvoke, getRole
 from .utils import config
 from discord.ext import commands
 from discord import utils
@@ -84,6 +84,7 @@ class Mod:
                 role = utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles)
                 roles = member.roles
                 roles.append(role)
+                asyncio.sleep(0.5)
                 await member.edit(roles=roles)
                 log.info(f'Muted {member}')
 
@@ -96,7 +97,6 @@ class Mod:
     # Mute a Member
     @commands.command(aliases=['Unmute'])
     @commands.has_permissions(manage_roles=True)
-    @commands.has_permissions(manage_channels=True)
     @commands.guild_only()
     async def unmute(self, ctx, mem: str):
         member = getUser(ctx, mem)
@@ -201,6 +201,61 @@ class Mod:
             e.add_field(name="False", value=false, inline=False)
 
             await edit(ctx, embed=e)
+
+    # Add or remove a role to a Member
+    @commands.command(aliases=['Addrole'])
+    @commands.has_permissions(manage_roles=True)
+    @commands.guild_only()
+    async def addrole(self, ctx, mem: str, ro: str):
+        member = getUser(ctx, mem)
+        role = getRole(ctx, ro)
+        if member and role:
+            if role not in member.roles:
+                roles = member.roles
+                roles.append(role)
+                asyncio.sleep(0.5)
+                await member.edit(roles=roles)
+                log.info(f'Added {role.name} to {member}')
+
+                e = discord.Embed(color=role.color)
+                e.set_author(name=f"Added {role.name} to {member}")
+                await edit(ctx, embed=e, ttl=5)
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member already has the selected role", ttl=5)
+        elif not member and role:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member not found", ttl=5)
+        elif not role and member:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found", ttl=5)
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member and Role not found", ttl=5)
+
+    # Add or remove a role to a Member
+    @commands.command(aliases=['Removerole'])
+    @commands.has_permissions(manage_roles=True)
+    @commands.guild_only()
+    async def removerole(self, ctx, mem: str, ro: str):
+        member = getUser(ctx, mem)
+        role = getRole(ctx, ro)
+        if member and role:
+            if role in member.roles:
+                roles = member.roles
+                roles.remove(role)
+                asyncio.sleep(0.5)
+                await member.edit(roles=roles)
+                log.info(f'Removed {role.name} to {member}')
+
+                e = discord.Embed(color=role.color)
+                e.set_author(name=f"Removed {role.name} from {member}")
+                await edit(ctx, embed=e, ttl=5)
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member does not have the selected role", ttl=5)
+        elif not member and role:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member not found", ttl=5)
+        elif not role and member:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found", ttl=5)
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Member and Role not found", ttl=5)
+
 
 
 def setup(bot):
