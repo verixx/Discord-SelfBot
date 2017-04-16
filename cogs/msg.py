@@ -44,7 +44,7 @@ class OnMessage:
                     log.info('In {1}:{0.content}'.format(message, destination))
                     if response[0] == 'embed':
                         if permEmbed(message):
-                            await message.edit(content='%s' % response[2], embed=discord.Embed(colour=discord.Color.purple()).set_image(url=response[1]))
+                            await message.edit(content=response[2], embed=discord.Embed(colour=discord.Color.purple()).set_image(url=response[1]))
                         else:
                             await message.edit(content='{0}\n{1}'.format(response[2], response[1]))
                     else:
@@ -91,13 +91,14 @@ class OnMessage:
                                 self.bot.mention_count_name += 1
                             break
                 if notify:
+                    content = message.clean_content if len(message.clean_content) < 1020 else message.clean_content[:1020] + '...'
                     em.set_author(name=message.author, icon_url=message.author.avatar_url)
                     em.add_field(name='In',
                                  value="#%s, ``%s``" % (message.channel, message.guild), inline=False)
                     em.add_field(name='At',
-                                 value="%s" % datetime.now().__format__('%A, %d. %B %Y @ %H:%M:%S'), inline=False)
+                                 value=datetime.now().__format__('%A, %d. %B %Y @ %H:%M:%S'), inline=False)
                     em.add_field(name='Message',
-                                 value="%s" % message.clean_content, inline=False)
+                                 value=content, inline=False)
                     em.set_thumbnail(url=message.author.avatar_url)
                     if self.webhook_token and not mention:
                         try:
