@@ -83,6 +83,8 @@ async def on_ready():
 async def on_command_error(error, ctx):
     if isinstance(error, commands.NoPrivateMessage):
         await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only usable on Servers', ttl=5)
+    elif isinstance(error, commands.CheckFailure):
+        await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Permissions to use this command', ttl=5)
     elif isinstance(error, commands.CommandInvokeError):
         log.error('In {0.command.qualified_name}:\n{1}'.format(ctx, ''.join(traceback.format_list(traceback.extract_tb(error.original.__traceback__)))))
         log.error('{0.__class__.__name__}: {0}'.format(error.original))
