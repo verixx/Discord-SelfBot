@@ -135,7 +135,7 @@ class Mod:
                 await edit(ctx, embed=e)
 
     # Ban a Member
-    @commands.group(aliases=['Ban'])
+    @commands.command(aliases=['Ban'])
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def ban(self, ctx):
@@ -155,10 +155,10 @@ class Mod:
                     await edit(ctx, embed=e)
 
     # SoftBan a Member (ban, delelte messagea and unban)
-    @ban.command(aliases=['Soft'])
+    @commands.command(aliases=['Softban'])
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
-    async def soft(self, ctx):
+    async def softban(self, ctx):
         member = getUser(ctx, getwithoutInvoke(ctx))
         if member:
             try:
