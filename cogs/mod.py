@@ -200,7 +200,7 @@ class Mod:
             e.add_field(name="True", value=true, inline=False)
             e.add_field(name="False", value=false, inline=False)
 
-            await edit(ctx, embed=e)
+            await edit(ctx, embed=e, ttl=20)
 
     # Add or remove a role to a Member
     @commands.command(aliases=['Addrole'])
