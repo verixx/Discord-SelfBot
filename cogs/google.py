@@ -150,7 +150,7 @@ class Google:
     async def get_google_entries(self, query):
         params = {
             'q': query,
-            'cr': 'countryUS'
+            'hl': 'en'
             }
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64)'
