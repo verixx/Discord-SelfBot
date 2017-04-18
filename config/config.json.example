@@ -1,16 +1,12 @@
 {
-    "gamestatus": "",
-    "log_channel": ,
-    "token": "",
-    "me": ,
-    "mal_username": "",
-    "setlog": "off",
-    "bot_identifier": "",
-    "prefix": "/",
-    "google_api_key": "",
-    "mal_password": "",
-    "custom_search_engine": "",
-    "restart_channel": ,
-    "restart": "",
-    "webhook_token":""
+  "webhook_token":"",
+  "log_channel":,
+  "gamestatus":"",
+  "custom_search_engine":"",
+  "token":"",
+  "google_api_key":"",
+  "prefix":["/"],
+  "mal_username":"",
+  "mal_password":"",
+  "setlog":"on"
 }
