@@ -6,7 +6,6 @@ import json
 from discord.ext import commands
 from lxml import etree
 from urllib.parse import parse_qs
-from .utils import config
 from .utils.checks import permEmbed, edit
 
 
@@ -14,7 +13,6 @@ class Google:
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = config.Config('config.json')
 
     def parse_google_card(self, node):
         if node is None:
@@ -210,7 +208,7 @@ class Google:
     @commands.command(aliases=["I", "image", "Image"])
     async def i(self, ctx, *, query):
         async with aiohttp.ClientSession() as cs:
-            async with cs.get("https://www.googleapis.com/customsearch/v1?q=" + query.replace(' ', '+') + "&start=" + '1' + "&key=" + self.config.get('google_api_key', []) + "&cx=" + self.config.get('custom_search_engine', []) + "&searchType=image") as resp:
+            async with cs.get("https://www.googleapis.com/customsearch/v1?q=" + query.replace(' ', '+') + "&start=" + '1' + "&key=" + self.bot.google_api_key + "&cx=" + self.bot.custom_search_engine + "&searchType=image") as resp:
                 if resp.status != 200:
                     await edit(ctx, content='Google somehow failed to respond.', ttl=3)
                 result = json.loads(await resp.text())

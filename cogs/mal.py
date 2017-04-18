@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 from lxml import etree
 from urllib.parse import parse_qs
-from .utils import config
 from .utils.checks import permEmbed, edit
 
 
@@ -17,7 +16,6 @@ class Mal:
     def __init__(self, bot):
         self.bot = bot
         self.malid = None
-        self.config = config.Config('config.json')
         self.loop = asyncio.get_event_loop()
 
     async def get_google_entries(self, query, search):
@@ -57,7 +55,7 @@ class Mal:
         return content
 
     def getMal(self, i, _type):
-        creds = spice.init_auth(self.config.get('mal_username', []), self.config.get('mal_password', []))
+        creds = spice.init_auth(self.bot.mal_un, self.bot.mal_pw)
         return spice.search_id(int(i), spice.get_medium(_type), creds)
 
     def parse_content(self, i, _type):

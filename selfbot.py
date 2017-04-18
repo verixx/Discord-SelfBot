@@ -2,16 +2,15 @@ import asyncio
 import datetime
 import discord
 import logging
+import os
 import time
 import traceback
 
-from cogs.utils import config
-from cogs.utils.checks import edit
+from cogs.utils.checks import edit, read_config, read_log
 from collections import Counter
 from discord.ext import commands
 
 # "Database"
-config = config.Config('config.json')
 
 # Logging
 log = logging.getLogger('LOG')
@@ -53,7 +52,8 @@ extensions = ['cogs.cmds',
               'cogs.tools'
               ]
 
-bot = commands.Bot(command_prefix=config.get('prefix', []), description='''IgneelDxD's Selfbot''', self_bot=True)
+prefix = read_config('prefix')
+bot = commands.Bot(command_prefix=prefix, description='''IgneelDxD's Selfbot''', self_bot=True)
 
 
 # Startup
@@ -71,11 +71,26 @@ async def on_ready():
     bot.mention_count = 0
     bot.mention_count_name = 0
     bot.refresh_time = time.time()
-    bot.gamename = config.get('gamestatus', [])
-    if config.get('restart', []) == 'true':
-        await bot.get_channel(config.get('restart_channel', [])).send(':wave: Back Running!', delete_after=2)
-        await config.put('restart', 'false')
-        await config.put('restart_channel', [])
+
+    bot.gamename = read_config('gamestatus')
+    bot.mal_un = read_config('mal_username')
+    bot.mal_pw = read_config('mal_password')
+    bot.log_channel = read_config('log_channel')
+    bot.webhook_token = read_config('webhook_token')
+    bot.google_api_key = read_config('google_api_key')
+    bot.custom_search_engine = read_config('custom_search_engine')
+    bot.prefix = prefix
+    bot.setlog = read_config('setlog')
+    bot.log_guild = read_log('guild')
+    bot.log_block_user = read_log('block-user')
+    bot.log_block_channel = read_log('block-channel')
+    bot.log_key = read_log('key')
+    bot.log_block_key = read_log('block-key')
+    bot.log_channel = read_log('channel')
+    if os.path.isfile('restart.txt'):
+        with open('restart.txt', 'r') as re:
+            await bot.get_channel(int(re.readline())).send(':wave: Back Running!', delete_after=2)
+        os.remove('restart.txt')
 
 
 # Command Errors
@@ -134,4 +149,4 @@ if __name__ == '__main__':
         except Exception as e:
             log.warning('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
     bot.loop.create_task(status(bot))
-    bot.run(config.get('token', []), bot=False)
+    bot.run(read_config('token'), bot=False)

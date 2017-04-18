@@ -4,7 +4,6 @@ import os
 import sys
 
 from discord.ext import commands
-from .utils import config
 from .utils.checks import edit
 
 log = logging.getLogger('LOG')
@@ -14,7 +13,6 @@ class Cogs:
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = config.Config('config.json')
 
     # Loads a module
     @commands.command(aliases=["Load"])
@@ -78,13 +76,13 @@ class Cogs:
         await edit(ctx, content='Bot has been killed.', ttl=2)
         with open('quit.txt', 'w') as re:
             re.write('quit')
-        exit()
+        os._exit(0)
 
     # Restart selfbot
     @commands.command(aliases=["Restart"])
     async def restart(self, ctx):
-        await self.config.put('restart', 'true')
-        await self.config.put('restart_channel', ctx.message.channel.id)
+        with open('restart.txt', 'w') as re:
+            re.write(str(ctx.channel.id))
         log.info('Restarting....')
         await ctx.message.edit(content='Good Bye :wave:')
         await asyncio.sleep(.5)

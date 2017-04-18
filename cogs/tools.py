@@ -4,8 +4,7 @@ import os
 import platform
 import psutil
 
-from .utils.checks import getwithoutInvoke, getTimeDiff, edit
-from .utils import config
+from .utils.checks import getwithoutInvoke, getTimeDiff, edit, save_config
 from colour import Color
 from discord.ext import commands
 
@@ -14,7 +13,6 @@ class Tools:
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = config.Config('config.json')
 
     # Command usage stats
     @commands.command(aliases=["Cmdstats"])
@@ -116,11 +114,11 @@ class Tools:
         ttl = None if ctx.message.content.endswith(' stay') else 5
         game = getwithoutInvoke(ctx)
         if game == '':
-            await self.config.put('gamestatus', None)
+            await save_config('gamestatus', None)
             self.bot.gamename = None
             await edit(ctx, content='\N{VIDEO GAME} Removed Game Status',  ttl=ttl)
         else:
-            await self.config.put('gamestatus', game)
+            await save_config('gamestatus', game)
             self.bot.gamename = game
             await edit(ctx, content='\N{VIDEO GAME} Now playing: ``%s``' % self.bot.gamename,  ttl=ttl)
 

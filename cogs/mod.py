@@ -4,7 +4,6 @@ import discord
 import logging
 
 from .utils.checks import edit, getUser, getwithoutInvoke, getRole, getChannel
-from .utils import config
 from discord.ext import commands
 from discord import utils
 
@@ -15,7 +14,6 @@ class Mod:
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = config.Config('config.json')
 
     # Do cleanup
     async def do_purge(self, ctx, limit, predicate):

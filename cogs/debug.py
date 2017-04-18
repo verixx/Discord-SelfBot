@@ -5,7 +5,6 @@ import textwrap
 import traceback
 
 from .utils.checks import getUser, edit
-from .utils import config
 from contextlib import redirect_stdout
 from discord.ext import commands
 from PythonGists import PythonGists
@@ -15,8 +14,6 @@ class Debug:
 
     def __init__(self, bot):
         self.bot = bot
-        self.config = config.Config('config.json')
-        self.logging = config.Config('log.json')
         self._last_result = None
 
     # DEBUG
