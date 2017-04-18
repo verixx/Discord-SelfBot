@@ -66,12 +66,12 @@ class Logging:
             if guild in guilds:
                 guilds.remove(guild)
                 self.bot.log_guild = guilds
-                await self.logging.put('guild', guilds)
+                await save_log('guild', guilds)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Removed guild with ID ``%s`` from logger' % guild,  ttl=5)
             else:
                 guilds.append(guild)
                 self.bot.log_guild = guilds
-                await self.logging.put('guild', guilds)
+                await save_log('guild', guilds)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Added guild with ID ``%s`` to logger' % guild,  ttl=5)
         else:
             await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Guild found',  ttl=5)
@@ -89,12 +89,12 @@ class Logging:
             if channel in channels:
                 channels.remove(channel)
                 self.bot.log_channel = channels
-                await self.logging.put('channel', channels)
+                await save_log('channel', channels)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Removed Channel with ID ``%s`` from logger' % channel,  ttl=5)
             else:
                 channels.append(channel)
                 self.bot.log_channel = channels
-                await self.logging.put('channel', channels)
+                await save_log('channel', channels)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to logger' % channel,  ttl=5)
         else:
             await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Chnnael found',  ttl=5)
@@ -171,12 +171,12 @@ class Logging:
         if msg in keys:
             keys.remove(msg)
             self.bot.log_block_key = keys
-            await self.logging.put('block-key', keys)
+            await save_log('block-key', keys)
             await edit(ctx, content='\N{HEAVY CHECK MARK} Unblocked ``%s`` from Logger' % msg,  ttl=5)
         elif msg not in keys:
             keys.append(msg)
             self.bot.log_block_key = keys
-            await self.logging.put('block-key', keys)
+            await save_log('block-key', keys)
             await edit(ctx, content='\N{HEAVY CHECK MARK} Blocked ``%s`` from Logger' % msg,  ttl=5)
 
     # Blacklist Channel
@@ -192,12 +192,12 @@ class Logging:
             if channel in channels:
                 channels.remove(channel)
                 self.bot.log_block_channel = channels
-                await self.logging.put('block-channel', channels)
+                await save_log('block-channel', channels)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Removed Channel with ID ``%s`` from blacklist' % channel,  ttl=5)
             else:
                 channels.append(channel)
                 self.bot.log_block_channel = channels
-                await self.logging.put('block-channel', channels)
+                await save_log('block-channel', channels)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to blacklist' % channel,  ttl=5)
         else:
             await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Chnnael found',  ttl=5)
@@ -213,12 +213,12 @@ class Logging:
         if user.id in users:
             users.remove(user.id)
             self.bot.log_block_user = users
-            await self.logging.put('block-user', users)
+            await save_log('block-user', users)
             await edit(ctx, content='\N{HEAVY CHECK MARK} Removed %s with ID ``%s`` from blacklist' % (ctx.message.guild.get_member(user.id), user.id),  ttl=5)
         else:
             users.append(user.id)
             self.bot.log_block_user = users
-            await self.logging.put('block-user', users)
+            await save_log('block-user', users)
             await edit(ctx, content='\N{HEAVY CHECK MARK} Added %s with ID ``%s`` to blacklist' % (ctx.message.guild.get_member(user.id), user.id),  ttl=5)
 
     # Automatically remove channel and guilds from blacklist on leave
@@ -229,7 +229,7 @@ class Logging:
         if guild.id in guilds:
             guilds.remove(guild.id)
             self.bot.log_guild = guilds
-            await self.logging.put('guild', guilds)
+            await save_log('guild', guilds)
             log.info('Removed Guild "{}" on leave from logger'.format(guild.name))
 
         block_channels = self.bot.log_block_channel
@@ -237,14 +237,14 @@ class Logging:
             if channel.id in block_channels:
                 block_channels.remove(channel.id)
                 self.bot.log_block_channel = block_channels
-                await self.logging.put('block-channel', block_channels)
+                await save_log('block-channel', block_channels)
                 log.info('Removed Channel "{}" in Guild "{}" on leave from blacklist'.format(channel.name, guild.name))
 
         channels = self.bot.log_channel
         if channel.id in channels:
             channels.remove(channel.id)
             self.bot.log_channel = channels
-            await self.logging.put('channel', channels)
+            await save_log('channel', channels)
             log.info('Removed Channel "{}" in Guild "{}" on leave from logger'.format(channel.name, channel.guild.name))
 
     # Automatically remove channel if it get's deleted
@@ -253,14 +253,14 @@ class Logging:
         if channel.id in block_channels:
             block_channels.remove(channel.id)
             self.bot.log_block_channel = block_channels
-            await self.logging.put('block-channel', block_channels)
+            await save_log('block-channel', block_channels)
             log.info('Removed Channel "{}" in Guild "{}" on leave from blacklist'.format(channel.name, channel.guild.name))
 
         channels = self.bot.log_channel
         if channel.id in channels:
             channels.remove(channel.id)
             self.bot.log_channel = channels
-            await self.logging.put('channel', channels)
+            await save_log('channel', channels)
             log.info('Removed Channel "{}" in Guild "{}" on leave from logger'.format(channel.name, channel.guild.name))
 
 
