@@ -2,7 +2,9 @@ import aiohttp
 import discord
 import json
 import logging
+import mimetypes
 import random
+import re
 
 from discord.ext import commands
 from random import choice
@@ -18,6 +20,16 @@ class Misc:
                      "Signs point to yes", "Without a doubt", "Yes", "Yes – definitely", "You may rely on it", "Reply hazy, try again",
                      "Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again",
                      "Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
+        self.regionals = {'A': '\N{REGIONAL INDICATOR SYMBOL LETTER A}', 'B': '\N{REGIONAL INDICATOR SYMBOL LETTER B}', 'C': '\N{REGIONAL INDICATOR SYMBOL LETTER C}',
+                          'D': '\N{REGIONAL INDICATOR SYMBOL LETTER D}', 'E': '\N{REGIONAL INDICATOR SYMBOL LETTER E}', 'F': '\N{REGIONAL INDICATOR SYMBOL LETTER F}',
+                          'G': '\N{REGIONAL INDICATOR SYMBOL LETTER G}', 'H': '\N{REGIONAL INDICATOR SYMBOL LETTER H}', 'I': '\N{REGIONAL INDICATOR SYMBOL LETTER I}',
+                          'J': '\N{REGIONAL INDICATOR SYMBOL LETTER J}', 'K': '\N{REGIONAL INDICATOR SYMBOL LETTER K}', 'L': '\N{REGIONAL INDICATOR SYMBOL LETTER L}',
+                          'M': '\N{REGIONAL INDICATOR SYMBOL LETTER M}', 'N': '\N{REGIONAL INDICATOR SYMBOL LETTER N}', 'O': '\N{REGIONAL INDICATOR SYMBOL LETTER O}',
+                          'P': '\N{REGIONAL INDICATOR SYMBOL LETTER P}', 'Q': '\N{REGIONAL INDICATOR SYMBOL LETTER Q}', 'R': '\N{REGIONAL INDICATOR SYMBOL LETTER R}',
+                          'S': '\N{REGIONAL INDICATOR SYMBOL LETTER S}', 'T': '\N{REGIONAL INDICATOR SYMBOL LETTER T}', 'U': '\N{REGIONAL INDICATOR SYMBOL LETTER U}',
+                          'V': '\N{REGIONAL INDICATOR SYMBOL LETTER V}', 'W': '\N{REGIONAL INDICATOR SYMBOL LETTER W}', 'X': '\N{REGIONAL INDICATOR SYMBOL LETTER X}',
+                          'Y': '\N{REGIONAL INDICATOR SYMBOL LETTER Y}', 'Z': '\N{REGIONAL INDICATOR SYMBOL LETTER Z}'}
+        self.numbers = {'0': '0⃣', '1': '1⃣', '2': '2⃣', '3': '3⃣', '4': '4⃣', '5': '5⃣', '6': '6⃣', '7': '7⃣', '8': '8⃣', '9': '9⃣'}
 
     # Sends a googleitfor.me link with the specified tags
     @commands.command(aliases=["L2g"])
@@ -104,6 +116,67 @@ class Misc:
                 await edit(ctx, content="Invalid search.", ttl=3)
         else:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Specify Search", ttl=3)
+
+    def to_reginals(self, content, react):
+        regional_list = []
+        for x in list(content):
+            if x.isalpha():
+                regional_list.append(self.regionals[x.upper()])
+            elif x.isdigit():
+                regional_list.append(self.numbers[x])
+            elif react is False:
+                regional_list.append(x)
+        return regional_list
+
+    @commands.command(aliases=["React"])
+    async def react(self, ctx, msg: str, _id: int = None):
+        reactions = self.to_reginals(msg, True)
+        if not _id:
+            async for message in ctx.message.channel.history(limit=2):
+                if message.id != ctx.message.id:
+                    for i in reactions:
+                        await message.add_reaction(i)
+        else:
+            async for message in ctx.message.channel.history(limit=25):
+                if message.id == _id:
+                    for i in reactions:
+                        await message.add_reaction(i)
+        await ctx.message.delete()
+
+    @commands.command(aliases=["Regional", "Regionals", "regionals"])
+    async def regional(self, ctx, *, msg: str):
+        regional_list = self.to_reginals(msg, False)
+        regional_output = ' '.join(regional_list)
+        await edit(ctx, content=regional_output)
+
+    @commands.command(aliases=["Embed"])
+    async def embed(self, ctx, *, msg: str):
+        try:
+            await edit(ctx, embed=discord.Embed(description=msg, colour=discord.Color.purple()))
+        except:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong", ttl=5)
+
+    @commands.command(aliases=["Eimage", "Ei", "ei"])
+    async def eimage(self, ctx, *, msg: str):
+        regex = re.compile(
+            r'^(?:http|ftp)s?://'
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
+            r'localhost|'
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+            r'(?::\d+)?'
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        link = regex.findall(msg)
+        if link:
+            mimetype, encoding = mimetypes.guess_type(link[0])
+            if mimetype and mimetype.startswith('image'):
+                try:
+                    await edit(ctx, embed=discord.Embed(colour=discord.Color.purple()).set_image(url=link[0]))
+                except:
+                    await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong", ttl=5)
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} No image link", ttl=5)
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} No link given", ttl=5)
 
 
 def setup(bot):
