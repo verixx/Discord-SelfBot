@@ -60,7 +60,7 @@ class Logging:
     @commands.guild_only()
     async def guild(self, ctx):
         guilds = self.logging.get('guild', {})
-        guild = getGuild(ctx, getwithoutInvoke(ctx))
+        guild = getGuild(ctx, getwithoutInvoke(ctx)).id
         if guild:
             if guild in guilds:
                 guilds.remove(guild)
@@ -78,10 +78,10 @@ class Logging:
     @commands.guild_only()
     async def channel(self, ctx):
         channels = self.logging.get('channel', {})
-        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        channel = getChannel(ctx, getwithoutInvoke(ctx)).id
         if channel:
             if channel in self.logging.get('block-channel', {}):
-                await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
+                await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in blacklist used',  ttl=5)
                 return
             if channel in channels:
                 channels.remove(channel)
@@ -178,7 +178,7 @@ class Logging:
     @commands.guild_only()
     async def _channel(self, ctx):
         channels = self.logging.get('block-channel', {})
-        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        channel = getChannel(ctx, getwithoutInvoke(ctx)).id
         if channel:
             if channel in self.logging.get('channel', {}):
                 await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
