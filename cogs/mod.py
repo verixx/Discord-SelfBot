@@ -285,7 +285,7 @@ class Mod:
             if channel in ctx.guild.text_channels:
                 perms = channel.overwrites_for(ctx.guild.default_role)
                 perms.send_messages = True
-                await channel.set_permissions(ctx.guild.default_role, send_messages=True)
+                await channel.set_permissions(ctx.guild.default_role, overwrite=perms)
                 log.info(f'Unlocked channel #{ctx.channel}')
 
                 e = discord.Embed(color=discord.Color.purple())
