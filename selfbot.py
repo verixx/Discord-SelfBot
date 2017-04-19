@@ -75,7 +75,7 @@ async def on_ready():
     bot.gamename = read_config('gamestatus')
     bot.mal_un = read_config('mal_username')
     bot.mal_pw = read_config('mal_password')
-    bot.log_channel = read_config('log_channel')
+    bot.mention_channel = read_config('log_channel')
     bot.webhook_token = read_config('webhook_token')
     bot.google_api_key = read_config('google_api_key')
     bot.custom_search_engine = read_config('custom_search_engine')

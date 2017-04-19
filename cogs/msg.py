@@ -99,9 +99,9 @@ class OnMessage:
                             try:
                                 await self.request_webhook(token, embeds=[em.to_dict()])
                             except:
-                                await self.bot.get_channel(self.bot.log_channel).send(embed=em)
+                                await self.bot.get_channel(self.bot.mention_channel).send(embed=em)
                         else:
-                            await self.bot.get_channel(self.bot.log_channel).send(embed=em)
+                            await self.bot.get_channel(self.bot.mention_channel).send(embed=em)
 
     async def on_message_edit(self, before, after):
         if me(self, before):
