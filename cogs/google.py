@@ -149,10 +149,10 @@ class Google:
         params = {
             'q': query,
             'hl': 'en'
-            }
+        }
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64)'
-            }
+        }
         entries = []
         card = None
         async with aiohttp.ClientSession() as cs:
@@ -195,7 +195,7 @@ class Google:
             before = before[:-1] + '%29' if before[-1] == ')' else before
 
             e = discord.Embed(colour=discord.Color.blue(), timestamp=datetime.datetime.now())
-            e.set_author(name="Google Search", url="https://www.google.com/search?q="+query.replace(" ", "+"), icon_url="https://cdn.discordapp.com/attachments/278603491520544768/300645219626647564/Google-logo-2015-G-icon.png")
+            e.set_author(name="Google Search", url="https://www.google.com/search?q=" + query.replace(" ", "+"), icon_url="https://cdn.discordapp.com/attachments/278603491520544768/300645219626647564/Google-logo-2015-G-icon.png")
             if next_two:
                 formatted = '\n'.join(map(lambda x: '<%s>' % x, next_two))
                 e.add_field(name="Search Result", value=before)

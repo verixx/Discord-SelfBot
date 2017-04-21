@@ -11,6 +11,7 @@ log = logging.getLogger('LOG')
 
 
 class OnMessage:
+
     def __init__(self, bot):
         self.bot = bot
         self.webhook_class = Webhook(self.bot)
@@ -60,7 +61,7 @@ class OnMessage:
                 if message.author.is_blocked():
                     return
                 if message.guild.id in self.bot.log_guild or message.channel.id in self.bot.log_channel:
-                    msg = re.sub('[,.!?-_"^()/]', ' ', message.content.lower())
+                    msg = re.sub('[^0-9a-zA-Z]+', ' ', message.content.lower())
                     if any(map(lambda v: v in msg.split(), self.bot.log_block_key)):
                         return
                     notify = False

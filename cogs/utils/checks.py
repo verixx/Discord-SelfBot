@@ -121,11 +121,11 @@ def getAgo(time):
     if 120 > sec:
         return f'{sec} seconds ago'
     elif 3600 > sec:
-        return '{} minutes ago'.format(sec//60)
+        return '{} minutes ago'.format(sec // 60)
     elif 86400 > sec:
-        return '{} hour ago'.format(sec//60//60) if 7200 > sec else '{} hours ago'.format(sec//60//60)
+        return '{} hour ago'.format(sec // 60 // 60) if 7200 > sec else '{} hours ago'.format(sec // 60 // 60)
     else:
-        return '{} day ago'.format(sec//60//60//24) if 7200 > sec else '{} days ago'.format(sec//60//60//24)
+        return '{} day ago'.format(sec // 60 // 60 // 24) if 7200 > sec else '{} days ago'.format(sec // 60 // 60 // 24)
 
 
 # Find User on server
@@ -173,7 +173,7 @@ def getChannel(ctx, msg):
     elif utils.find(lambda c: msg.lower() in c.name.lower(), ctx.guild.text_channels):
         return utils.find(lambda c: msg.lower() in c.name.lower(), ctx.guild.text_channels)
     else:
-        return utils.find(lambda c: msg.lower() in c.name.lower(), ctx.bot.get_all_channels)
+        return utils.find(lambda c: msg.lower() in c.name.lower(), ctx.bot.get_all_channels())
     return None
 
 

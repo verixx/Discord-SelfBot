@@ -71,7 +71,7 @@ class Tools:
                         value=self.bot.icount, inline=True)
         embed.add_field(name='\N{SPEAKING HEAD IN SILHOUETTE} Members [%s]' % len(self.bot.users),
                         value='%s Online' % unique_online, inline=True)
-        embed.add_field(name='\N{SPIRAL NOTE PAD} Channels [%s]' % (text+voice),
+        embed.add_field(name='\N{SPIRAL NOTE PAD} Channels [%s]' % (text + voice),
                         value='%s Text | %s Voice' % (text, voice), inline=True)
         embed.add_field(name='\N{TICKET} Guilds',
                         value=len(self.bot.guilds))
@@ -157,9 +157,9 @@ class Tools:
             if len(incolor) == 3:
                 try:
                     if float(incolor[0]) > 1.0 or float(incolor[1]) > 1.0 or float(incolor[2]) > 1.0:
-                        red = float(int(incolor[0])/255)
-                        blue = float(int(incolor[1])/255)
-                        green = float(int(incolor[2])/255)
+                        red = float(int(incolor[0]) / 255)
+                        blue = float(int(incolor[1]) / 255)
+                        green = float(int(incolor[2]) / 255)
                     else:
                         red = incolor[0]
                         blue = incolor[1]

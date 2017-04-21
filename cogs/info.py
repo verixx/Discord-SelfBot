@@ -70,7 +70,7 @@ class Userinfo:
 
                 rolelist = ', '.join(r.name for r in mem.roles)
                 if rolelist[11:]:
-                    em.add_field(name='Roles [%s]' % (len(mem.roles)-1),
+                    em.add_field(name='Roles [%s]' % (len(mem.roles) - 1),
                                  value=rolelist[11:], inline=True)
 
             guildlist = ', '.join(g.name for g in self.bot.guilds if g.get_member(mem.id))
@@ -161,7 +161,7 @@ class Userinfo:
         serv = getGuild(ctx, getwithoutInvoke(ctx))
         if serv:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
-            em.add_field(name='Roles [%s]' % (len(serv.roles)-1),
+            em.add_field(name='Roles [%s]' % (len(serv.roles) - 1),
                          value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
             await edit(ctx, embed=em, ttl=ttl)
         else:

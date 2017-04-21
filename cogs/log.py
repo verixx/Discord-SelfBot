@@ -109,10 +109,6 @@ class Logging:
         if keys is not '':
             em.add_field(name="Logged Words[%s] " % len(self.bot.log_key), value=keys)
 
-        blocked = ', '.join(self.bot.log_block_key)
-        if blocked is not '':
-            em.add_field(name="Blocked Words[%s] " % len(self.bot.log_block_key), value=blocked)
-
         guilds = ', '.join(str(self.bot.get_guild(i)) for i in self.bot.log_guild)
         if guilds is not '':
             if len(guilds) < 1024:
@@ -140,6 +136,21 @@ class Logging:
                         em.add_field(name="Logged Guilds[%s]" % len(self.bot.log_guild), value=x[:-2], inline=False)
                     else:
                         em.add_field(name=u"\u2063", value=x[:-2], inline=False)
+        channel2 = ', '.join(str(self.bot.get_channel(i)) for i in self.bot.log_channel)
+        if channel2 is not '':
+            em.add_field(name="Logged Channels[%s]" % len(self.bot.log_channel), value=channel2, inline=False)
+
+        blocked = ', '.join(self.bot.log_block_key)
+        if blocked is not '':
+            em.add_field(name="Blocked Words[%s] " % len(self.bot.log_block_key), value=blocked)
+
+        blocked_users = self.bot.log_block_user
+        for x in blocked_users:
+            if discord.utils.find(lambda u: x == u.id, ctx.bot.users) is None:
+                blocked_users.remove(x)
+                self.bot.log_block_user = blocked_users
+                await save_log('block-user', blocked_users)
+                log.info('Removed User with the ID: {} from Blacklist due to not finding it.'.format(x))
 
         users = ', '.join(str(u) for u in self.bot.users if u.id in self.bot.log_block_user)
         if users is not '':
@@ -148,10 +159,6 @@ class Logging:
         channel = ', '.join(str(self.bot.get_channel(i)) for i in self.bot.log_block_channel)
         if channel is not '':
             em.add_field(name="Blocked Channels[%s]" % len(self.bot.log_block_channel), value=channel, inline=False)
-
-        channel2 = ', '.join(str(self.bot.get_channel(i)) for i in self.bot.log_channel)
-        if channel2 is not '':
-            em.add_field(name="Logged Channels[%s]" % len(self.bot.log_channel), value=channel2, inline=False)
 
         await edit(ctx, embed=em, ttl=ttl)
 

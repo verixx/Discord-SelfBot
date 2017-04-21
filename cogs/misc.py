@@ -85,14 +85,14 @@ class Misc:
                         definition = result['list'][pos]['definition']
                         example = result['list'][pos]['example']
                         defs = len(result['list'])
-                        embed = discord.Embed(title='Definition #{} out of {}'.format(pos+1, defs), description=definition, colour=discord.Color.purple())
+                        embed = discord.Embed(title='Definition #{} out of {}'.format(pos + 1, defs), description=definition, colour=discord.Color.purple())
                         embed.set_author(name=search_terms, icon_url='https://i.imgur.com/bLf4CYz.png')
                         embed.add_field(name="Example:", value=example, inline=False)
                         await edit(ctx, embed=embed)
                     else:
                         await edit(ctx, content="Your search terms gave no results.", ttl=3)
         except IndexError:
-            await edit(ctx, content="There is no definition #{}".format(pos+1), ttl=3)
+            await edit(ctx, content="There is no definition #{}".format(pos + 1), ttl=3)
         except:
             await edit(ctx, content="Error.", ttl=3)
 

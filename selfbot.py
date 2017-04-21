@@ -10,8 +10,6 @@ from cogs.utils.checks import edit, read_config, read_log
 from collections import Counter
 from discord.ext import commands
 
-# "Database"
-
 # Logging
 log = logging.getLogger('LOG')
 log.setLevel(logging.INFO)
@@ -52,8 +50,7 @@ extensions = ['cogs.cmds',
               'cogs.tools'
               ]
 
-prefix = read_config('prefix')
-bot = commands.Bot(command_prefix=prefix, description='''IgneelDxD's Selfbot''', self_bot=True)
+bot = commands.Bot(command_prefix=read_config('prefix'), description='''IgneelDxD's Selfbot''', self_bot=True)
 
 
 # Startup
@@ -79,7 +76,7 @@ async def on_ready():
     bot.webhook_token = read_config('webhook_token')
     bot.google_api_key = read_config('google_api_key')
     bot.custom_search_engine = read_config('custom_search_engine')
-    bot.prefix = prefix
+    bot.prefix = read_config('prefix')
     bot.setlog = read_config('setlog')
     bot.log_guild = read_log('guild')
     bot.log_block_user = read_log('block-user')

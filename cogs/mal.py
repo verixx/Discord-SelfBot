@@ -23,10 +23,10 @@ class Mal:
             'as_q': search,
             'as_epq': query,
             'as_sitesearch': 'myanimelist.net'
-            }
+        }
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64)'
-            }
+        }
         entries = []
         async with aiohttp.ClientSession() as cs:
             async with cs.get('https://www.google.com/search', params=params, headers=headers) as resp:
@@ -64,7 +64,7 @@ class Mal:
         synnew = ''
         for i in synopsis.split('.'):
             if (len(synnew + i + '.')) <= 1024:
-                    synnew += i + '.'
+                synnew += i + '.'
             else:
                 synnew += '..'
         if (mal.raw_data.start_date is None) or ('00' in mal.raw_data.start_date.text):
@@ -78,7 +78,7 @@ class Mal:
         e = discord.Embed(colour=discord.Color.blue(), description='**Alternative:** {}'.format(mal.english))
         e.set_author(name=mal.title, icon_url='https://myanimelist.cdn-dena.com/img/sp/icon/apple-touch-icon-256.png')
         e.set_thumbnail(url=mal.image_url)
-        e.add_field(name='Synopsis', value=synnew.replace('[Written by MAL Rewrite].', '')+' [[more]](https://myanimelist.net/anime/{}/)'.format(mal.id), inline=False)
+        e.add_field(name='Synopsis', value=synnew.replace('[Written by MAL Rewrite].', '') + ' [[more]](https://myanimelist.net/anime/{}/)'.format(mal.id), inline=False)
         e.add_field(name='Score', value=mal.score + '/10', inline=True)
         if _type is 'anime':
             e.add_field(name='Episodes', value=mal.episodes, inline=True)
@@ -113,7 +113,7 @@ class Mal:
                     if permEmbed(ctx.message):
                         await edit(ctx, embed=em)
                     else:
-                        await edit(ctx, content='https://myanimelist.net/anime/{}'+content)
+                        await edit(ctx, content='https://myanimelist.net/anime/{}' + content)
                 except:
                     await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
 
@@ -136,7 +136,7 @@ class Mal:
                     if permEmbed(ctx.message):
                         await edit(ctx, embed=em)
                     else:
-                        await edit(ctx, content='https://myanimelist.net/anime/{}'+content)
+                        await edit(ctx, content='https://myanimelist.net/anime/{}' + content)
                 except:
                     await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
 
