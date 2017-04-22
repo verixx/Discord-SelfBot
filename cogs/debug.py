@@ -4,10 +4,10 @@ import io
 import textwrap
 import traceback
 
-from .utils.checks import getUser, edit
 from contextlib import redirect_stdout
 from discord.ext import commands
 from PythonGists import PythonGists
+from .utils.checks import edit, getUser
 
 
 class Debug:

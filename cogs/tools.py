@@ -4,8 +4,8 @@ import os
 import platform
 import psutil
 
-from .utils.checks import getwithoutInvoke, getTimeDiff, edit, save_config, getColor, getRole
 from discord.ext import commands
+from .utils.checks import edit, getColor, getRole, getTimeDiff, getWithoutInvoke, save_config
 
 
 class Tools:
@@ -111,7 +111,7 @@ class Tools:
     @commands.command(aliases=["Game"])
     async def game(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 5
-        game = getwithoutInvoke(ctx)
+        game = getWithoutInvoke(ctx)
         if game == '':
             await save_config('gamestatus', None)
             self.bot.gamename = None
@@ -124,7 +124,7 @@ class Tools:
     # Find message with specific Text in Channel History...    Search Term(s) | Text
     @commands.command(aliases=["Quote"])
     async def quote(self, ctx):
-        search = getwithoutInvoke(ctx)
+        search = getWithoutInvoke(ctx)
         content = '\U0000200d'
         if '|' in search:
             msg = search.split(" | ")
@@ -149,9 +149,9 @@ class Tools:
     # Colours
     @commands.command(aliases=['colour', 'Colour', 'Color'])
     async def color(self, ctx):
-        color = getColor(getwithoutInvoke(ctx).strip())
+        color = getColor(getWithoutInvoke(ctx).strip())
         if color is None:
-            role = getRole(ctx, getwithoutInvoke(ctx))
+            role = getRole(ctx, getWithoutInvoke(ctx))
             if role:
                 color = getColor(str(role.color))
         if color:

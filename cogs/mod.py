@@ -3,9 +3,9 @@ import datetime
 import discord
 import logging
 
-from .utils.checks import edit, getUser, getwithoutInvoke, getRole, getChannel, getColor
-from discord.ext import commands
 from discord import utils
+from discord.ext import commands
+from .utils.checks import edit, getChannel, getColor, getRole, getUser, getWithoutInvoke
 
 log = logging.getLogger('LOG')
 
@@ -118,7 +118,7 @@ class Mod:
     @commands.has_permissions(kick_members=True)
     @commands.guild_only()
     async def kick(self, ctx):
-        member = getUser(ctx, getwithoutInvoke(ctx))
+        member = getUser(ctx, getWithoutInvoke(ctx))
         if member:
             try:
                 await ctx.guild.kick(member)
@@ -138,7 +138,7 @@ class Mod:
     @commands.guild_only()
     async def ban(self, ctx):
         if ctx.invoked_subcommand is None:
-            member = getUser(ctx, getwithoutInvoke(ctx))
+            member = getUser(ctx, getWithoutInvoke(ctx))
             if member:
                 try:
                     await ctx.guild.ban(member)
@@ -157,7 +157,7 @@ class Mod:
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def softban(self, ctx):
-        member = getUser(ctx, getwithoutInvoke(ctx))
+        member = getUser(ctx, getWithoutInvoke(ctx))
         if member:
             try:
                 await ctx.guild.ban(member)
@@ -196,7 +196,7 @@ class Mod:
     @commands.command(aliases=['Permissions', 'Perms', 'perms'])
     @commands.guild_only()
     async def permissions(self, ctx):
-        member = getUser(ctx, getwithoutInvoke(ctx))
+        member = getUser(ctx, getWithoutInvoke(ctx))
         if member:
             true = '\n'.join(name.replace('_', ' ').title() for name, value in ctx.channel.permissions_for(member) if value is True)
             false = '\n'.join(name.replace('_', ' ').title() for name, value in ctx.channel.permissions_for(member) if value is False)
@@ -267,7 +267,7 @@ class Mod:
     @commands.has_permissions(manage_channels=True)
     @commands.guild_only()
     async def lock(self, ctx):
-        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
             if channel in ctx.guild.text_channels:
                 perms = channel.overwrites_for(ctx.guild.default_role)
@@ -288,7 +288,7 @@ class Mod:
     @commands.has_permissions(manage_channels=True)
     @commands.guild_only()
     async def unlock(self, ctx):
-        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
             if channel in ctx.guild.text_channels:
                 perms = channel.overwrites_for(ctx.guild.default_role)

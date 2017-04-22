@@ -8,7 +8,7 @@ import unicodedata
 from dateutil import parser
 from discord import utils
 from discord.ext import commands
-from .utils.checks import getwithoutInvoke, getUser, edit, getAgo, getGuild, getChannel, getRole
+from .utils.checks import edit, getAgo, getChannel, getGuild, getRole, getUser, getWithoutInvoke
 
 log = logging.getLogger('LOG')
 
@@ -42,7 +42,7 @@ class Userinfo:
     @commands.command(aliases=["User"])
     async def user(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        mem = getUser(ctx, getwithoutInvoke(ctx))
+        mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem:
             em = discord.Embed(timestamp=ctx.message.created_at)
             em.colour = mem.colour if ctx.guild else discord.Color.purple()
@@ -87,7 +87,7 @@ class Userinfo:
     @commands.command(aliases=["Avi"])
     async def avi(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        mem = getUser(ctx, getwithoutInvoke(ctx))
+        mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem is not None:
             em = discord.Embed(timestamp=ctx.message.created_at)
             em.colour = mem.colour if ctx.guild else discord.Color.purple()
@@ -102,7 +102,7 @@ class Userinfo:
     @commands.guild_only()
     async def role(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        role = getRole(ctx, getwithoutInvoke(ctx))
+        role = getRole(ctx, getWithoutInvoke(ctx))
         if role is not None:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=role.colour)
             em.add_field(name='Name',
@@ -128,7 +128,7 @@ class Userinfo:
     async def guild(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
         if ctx.invoked_subcommand is None:
-            serv = getGuild(ctx, getwithoutInvoke(ctx))
+            serv = getGuild(ctx, getWithoutInvoke(ctx))
             if serv:
                 em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
                 em.set_author(name=serv.name, icon_url='https://i.imgur.com/RHagTDg.png')
@@ -158,7 +158,7 @@ class Userinfo:
     @commands.guild_only()
     async def roles(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        serv = getGuild(ctx, getwithoutInvoke(ctx))
+        serv = getGuild(ctx, getWithoutInvoke(ctx))
         if serv:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
             em.add_field(name='Roles [%s]' % (len(serv.roles) - 1),
@@ -172,7 +172,7 @@ class Userinfo:
     @commands.guild_only()
     async def channel(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        channel = getChannel(ctx, getwithoutInvoke(ctx))
+        channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
             em.add_field(name='Name',

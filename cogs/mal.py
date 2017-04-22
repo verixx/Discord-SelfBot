@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 from lxml import etree
 from urllib.parse import parse_qs
-from .utils.checks import permEmbed, edit
+from .utils.checks import edit, permEmbed
 
 
 class Mal:

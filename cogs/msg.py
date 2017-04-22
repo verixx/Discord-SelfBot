@@ -2,10 +2,9 @@ import discord
 import logging
 import re
 
-from .utils.allmsgs import quickcmds, custom
-from .utils.checks import permEmbed, me
 from datetime import datetime
 from discord_webhooks import Webhook
+from .utils.checks import permEmbed
 
 log = logging.getLogger('LOG')
 
@@ -23,7 +22,7 @@ class OnMessage:
             if hasattr(self.bot, 'message_count'):
                 self.bot.message_count += 1
             # Custom commands
-            if me(self, message):
+            if message.author.id == self.bot.user.id:
                 if hasattr(self.bot, 'icount'):
                     self.bot.icount += 1
                 prefix = ''
@@ -105,7 +104,7 @@ class OnMessage:
                             await self.bot.get_channel(self.bot.mention_channel).send(embed=em)
 
     async def on_message_edit(self, before, after):
-        if me(self, before):
+        if before.author.id == self.bot.user.id:
             if before.content != after.content:
                 del before
                 await self.on_message(after)

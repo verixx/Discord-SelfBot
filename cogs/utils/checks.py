@@ -83,11 +83,6 @@ async def edit(ctx, content=None, embed=None, ttl=None):
             await ctx.send(content=content, embed=embed, delete_after=ttl, file=None)
 
 
-# Check if me
-def me(self, message):
-    return message.author.id == self.bot.user.id
-
-
 # Check for perms of links and attached files
 def permFile(message):
     return message.channel.permissions_for(message.author).attach_files
@@ -99,7 +94,7 @@ def permEmbed(message):
 
 
 # Get Message without inokation prefix and space after invokation
-def getwithoutInvoke(ctx):
+def getWithoutInvoke(ctx):
     message = ctx.message.content
     if message.endswith(' stay'):
         return message[len(ctx.prefix + ctx.command.qualified_name + ' '):-5]

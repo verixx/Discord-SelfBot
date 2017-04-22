@@ -2,7 +2,7 @@ import discord
 import logging
 
 from discord.ext import commands
-from .utils.checks import getUser, edit, getwithoutInvoke, getGuild, getChannel, save_log, save_config
+from .utils.checks import edit, getChannel, getGuild, getUser, getWithoutInvoke, save_config, save_log
 
 log = logging.getLogger('LOG')
 
@@ -61,7 +61,7 @@ class Logging:
     @commands.guild_only()
     async def guild(self, ctx):
         guilds = self.bot.log_guild
-        guild = getGuild(ctx, getwithoutInvoke(ctx)).id
+        guild = getGuild(ctx, getWithoutInvoke(ctx)).id
         if guild:
             if guild in guilds:
                 guilds.remove(guild)
@@ -81,7 +81,7 @@ class Logging:
     @commands.guild_only()
     async def channel(self, ctx):
         channels = self.bot.log_channel
-        channel = getChannel(ctx, getwithoutInvoke(ctx)).id
+        channel = getChannel(ctx, getWithoutInvoke(ctx)).id
         if channel:
             if channel in self.bot.log_block_channel:
                 await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in blacklist used',  ttl=5)
@@ -191,7 +191,7 @@ class Logging:
     @commands.guild_only()
     async def _channel(self, ctx):
         channels = self.bot.log_block_channel
-        channel = getChannel(ctx, getwithoutInvoke(ctx)).id
+        channel = getChannel(ctx, getWithoutInvoke(ctx)).id
         if channel:
             if channel in self.bot.log_channel:
                 await edit('\N{HEAVY EXCLAMATION MARK SYMBOL} Already in logger used',  ttl=5)
