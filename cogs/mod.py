@@ -3,7 +3,7 @@ import datetime
 import discord
 import logging
 
-from .utils.checks import edit, getUser, getwithoutInvoke, getRole, getChannel
+from .utils.checks import edit, getUser, getwithoutInvoke, getRole, getChannel, getColor
 from discord.ext import commands
 from discord import utils
 
@@ -175,15 +175,23 @@ class Mod:
     @commands.command(name="role-color", aliases=['role-colour', 'Role-Colour', 'Role-Color'])
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
-    async def _colour(self, ctx, colour: discord.Colour, role: discord.Role):
-        try:
-            await role.edit(colour=colour)
-        except discord.HTTPException:
-            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Missing permissions to edit this role", ttl=5)
+    async def _colour(self, ctx, role: str, colour: str):
+        role = getRole(ctx, role)
+        colour = getColor(colour)
+        if not role:
+            return await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found", ttl=5)
+        elif not colour:
+            return await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Colour not found", ttl=5)
         else:
-            e = discord.Embed(color=colour)
-            e.set_author(name="Changed Role Color of: " + str(role))
-            await edit(ctx, embed=e)
+            value = discord.Colour(int((colour.hex_l.strip('#')), 16))
+            try:
+                await role.edit(colour=value)
+            except discord.HTTPException:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Missing permissions to edit this role", ttl=5)
+            else:
+                e = discord.Embed(color=value)
+                e.set_author(name="Changed Role Color of: " + str(role))
+                await edit(ctx, embed=e)
 
     @commands.command(aliases=['Permissions', 'Perms', 'perms'])
     @commands.guild_only()
