@@ -69,17 +69,21 @@ class Mod:
     async def mute(self, ctx, mem: str):
         member = getUser(ctx, mem)
         if member:
-            if not utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles):
-                perms = utils.find(lambda r: "@everyone" == r.name, ctx.message.guild.roles).permissions
-                role = await ctx.guild.create_role(name="Muted", permissions=perms)
-                log.info('Created role: Muted')
-                for channel in ctx.guild.text_channels:
-                    await channel.set_permissions(role, overwrite=discord.PermissionOverwrite(send_messages=False, add_reactions=False))
-                for channel in ctx.guild.voice_channels:
-                    await channel.set_permissions(role, overwrite=discord.PermissionOverwrite(speak=False))
-                log.info('Prepared Mute role for mutes in channels')
-            if utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles) not in member.roles:
+            if not utils.find(lambda r: "mute" in r.name.lower(), ctx.message.guild.roles):
+                if not utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles):
+                    perms = utils.find(lambda r: "@everyone" == r.name, ctx.message.guild.roles).permissions
+                    role = await ctx.guild.create_role(name="Muted", permissions=perms)
+                    log.info('Created role: Muted')
+                    for channel in ctx.guild.text_channels:
+                        await channel.set_permissions(role, overwrite=discord.PermissionOverwrite(send_messages=False, add_reactions=False))
+                    for channel in ctx.guild.voice_channels:
+                        await channel.set_permissions(role, overwrite=discord.PermissionOverwrite(speak=False))
+                    log.info('Prepared Mute role for mutes in channels')
                 role = utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles)
+            else:
+                role = utils.find(lambda r: "mute" in r.name.lower(), ctx.message.guild.roles)
+
+            if role not in member.roles:
                 roles = member.roles
                 roles.append(role)
                 asyncio.sleep(0.5)
@@ -99,8 +103,8 @@ class Mod:
     async def unmute(self, ctx, mem: str):
         member = getUser(ctx, mem)
         if member:
-            if utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles) in member.roles:
-                role = utils.find(lambda r: "Muted" == r.name, ctx.message.guild.roles)
+            role = utils.find(lambda r: "mute" in r.name.lower(), member.roles)
+            if role:
                 roles = member.roles
                 roles.remove(role)
                 asyncio.sleep(0.5)
