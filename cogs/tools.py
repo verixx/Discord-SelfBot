@@ -4,8 +4,7 @@ import os
 import platform
 import psutil
 
-from .utils.checks import getwithoutInvoke, getTimeDiff, edit, save_config
-from colour import Color
+from .utils.checks import getwithoutInvoke, getTimeDiff, edit, save_config, getColor, getRole
 from discord.ext import commands
 
 
@@ -150,40 +149,23 @@ class Tools:
     # Colours
     @commands.command(aliases=['colour', 'Colour', 'Color'])
     async def color(self, ctx):
-        incolor = getwithoutInvoke(ctx).strip()
-        outcolor = None
-        if ',' in incolor:
-            incolor = incolor.split(',')
-            if len(incolor) == 3:
-                try:
-                    if float(incolor[0]) > 1.0 or float(incolor[1]) > 1.0 or float(incolor[2]) > 1.0:
-                        red = float(int(incolor[0]) / 255)
-                        blue = float(int(incolor[1]) / 255)
-                        green = float(int(incolor[2]) / 255)
-                    else:
-                        red = incolor[0]
-                        blue = incolor[1]
-                        green = incolor[2]
-                    outcolor = Color(rgb=(float(red), float(green), float(blue)))
-                except:
-                    return await edit(ctx, '\N{HEAVY EXCLAMATION MARK SYMBOL} Could not find color', ttl=3)
-        else:
-            try:
-                outcolor = Color(incolor)
-            except:
-                return await edit(ctx, '\N{HEAVY EXCLAMATION MARK SYMBOL} Could not find color', ttl=3)
+        color = getColor(getwithoutInvoke(ctx).strip())
+        if color is None:
+            role = getRole(ctx, getwithoutInvoke(ctx))
+            if role:
+                color = getColor(str(role.color))
+        if color:
+            value = color.hex_l.strip('#')
+            rgb = tuple(int(value[i:i + len(value) // 3], 16) for i in range(0, len(value), len(value) // 3))
 
-        if outcolor:
-            value = outcolor.hex_l.strip('#')
-            lv = len(value)
-            rgb = tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
-
-            e = discord.Embed(title=outcolor.web.title(), colour=int(str(outcolor.hex_l).strip('#'), 16))
-            e.url = 'http://www.colorhexa.com/{}'.format(str(outcolor.hex_l).strip('#'))
-            e.add_field(name='HEX', value=outcolor.hex_l, inline=False)
+            e = discord.Embed(title=color.web.title(), colour=int((value), 16))
+            e.url = f'http://www.colorhexa.com/{value}'
+            e.add_field(name='HEX', value=color.hex_l, inline=False)
             e.add_field(name='RGB', value=rgb, inline=False)
-            e.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(outcolor.hex_l).strip('#'))
+            e.set_thumbnail(url=f'http://www.colorhexa.com/{value}.png')
             await edit(ctx, embed=e)
+        else:
+            await edit(ctx, '\N{HEAVY EXCLAMATION MARK SYMBOL} Could not find color', ttl=3)
 
 
 def setup(bot):

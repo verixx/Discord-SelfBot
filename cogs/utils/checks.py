@@ -3,6 +3,7 @@ import datetime
 import json
 import logging
 
+from colour import Color
 from discord import utils
 
 log = logging.getLogger('LOG')
@@ -74,9 +75,12 @@ async def edit(ctx, content=None, embed=None, ttl=None):
         elif embed is None:
             await ctx.message.edit(content=content, embed=embed)
         elif embed and not perms:
-            await ctx.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
+            await ctx.message.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
     except:
-        await ctx.send(content=content, embed=embed, delete_after=ttl, file=None)
+        if embed and not perms:
+            await ctx.message.edit(content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Perms for Embeds', delete_after=5)
+        else:
+            await ctx.send(content=content, embed=embed, delete_after=ttl, file=None)
 
 
 # Check if me
@@ -188,3 +192,33 @@ def getRole(ctx, msg):
     else:
         return utils.find(lambda r: msg.strip().lower() in r.name.lower(), ctx.guild.roles)
     return None
+
+
+# Find Color
+def getColor(incolor):
+    if len(incolor.split(',')) == 3:
+        try:
+            incolor = incolor.split(',')
+            if float(incolor[0]) > 1.0 or float(incolor[1]) > 1.0 or float(incolor[2]) > 1.0:
+                red = float(int(incolor[0]) / 255)
+                blue = float(int(incolor[1]) / 255)
+                green = float(int(incolor[2]) / 255)
+            else:
+                red = incolor[0]
+                blue = incolor[1]
+                green = incolor[2]
+            outcolor = Color(rgb=(float(red), float(green), float(blue)))
+        except:
+            outcolor = None
+    else:
+        try:
+            outcolor = Color(incolor)
+        except:
+            outcolor = None
+
+        if outcolor is None:
+            try:
+                outcolor = Color('#' + incolor)
+            except:
+                outcolor = None
+    return outcolor
