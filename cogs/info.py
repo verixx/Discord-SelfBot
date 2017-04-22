@@ -13,7 +13,7 @@ from .utils.checks import edit, getAgo, getChannel, getGuild, getRole, getUser, 
 log = logging.getLogger('LOG')
 
 
-class Userinfo:
+class Info:
 
     def __init__(self, bot):
         self.bot = bot
@@ -84,7 +84,7 @@ class Userinfo:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=5)
 
     # User Avi on Server
-    @commands.command(aliases=["Avi"])
+    @commands.command(aliases=["Avi", "Avatar", "avatar"])
     async def avi(self, ctx):
         ttl = None if ctx.message.content.endswith(' stay') else 20
         mem = getUser(ctx, getWithoutInvoke(ctx))
@@ -215,22 +215,6 @@ class Userinfo:
             em.add_field(name='Emotes', value='Not Found \N{HEAVY EXCLAMATION MARK SYMBOL}', inline=False)
         await edit(ctx, embed=em, ttl=ttl)
 
-    # Jumbo Emote
-    @commands.command(aliases=["Jumbo"])
-    async def jumbo(self, ctx):
-        e = self.emoji_reg.findall(ctx.message.content)
-        if e:
-            if len(e) > 1:
-                await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
-            else:
-                emo = utils.get(self.bot.emojis, id=int(e[0]))
-                if emo:
-                    em = discord.Embed(colour=discord.Color.purple())
-                    em.set_image(url=emo.url)
-                    await edit(ctx, embed=em)
-        else:
-            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only Emotes...', ttl=3)
-
     # Info of Custom or Unicode Emotes
     @commands.command(aliases=["Emote"])
     async def emote(self, ctx, emote: str):
@@ -264,4 +248,4 @@ class Userinfo:
 
 
 def setup(bot):
-    bot.add_cog(Userinfo(bot))
+    bot.add_cog(Info(bot))

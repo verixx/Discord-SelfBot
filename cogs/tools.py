@@ -4,6 +4,7 @@ import os
 import platform
 import psutil
 
+from discord import utils
 from discord.ext import commands
 from .utils.checks import edit, getColor, getRole, getTimeDiff, getWithoutInvoke, save_config
 
@@ -166,6 +167,22 @@ class Tools:
             await edit(ctx, embed=e)
         else:
             await edit(ctx, '\N{HEAVY EXCLAMATION MARK SYMBOL} Could not find color', ttl=3)
+
+    # Jumbo Emote
+    @commands.command(aliases=["Jumbo"])
+    async def jumbo(self, ctx):
+        e = self.emoji_reg.findall(ctx.message.content)
+        if e:
+            if len(e) > 1:
+                await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
+            else:
+                emo = utils.get(self.bot.emojis, id=int(e[0]))
+                if emo:
+                    em = discord.Embed(colour=discord.Color.purple())
+                    em.set_image(url=emo.url)
+                    await edit(ctx, embed=em)
+        else:
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only Emotes...', ttl=3)
 
 
 def setup(bot):
