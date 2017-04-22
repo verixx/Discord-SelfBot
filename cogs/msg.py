@@ -1,12 +1,33 @@
 import discord
+import json
 import logging
+import mimetypes
 import re
 
 from datetime import datetime
 from discord_webhooks import Webhook
+from random import randint
 from .utils.checks import permEmbed
 
 log = logging.getLogger('LOG')
+
+
+# Cumstom Commands with prefix
+def custom(prefix, content):
+    message = content.lower().replace(prefix, '')
+    with open('config/commands.json', 'r') as f:
+        commands = json.load(f)
+        for i in commands:
+            if i.lower() in message.split():
+                    mimetype, encoding = mimetypes.guess_type(commands[i])
+                    zwi = message.split(' ', 1)
+                    if len(zwi) != 2:
+                        zwi.append(' ')
+                    if mimetype and mimetype.startswith('image'):
+                        return 'embed', commands[i], zwi[len(zwi) - 1], str(i)
+                    else:
+                        return 'message', commands[i], zwi[len(zwi) - 1], str(i)
+        return None
 
 
 class OnMessage:
@@ -15,6 +36,12 @@ class OnMessage:
         self.bot = bot
         self.webhook_class = Webhook(self.bot)
         self.request_webhook = self.webhook_class.request_webhook
+        self.quickcmds = {'shrug': '¯\_(ツ)_/¯',
+                          'flip': '(╯°□°）╯︵ ┻━┻',
+                          'unflip': '┬─┬﻿ ノ( ゜-゜ノ)',
+                          'lenny': '( ͡° ͜ʖ ͡°)',
+                          'fite': '(ง’̀-‘́)ง'
+                         }
 
     async def on_message(self, message):
         if self.bot.is_ready():
@@ -25,16 +52,10 @@ class OnMessage:
             if message.author.id == self.bot.user.id:
                 if hasattr(self.bot, 'icount'):
                     self.bot.icount += 1
-                prefix = ''
-                for i in self.bot.prefix:
-                    if message.content.startswith(i):
-                        prefix = i
-                        break
-                if prefix is not '':
-                    response = custom(prefix, message.content)
-                    if response is None:
-                        pass
-                    else:
+                prefix = [x for x in self.bot.prefix if message.content.startswith(x)]
+                if prefix:
+                    response = custom(prefix[0], message.content)
+                    if response:
                         self.bot.commands_triggered[response[3]] += 1
                         destination = 'DM with {0.channel.recipient}'.format(message) if isinstance(message.channel, discord.DMChannel) else '#{0.channel.name},({0.guild.name})'.format(message)
                         log.info('In {1}:{0.content}'.format(message, destination))
@@ -46,12 +67,12 @@ class OnMessage:
                         else:
                             await message.edit(content='{0}\n{1}'.format(response[2], response[1]))
                 else:
-                    response = quickcmds(message.content.lower().strip())
-                    if response:
-                        self.bot.commands_triggered[response[1]] += 1
+                    if message.content.lower().strip() in self.quickcmds.keys():
+                        response = self.quickcmds[message.content.lower().strip()]
+                        self.bot.commands_triggered[message.content.lower().strip()] += 1
                         destination = 'DM with {0.channel.recipient}'.format(message) if isinstance(message.channel, discord.DMChannel) else '#{0.channel.name},({0.guild.name})'.format(message)
                         log.info('In {1}:{0.content}'.format(message, destination))
-                        await message.edit(content=response[0])
+                        await message.edit(content=response)
             elif (message.guild is not None) and (self.bot.setlog == 'on'):
                 if message.author.id in self.bot.log_block_user:
                     return
