@@ -1,11 +1,135 @@
-# A Discord SelfBot with various commands
+[<img src="https://img.shields.io/badge/discord.py-rewrite-blue.svg?style=flat-square">](https://github.com/Rapptz/discord.py/tree/rewrite)
+[<img src="https://img.shields.io/badge/python-3.6-brightgreen.svg?style=flat-square">](https://www.python.org/downloads/release/python-360/)
+[<img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square">](https://github.com/IgneelDxD/Discord-SelfBot/blob/master/LICENSE)
+[<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=shield">](https://discordapp.com/invite/DJK8h3n)
 
-### This Bot uses the rewrite of discord.py, keep that in mind if you use it.
+For any kind of suggestions, feedback, support or just to hang out, I'll gladly welcome you on my [Server](https://discord.gg/DJK8h3n).
+If you enquire problems while setting up the selfbot, come by and I am sure we'll find a solution.
 
-I won't add any documentation, this is just something for me..
+# IgneelDxD's Discord SelfBot
+#### This Project uses the rewrite version of [discord.py](https://github.com/Rapptz/discord.py/tree/rewrite) as well as [Python 3.6](https://www.python.org/downloads/release/python-360/). Please keep this in mind when using the bot.
 
-Thanks to [Danny](https://github.com/Rapptz) and [Appu](https://github.com/appu1232) for some code parts
+This SelfBot has a lot of useful features like a bunch of Moderation commands as well as fun commands or a Mention logger.
 
-If you are interested in a very similar SelfBot, please visit https://github.com/appu1232/Selfbot-for-Discord
+Disclaimer: Use this on your own risk. If you get banned somewhere because of using it I won't take responsibility.
 
-You can find me on my [Discord Server](https://discordapp.com/invite/DJK8h3n) for suggestions, feedback or support.
+## Features
+- Moderation (Works only if you have the permissions to use it on a Server)
+  - Add/Remove a role of a Server-Member.
+  - Change Role-Colors without leaving the Chat.
+  - Lock/Unlock a Channel in spammy situations to clean up a mess.
+  - Kick/Ban Members if they misbehave.
+  - Softban a Member if a kick would be necessary but you want to clean up the last messages they sent in one.
+  - Mute/Unmute Members if they need a cool of phase.
+  - Prune a Member's Messages of a certain type or your own if necessary.
+  - Show Permissions of a Member.
+- Mention Logging
+  - Set a Channel on your own Server to log all your mentions and Keywords to.
+  - Add Keywords to your logger to trigger it in whole Servers or specific Channels.
+  - Don't like a user/channel? Simply add them to your blacklist and you'll never log them again.
+- Information:
+  - Love this SelfBot as much as I do? Use "About" to share it with others.
+  - Display interesting information about Users, Servers, Roles, Channels or Emotes.
+- Google
+  - Search for information or images directly in the Chat.
+- MyAnimeList
+  - Display information about your favorite Anime/Manga within a nice looking embed.
+- Custom Commands
+  - Add quickly links per commands to a json and then use them like normal commands of the bot.
+  - Show off those reaction gifs.
+- Tools
+  - Return the Ping or Uptime of your SelfBot.
+  - Set a game so you will even have a status when you are on mobile.
+  - Show several interesting Stats about your usage of the bot.
+  - Quote Messages when you are replying to something.
+  - Color command.
+  - Display your favorite Emote larger than normal.
+- Misc
+  - 8ball / choose / learn to google command.
+  - embed text or an image link.
+  - Urban Dictionary
+  - Giphy search
+  - add reaction text with a command.
+  - convert a message to Alphanumeric Emotes.
+- Debug
+  - Use Python within of a channel.
+
+
+
+1. [Setup](#setup)
+2. [Commands](#commands)
+3. [Custom Commands](#custom-commands)
+4. [Mention Logger](#mention-logger)
+5. [Google API](#google-api)
+6. [Acknowledgements](#acknowledgements)
+
+## Setup
+Clone this repo or download it as Zip and move/unpack it to the location where you wanna have it.
+
+Go into the config folder and rename all three files by simply removing the ``.example`` ending and saving again.
+
+Now after this is done, open the config file and start adding your information. Notepad should be enough to edit the file.
+
+```json
+{
+  "token":"",
+  "prefix":["/"],
+  "gamestatus":"",
+  "custom_search_engine":"",
+  "google_api_key":"",
+  "mal_username":"",
+  "mal_password":"",
+  "webhook_token":"",
+  "log_channel": ,
+  "setlog":"off"
+}
+```
+
+- ``token`` - On Discord hit ``Ctrl + Shift + I`` to open the Development Console. Then move to the tab ``Application`` and open the ``Local Storage`` on the left bar. Once that's done, get your token [here](https://i.imgur.com/GdgxStn.png) and paste it into your config. Do not give this to *anyone* as they will be able to gain access to your account with it.
+- ``prefix`` - This can be anything you like. You even can set multiple prefixes by doing something like ``["/", "self."]``. I'd suggest you to take a prefix which won't easily trigger common bots as it might get spammy.
+- ``gamestatus`` - You can set this to whatever you want your game as. There is a command to change it while the bot is running so if you don't know what to choose you can skip this step.
+- ``custom_search_engine`` and ``google_api_key`` - For this take a look at the [Google API](#google-api) section below.
+- ``mal_username`` and ``mal_password`` - MyAnimeList username and password to use the Anime and Manga command. This will simply log into your account to obtain information about Anime or Manga. Your normal account is totally okay for it. If you don't own one till now, simply create a throwaway account.
+- ``webhook_token``
+  - Go to your private Server, create a logging channel and set it so only you see it.
+  - Change the Notification settings to "All" Messages in that Channel
+  - Open the Channel settings of the Server where you want to log your keywords and mentions.
+  - Click on **Webhooks**, create a **New Webhook** (Give it a nice name an Avatar if you want eg: "Mention Bot", [Avi](https://i.imgur.com/BN4iLQt.png)) It should look like [this](https://i.imgur.com/cLABbvR.png).
+  - Copy the **Webhook URL** at the bottom, add it to ``webhook_token`` and don't forget to **save**.
+- ``log_channel``
+  - For this you need to activate Developer Mode.
+  - Go into **settings**, select **Appearance** and toggle **Developer Mode**
+  - Then go to your log channel and right-click on the name in your channel selector.
+  - Click the last point to copy the id and paste it to ``log_channel``. It should look like ``"log_channel": 123456789123456789,``. Do **not** use quotes here as we need it as number, not as Text.
+
+
+
+## Commands
+### Coming
+
+## Custom Commands
+### Soon
+
+## Mention Logger
+### TM
+
+## Google API
+
+In order to use the ``/i`` command to image search, you will need a Google API key and a Custom Search Engine ID.
+
+Follow these steps to obtain them:
+
+1. Visit the [Google API Console](https://console.developers.google.com/). Once you are in the Console, create a new project.
+2. Go to ``Library`` and search ``Custom Search API``. Click it and enable it.
+3. Go to ``Credentials`` and click ``create credentials`` and choose ``API Key`` (no need to restrict the key). The value under "Key" is your api key. Paste this into the config.json under ``google_api_key``.
+4. Go [here](https://cse.google.com/cse/all) and click ``Add`` and then ``Create`` (if asked to specify a site, just do www.google.com)
+5. On the home page of the Custom Search webpage, click on the newly created search engine and change the ``Sites to Search`` option to ``Search the entire web but emphasize included sites``.
+6. Make sure the ``Image search`` option is enabled and make sure to click the ``Update`` button at the bottom when you are done with the changes!
+6. Go to ``Details`` section and click ``Search Engine ID`` to grab the ID. Copy this and add it for ``custom_search_engine`` in the config.json.
+
+**Note:** Google may take a little while to properly register your key so the search feature may not work right away. If it's still not working after a few hours, then you may have messed up somewhere.
+
+## Acknowledgements
+Thanks to
+- [Appu](https://github.com/appu1232) for even getting me into doing this. As well as several ideas, suggestions and the Google API part.
+- [Danny](https://github.com/Rapptz) for especially larger parts of the google and debug commands and now and there so minor improvements.
