@@ -85,7 +85,7 @@ Now after this is done, open the config file and start adding your information. 
 }
 ```
 
-- ``token`` - On Discord hit ``Ctrl + Shift + I`` to open the Development Console. Then move to the tab ``Application`` and open the ``Local Storage`` on the left bar. Once that's done, get your token [here](https://i.imgur.com/GdgxStn.png) and paste it into your config. Do not give this to *anyone* as they will be able to gain access to your account with it.
+- ``token`` - On Discord hit ``Ctrl + Shift + I`` to open the Development Console. Then move to the tab ``Application`` and open the ``Local Storage`` on the left bar. Once that's done, get your token [here](https://i.imgur.com/dfb7nTt.png) and paste it into your config. Do not give this to *anyone* as they will be able to gain access to your account with it.
 - ``prefix`` - This can be anything you like. You even can set multiple prefixes by doing something like ``["/", "self."]``. I'd suggest you to take a prefix which won't easily trigger common bots as it might get spammy.
 - ``gamestatus`` - You can set this to whatever you want your game as. There is a command to change it while the bot is running so if you don't know what to choose you can skip this step.
 - ``custom_search_engine`` and ``google_api_key`` - For this take a look at the [Google API](#google-api) section below.
