@@ -22,6 +22,7 @@ class Info:
     # About this Selfbot
     @commands.command(aliases=["About"])
     async def about(self, ctx):
+        """Infos about the SelfBot."""
         embed = discord.Embed()
         embed.set_author(name="Igneel's SelfBot", url="https://github.com/IgneelDxD/Discord-SelfBot")
         embed.description = "https://github.com/IgneelDxD/Discord-SelfBot\nThis is a Selfbot written by IgneelDxD\nFor support or feedback you can join my [Server](https://discord.gg/DJK8h3n)"
@@ -41,6 +42,7 @@ class Info:
     # User info on Server
     @commands.command(aliases=["User"])
     async def user(self, ctx):
+        """Infos about a User/Member."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem:
@@ -86,6 +88,7 @@ class Info:
     # User Avi on Server
     @commands.command(aliases=["Avi", "Avatar", "avatar"])
     async def avi(self, ctx):
+        """Show the Avi of a User."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem is not None:
@@ -101,6 +104,7 @@ class Info:
     @commands.command(aliases=["Role"])
     @commands.guild_only()
     async def role(self, ctx):
+        """Info about a role."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         role = getRole(ctx, getWithoutInvoke(ctx))
         if role is not None:
@@ -126,6 +130,7 @@ class Info:
     @commands.command(aliases=["server", "Guild", "Server"])
     @commands.guild_only()
     async def guild(self, ctx):
+        """Infos about a Guild."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         if ctx.invoked_subcommand is None:
             serv = getGuild(ctx, getWithoutInvoke(ctx))
@@ -157,6 +162,7 @@ class Info:
     @commands.command(aliases=["Roles"])
     @commands.guild_only()
     async def roles(self, ctx):
+        """Show the roles on a guild."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         serv = getGuild(ctx, getWithoutInvoke(ctx))
         if serv:
@@ -171,6 +177,7 @@ class Info:
     @commands.command(aliases=["Channel"])
     @commands.guild_only()
     async def channel(self, ctx):
+        """Infos about a Channel."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
@@ -191,6 +198,7 @@ class Info:
     @commands.command(aliases=["Emotes"])
     @commands.guild_only()
     async def emotes(self, ctx):
+        """Display all emotes avaiable on a Server."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         unique_emojis = set(ctx.message.guild.emojis)
         em = discord.Embed(timestamp=ctx.message.created_at, title='Emotes [%s]' % len(unique_emojis), colour=ctx.message.author.colour)
@@ -218,6 +226,7 @@ class Info:
     # Info of Custom or Unicode Emotes
     @commands.command(aliases=["Emote"])
     async def emote(self, ctx, emote: str):
+        """Infos about Emotes."""
         e = self.emoji_reg.findall(ctx.message.content)
         if e:
             if len(e) > 1:

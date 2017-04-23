@@ -178,6 +178,7 @@ class Google:
     # Google Command
     @commands.command(aliases=['google', 'G', 'Google'])
     async def g(self, ctx, *, query):
+        """Google for whatever you like."""
         try:
             card, entries = await self.get_google_entries(query)
         except RuntimeError as e:
@@ -207,6 +208,7 @@ class Google:
     # Google Image Search (100 per day)
     @commands.command(aliases=["I", "image", "Image"])
     async def i(self, ctx, *, query):
+        """Search for images on google."""
         async with aiohttp.ClientSession() as cs:
             async with cs.get("https://www.googleapis.com/customsearch/v1?q=" + query.replace(' ', '+') + "&start=" + '1' + "&key=" + self.bot.google_api_key + "&cx=" + self.bot.custom_search_engine + "&searchType=image") as resp:
                 if resp.status != 200:

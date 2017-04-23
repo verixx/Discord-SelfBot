@@ -97,6 +97,7 @@ class Mal:
     # MyAnimelist Anime
     @commands.command(aliases=["Anime"])
     async def anime(self, ctx, *, query):
+        """Search for an Anime."""
         await edit(ctx, content='Searching...')
         try:
             content = await self.loop.run_in_executor(None, self.get_google_entries, query, 'anime')
@@ -120,6 +121,7 @@ class Mal:
     # MyAnimelist Manga
     @commands.command(aliases=["Manga"])
     async def manga(self, ctx, *, query):
+        """Search for a Manga."""
         await edit(ctx, content='Searching...')
         try:
             content = await self.loop.run_in_executor(None, self.get_google_entries, query, 'manga')

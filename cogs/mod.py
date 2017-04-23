@@ -28,6 +28,7 @@ class Mod:
     @commands.group(aliases=['purge', 'Purge', 'Clean'])
     @commands.guild_only()
     async def clean(self, ctx):
+        """Remove Messages that fit a certain schema."""
         if ctx.invoked_subcommand is None:
             pass
 
@@ -35,30 +36,35 @@ class Mod:
     @clean.command(aliases=['Embed', 'embed', 'Embeds'])
     @commands.has_permissions(manage_messages=True)
     async def embeds(self, ctx, search: int = None):
+        """Remove Messages with Embeds in them."""
         await self.do_purge(ctx, search, lambda e: len(e.embeds))
 
     # Remove images/attachments
     @clean.command(aliases=['Attachments', 'Attachment', 'attachment'])
     @commands.has_permissions(manage_messages=True)
     async def attachments(self, ctx, search: int = None):
+        """Remove Messages with Attachments in them."""
         await self.do_purge(ctx, search, lambda e: len(e.attachments))
 
     # Remove all
     @clean.command(name='all', aliases=['All'])
     @commands.has_permissions(manage_messages=True)
     async def _all(self, ctx, search: int = None):
+        """Remove all Messages."""
         await self.do_purge(ctx, search, lambda e: True)
 
     # Remove from specific user
     @clean.command(aliases=['User'])
     @commands.has_permissions(manage_messages=True)
     async def user(self, ctx, mem: str, search: int = None):
+        """Removes Messages of a certain User."""
         member = getUser(ctx, mem)
         await self.do_purge(ctx, search, lambda e: e.author == member)
 
     # remove your own message, works everywhere not like all other purges.
     @clean.command(aliases=['Mine'])
     async def mine(self, ctx, search: int = None):
+        """Remove all Messages sent by me."""
         await self.do_purge(ctx, search, lambda e: e.author == ctx.author)
 
     # Mute a Member
@@ -67,6 +73,7 @@ class Mod:
     @commands.has_permissions(manage_channels=True)
     @commands.guild_only()
     async def mute(self, ctx, mem: str):
+        """Mute a Member."""
         member = getUser(ctx, mem)
         if member:
             if not utils.find(lambda r: "mute" in r.name.lower(), ctx.message.guild.roles):
@@ -101,6 +108,7 @@ class Mod:
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def unmute(self, ctx, mem: str):
+        """Unmute a Member."""
         member = getUser(ctx, mem)
         if member:
             role = utils.find(lambda r: "mute" in r.name.lower(), member.roles)
@@ -122,6 +130,7 @@ class Mod:
     @commands.has_permissions(kick_members=True)
     @commands.guild_only()
     async def kick(self, ctx):
+        """Kick a Member."""
         member = getUser(ctx, getWithoutInvoke(ctx))
         if member:
             try:
@@ -141,6 +150,7 @@ class Mod:
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def ban(self, ctx):
+        """Ban a Member."""
         if ctx.invoked_subcommand is None:
             member = getUser(ctx, getWithoutInvoke(ctx))
             if member:
@@ -161,6 +171,7 @@ class Mod:
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def softban(self, ctx):
+        """Softban a Member(Kick and delete Messages)"""
         member = getUser(ctx, getWithoutInvoke(ctx))
         if member:
             try:
@@ -180,6 +191,7 @@ class Mod:
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def _colour(self, ctx, role: str, colour: str):
+        """Set the Color of a Role."""
         role = getRole(ctx, role)
         colour = getColor(colour)
         if not role:
@@ -200,6 +212,7 @@ class Mod:
     @commands.command(aliases=['Permissions', 'Perms', 'perms'])
     @commands.guild_only()
     async def permissions(self, ctx):
+        """Show Permissions of a Member."""
         member = getUser(ctx, getWithoutInvoke(ctx))
         if member:
             true = '\n'.join(name.replace('_', ' ').title() for name, value in ctx.channel.permissions_for(member) if value is True)
@@ -217,6 +230,7 @@ class Mod:
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def addrole(self, ctx, mem: str, ro: str):
+        """Add a role to a Member."""
         member = getUser(ctx, mem)
         role = getRole(ctx, ro)
         if member and role:
@@ -244,6 +258,7 @@ class Mod:
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def removerole(self, ctx, mem: str, ro: str):
+        """Remove a role from a Member."""
         member = getUser(ctx, mem)
         role = getRole(ctx, ro)
         if member and role:
@@ -271,6 +286,7 @@ class Mod:
     @commands.has_permissions(manage_channels=True)
     @commands.guild_only()
     async def lock(self, ctx):
+        """Lock a Channel down for @everyone"""
         channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
             if channel in ctx.guild.text_channels:
@@ -292,6 +308,7 @@ class Mod:
     @commands.has_permissions(manage_channels=True)
     @commands.guild_only()
     async def unlock(self, ctx):
+        """Unlock a Channel for @everyone"""
         channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
             if channel in ctx.guild.text_channels:

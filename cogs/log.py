@@ -15,12 +15,14 @@ class Logging:
     # Log Help
     @commands.group(aliases=["Log"])
     async def log(self, ctx):
+        """Command group for managing logging."""
         if ctx.invoked_subcommand is None:
             await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} ``on``, ``off``, ``status``, ``show``, ``key <word>``, ``guild``, ``channel``, ``blacklist channel`` or ``blacklist <word>````blacklist user <user>``', ttl=5)
 
     # Log On
     @log.command(aliases=["On"])
     async def on(self, ctx):
+        """Set Logging to on."""
         await save_config('setlog', 'on')
         self.bot.setlog = 'on'
         await edit(ctx, content='\N{HEAVY CHECK MARK} Mention Log set to ``on``', ttl=3)
@@ -28,6 +30,7 @@ class Logging:
     # Log Off
     @log.command(aliases=["Off"])
     async def off(self, ctx):
+        """Set Logging to off."""
         await save_config('setlog', 'off')
         self.bot.setlog = 'off'
         await edit(ctx, '\N{HEAVY CHECK MARK} Mention Log set to ``off``', ttl=3)
@@ -35,11 +38,13 @@ class Logging:
     # Log Status
     @log.command(aliases=["Status"])
     async def status(self, ctx):
+        """Show Logging Status."""
         await edit(ctx, content='<:robot:273922151856209923> Mention logging is currently ``%s``' % self.bot.setlog, ttl=3)
 
     # Add Key-Word to Logger
     @log.command(aliases=["Key"])
     async def key(self, ctx, msg: str):
+        """Add a keyword to the logger."""
         msg = msg.lower()
         keys = self.bot.log_key
         if msg in self.bot.log_block_key:
@@ -60,6 +65,7 @@ class Logging:
     @log.command(aliases=["Guild"])
     @commands.guild_only()
     async def guild(self, ctx):
+        """Add a guild to the logger."""
         guilds = self.bot.log_guild
         guild = getGuild(ctx, getWithoutInvoke(ctx)).id
         if guild:
@@ -80,6 +86,7 @@ class Logging:
     @log.command(aliases=["Channel"])
     @commands.guild_only()
     async def channel(self, ctx):
+        """Add a channel to the logger."""
         channels = self.bot.log_channel
         channel = getChannel(ctx, getWithoutInvoke(ctx)).id
         if channel:
@@ -102,6 +109,7 @@ class Logging:
     # Show Logging Infosconfig
     @log.command(aliases=["Show"])
     async def show(self, ctx):
+        """Show Info about logged things."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         em = discord.Embed(title='Logging Info', colour=discord.Color.purple())
 
@@ -165,11 +173,13 @@ class Logging:
     @log.group(aliases=["Blacklist"])
     @commands.guild_only()
     async def blacklist(self, ctx):
+        """Blacklist things from the Logger."""
         ...
 
     # Add Blocked-Key-Word to Logger
     @blacklist.command(name="key", aliases=["Key"])
     async def _key(self, ctx, msg: str):
+        """Add Keywords to the Blacklist."""
         msg = msg.lower()
         keys = self.bot.log_block_key
         if msg in self.bot.log_key:
@@ -190,6 +200,7 @@ class Logging:
     @blacklist.command(name="channel", aliases=["Channel"])
     @commands.guild_only()
     async def _channel(self, ctx):
+        """Add a Channel to the Blacklist."""
         channels = self.bot.log_block_channel
         channel = getChannel(ctx, getWithoutInvoke(ctx)).id
         if channel:
@@ -212,6 +223,7 @@ class Logging:
     # Blacklist user
     @blacklist.command(aliases=["User"])
     async def user(self, ctx, msg: str):
+        """Add a User to the Blacklist."""
         users = self.bot.log_block_user
         user = getUser(ctx, msg)
         if not user:

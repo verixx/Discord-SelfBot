@@ -17,6 +17,7 @@ class Tools:
     # Command usage stats
     @commands.command(aliases=["Cmdstats"])
     async def cmdstats(self, ctx):
+        """A Statistik about your used commands."""
         counter = self.bot.commands_triggered
         width = len(max(counter, key=len))
         total = sum(counter.values())
@@ -26,6 +27,7 @@ class Tools:
 
     @commands.command(aliases=["Socketstats"])
     async def socketstats(self, ctx):
+        """A Statistik about Discords Socket Events you see."""
         delta = datetime.datetime.utcnow() - self.bot.uptime
         minutes = delta.total_seconds() / 60
         total = sum(self.bot.socket_stats.values())
@@ -37,6 +39,7 @@ class Tools:
     # Ping Time
     @commands.command(aliases=["Ping"])
     async def ping(self, ctx):
+        """Time the websocket takes to rspond."""
         ttl = None if ctx.message.content.endswith(' stay') else 10
         before = datetime.datetime.utcnow()
         await (await self.bot.ws.ping())
@@ -49,6 +52,7 @@ class Tools:
     # Time Since Bot is running
     @commands.command(aliases=["Uptime"])
     async def uptime(self, ctx):
+        """Show how long the Bot is running already."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=discord.Color.purple())
         embed.add_field(name='﻿ ', value=getTimeDiff(self.bot.uptime), inline=False)
@@ -58,6 +62,7 @@ class Tools:
     # Various stat about the bot since startup
     @commands.command(aliases=["Stats"])
     async def stats(self, ctx):
+        """Several interesting informations about your Bot."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         unique_online = len(dict((m.id, m) for m in self.bot.get_all_members() if m.status != discord.Status.offline))
         voice = sum(len(g.voice_channels) for g in self.bot.guilds)
@@ -90,6 +95,7 @@ class Tools:
     # Host System Infos
     @commands.command(aliases=["Sysinfo"])
     async def sysinfo(self, ctx):
+        """Several interesting informations about your Host System."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         process = psutil.Process(os.getpid())
         memory_usage = process.memory_full_info().uss / 1024**2
@@ -111,6 +117,7 @@ class Tools:
     # Change Gamestatus - blank is no game
     @commands.command(aliases=["Game"])
     async def game(self, ctx):
+        """Change or remove your game."""
         ttl = None if ctx.message.content.endswith(' stay') else 5
         game = getWithoutInvoke(ctx)
         if game == '':
@@ -125,6 +132,7 @@ class Tools:
     # Find message with specific Text in Channel History...    Search Term(s) | Text
     @commands.command(aliases=["Quote"])
     async def quote(self, ctx):
+        """Quote messages by Id or text."""
         search = getWithoutInvoke(ctx)
         content = '\U0000200d'
         if '|' in search:
@@ -150,6 +158,7 @@ class Tools:
     # Colours
     @commands.command(aliases=['colour', 'Colour', 'Color'])
     async def color(self, ctx):
+        """Convert Color from HEX to RGB or simply search for webcolors."""
         color = getColor(getWithoutInvoke(ctx).strip())
         if color is None:
             role = getRole(ctx, getWithoutInvoke(ctx))
@@ -171,6 +180,7 @@ class Tools:
     # Jumbo Emote
     @commands.command(aliases=["Jumbo"])
     async def jumbo(self, ctx):
+        """Display your favorite emotes in large."""
         e = self.emoji_reg.findall(ctx.message.content)
         if e:
             if len(e) > 1:

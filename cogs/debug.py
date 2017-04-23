@@ -19,6 +19,7 @@ class Debug:
     # DEBUG
     @commands.command(aliases=["Debug", "d", "D"])
     async def debug(self, ctx, *, code: str):
+        """Single line Python debug.."""
         code = code.strip('` ')
         python = '```ocaml\n>>> Input: {}\n{}\n```'
         result = None
@@ -65,6 +66,7 @@ class Debug:
     # Eval Command
     @commands.command(name='eval', aliases=["Eval", "e", "E"])
     async def _eval(self, ctx, *, body: str):
+        """Multiline Python Eval."""
         env = {
             'bot': self.bot,
             'say': ctx.send,

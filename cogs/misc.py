@@ -34,6 +34,7 @@ class Misc:
     # Sends a googleitfor.me link with the specified tags
     @commands.command(aliases=["L2g"])
     async def l2g(self, ctx, *, msg: str):
+        """Links to lmgtfy."""
         lmgtfy = 'http://googleitfor.me/?q='
         words = msg.lower().strip().split(' ')
         for word in words:
@@ -43,6 +44,7 @@ class Misc:
     # Picks a random answer from a list of options
     @commands.command(aliases=["Choose"])
     async def choose(self, ctx, *, choices: str):
+        """Chooses one from many possibilities."""
         choiceslist = choices.split("|")
         choice = random.choice(choiceslist)
         if len(choiceslist) < 2:
@@ -56,6 +58,7 @@ class Misc:
     # 8ball
     @commands.command(name="8", aliases=["8ball"])
     async def _8ball(self, ctx, *, question: str):
+        """Typical 8ball like you know it."""
         if question.endswith("?") and question != "?":
             await edit(ctx, content="`" + choice(self.ball) + "`")
         else:
@@ -64,6 +67,7 @@ class Misc:
     # Urbandictionary
     @commands.command(aliases=["Urban"])
     async def urban(self, ctx, *, search_terms: str, definition_number: int=1):
+        """Get an Urban Dictionary entry."""
         search_terms = search_terms.split(" ")
         try:
             if len(search_terms) > 1:
@@ -98,6 +102,7 @@ class Misc:
 
     @commands.command(aliases=["Gif"])
     async def gif(self, ctx, *text):
+        """Get a gif from Giphy."""
         if text:
             if len(text[0]) > 1 and len(text[0]) < 20:
                 try:
@@ -130,6 +135,7 @@ class Misc:
 
     @commands.command(aliases=["React"])
     async def react(self, ctx, msg: str, _id: int = None):
+        """React to a Message with Text."""
         reactions = self.to_reginals(msg, True)
         if not _id:
             async for message in ctx.message.channel.history(limit=2):
@@ -145,12 +151,14 @@ class Misc:
 
     @commands.command(aliases=["Regional", "Regionals", "regionals"])
     async def regional(self, ctx, *, msg: str):
+        """Convert a Text to emotes."""
         regional_list = self.to_reginals(msg, False)
         regional_output = ' '.join(regional_list)
         await edit(ctx, content=regional_output)
 
     @commands.command(aliases=["Embed"])
     async def embed(self, ctx, *, msg: str):
+        """Embed a Text."""
         try:
             await edit(ctx, embed=discord.Embed(description=msg, colour=discord.Color.purple()))
         except:
@@ -166,6 +174,7 @@ class Misc:
             r'(?::\d+)?'
             r'(?:/?|[/?]\S+)$', re.IGNORECASE)
         link = regex.findall(msg)
+        """Embed an image."""
         if link:
             mimetype, encoding = mimetypes.guess_type(link[0])
             if mimetype and mimetype.startswith('image'):

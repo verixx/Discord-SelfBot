@@ -17,6 +17,7 @@ class Cogs:
     # Loads a module
     @commands.command(aliases=["Load"])
     async def load(self, ctx, *, module: str):
+        """Load a certain cogs."""
         try:
             self.bot.load_extension(module)
         except Exception as e:
@@ -29,6 +30,7 @@ class Cogs:
     # Unloads a module
     @commands.command(aliases=["Unload"])
     async def unload(self, ctx, *, module: str):
+        """Unload a certain cog."""
         try:
             self.bot.unload_extension(module)
         except Exception as e:
@@ -41,6 +43,7 @@ class Cogs:
     # Reloads a module.
     @commands.command(aliases=["Reload"])
     async def reload(self, ctx, module: str = None):
+        """Reload one or all cogs."""
         if not module:
             utils = []
             for i in self.bot.extensions:
@@ -72,6 +75,7 @@ class Cogs:
     # Shutdown Bot
     @commands.command(aliases=["Quit"])
     async def quit(self, ctx):
+        """Shut down the SelfBot."""
         log.warning('Bot has been killed.')
         await edit(ctx, content='Bot has been killed.', ttl=2)
         with open('quit.txt', 'w') as re:
@@ -81,6 +85,7 @@ class Cogs:
     # Restart selfbot
     @commands.command(aliases=["Restart"])
     async def restart(self, ctx):
+        """Restart the SelfBot."""
         with open('restart.txt', 'w') as re:
             re.write(str(ctx.channel.id))
         log.info('Restarting....')
