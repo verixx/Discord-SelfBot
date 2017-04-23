@@ -30,6 +30,12 @@ class Misc:
                           'V': '\N{REGIONAL INDICATOR SYMBOL LETTER V}', 'W': '\N{REGIONAL INDICATOR SYMBOL LETTER W}', 'X': '\N{REGIONAL INDICATOR SYMBOL LETTER X}',
                           'Y': '\N{REGIONAL INDICATOR SYMBOL LETTER Y}', 'Z': '\N{REGIONAL INDICATOR SYMBOL LETTER Z}'}
         self.numbers = {'0': '0⃣', '1': '1⃣', '2': '2⃣', '3': '3⃣', '4': '4⃣', '5': '5⃣', '6': '6⃣', '7': '7⃣', '8': '8⃣', '9': '9⃣'}
+        self.link = re.compile(r'^(?:http|ftp)s?://'
+                               r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
+                               r'localhost|'
+                               r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+                               r'(?::\d+)?'
+                               r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
     # Sends a googleitfor.me link with the specified tags
     @commands.command(aliases=["L2g"])
@@ -166,15 +172,8 @@ class Misc:
 
     @commands.command(aliases=["Eimage", "Ei", "ei"])
     async def eimage(self, ctx, *, msg: str):
-        regex = re.compile(
-            r'^(?:http|ftp)s?://'
-            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
-            r'localhost|'
-            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-            r'(?::\d+)?'
-            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-        link = regex.findall(msg)
         """Embed an image."""
+        link = self.link.findall(msg)
         if link:
             mimetype, encoding = mimetypes.guess_type(link[0])
             if mimetype and mimetype.startswith('image'):

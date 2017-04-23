@@ -11,7 +11,7 @@ from urllib.parse import parse_qs
 from .utils.checks import edit, permEmbed
 
 
-class Mal:
+class MyAnimeList:
 
     def __init__(self, bot):
         self.bot = bot
@@ -144,4 +144,4 @@ class Mal:
 
 
 def setup(bot):
-    bot.add_cog(Mal(bot))
+    bot.add_cog(MyAnimeList(bot))

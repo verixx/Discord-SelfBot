@@ -17,7 +17,7 @@ class Logging:
     async def log(self, ctx):
         """Command group for managing logging."""
         if ctx.invoked_subcommand is None:
-            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} ``on``, ``off``, ``status``, ``show``, ``key <word>``, ``guild``, ``channel``, ``blacklist channel`` or ``blacklist <word>````blacklist user <user>``', ttl=5)
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} ``on``, ``off``, ``status``, ``show``, ``key <word>``, ``guild``, ``channel``, ``blacklist channel``, ``blacklist <word>`` or ``blacklist user <user>``', ttl=5)
 
     # Log On
     @log.command(aliases=["On"])

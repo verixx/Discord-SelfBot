@@ -4,7 +4,7 @@
 [<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=shield">](https://discordapp.com/invite/DJK8h3n)
 
 For any kind of suggestions, feedback, support or just to hang out, I'll gladly welcome you on my [Server](https://discord.gg/DJK8h3n).
-If you encounter problems while setting up the selfbot, come by and I am sure we'll find a solution.
+If you encounter problems while setting up the SelfBot, come by and I am sure we'll find a solution.
 
 # IgneelDxD's Discord SelfBot
 #### This Project uses the rewrite version of [discord.py](https://github.com/Rapptz/discord.py/tree/rewrite) as well as [Python 3.6](https://www.python.org/downloads/release/python-360/). Please keep this in mind when using the bot.

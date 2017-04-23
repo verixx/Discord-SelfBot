@@ -10,7 +10,7 @@ from .utils.checks import edit, getChannel, getColor, getRole, getUser, getWitho
 log = logging.getLogger('LOG')
 
 
-class Mod:
+class Moderation:
 
     def __init__(self, bot):
         self.bot = bot
@@ -327,4 +327,4 @@ class Mod:
 
 
 def setup(bot):
-    bot.add_cog(Mod(bot))
+    bot.add_cog(Moderation(bot))

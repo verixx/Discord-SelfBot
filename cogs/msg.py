@@ -18,7 +18,7 @@ def custom(prefix, content):
     with open('config/commands.json', 'r') as f:
         commands = json.load(f)
         for i in commands:
-            if i.lower() in message.split():
+            if i == message.split()[0]:
                     mimetype, encoding = mimetypes.guess_type(commands[i])
                     zwi = message.split(' ', 1)
                     if len(zwi) != 2:
