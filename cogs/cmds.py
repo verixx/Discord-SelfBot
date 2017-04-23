@@ -1,14 +1,14 @@
-import asyncio
+import itertools
 import json
 import logging
-import re
 
 from discord.ext import commands
+from .utils.checks import edit
 
 log = logging.getLogger('LOG')
 
 
-class Customcmds:
+class CustomCommands:
 
     def __init__(self, bot):
         self.bot = bot
@@ -16,6 +16,7 @@ class Customcmds:
     # List all custom commands without links
     @commands.group(aliases=["Cmds"])
     async def cmds(self, ctx):
+        """Show all custom commands."""
         if ctx.invoked_subcommand is None:
             ttl = None if ctx.message.content.endswith(' stay') else 20
             p = commands.Paginator(prefix='```css')
@@ -35,6 +36,7 @@ class Customcmds:
     # List all custom commands with Links
     @cmds.command(aliases=["Long"])
     async def long(self, ctx):
+        """Display also their content"""
         ttl = None if ctx.message.content.endswith(' stay') else 20
         p = commands.Paginator(prefix='```css')
         with open('config/commands.json', 'r') as com:
@@ -47,162 +49,75 @@ class Customcmds:
             await ctx.send(page, delete_after=ttl)
         await ctx.message.delete()
 
+    @commands.group(aliases=["Cmd"])
+    async def cmd(self, ctx, key: str):
+        """Display content of a command."""
+        ttl = None if ctx.message.content.endswith(' stay') else 20
+        with open('config/commands.json', 'r') as com:
+            cmds = json.load(com)
+        if key in cmds:
+            await edit(ctx, content="``{}`` content:\n{}".format(key, cmds.get(key)), ttl=ttl)
+        else:
+            await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} Couldn't find ``{key}`` in Custom Commands", ttl=5)
+
     # Add a custom command
     @commands.command(aliases=["Add"])
     async def add(self, ctx, *, msg: str):
-        words = msg.strip()
-
+        """Add a Custom Command."""
+        words = msg.strip('"').split(' ', 1)
         with open('config/commands.json', 'r') as commands:
             cmds = json.load(commands)
             save = cmds
-
-        try:
-
-            # If there are quotes in the message (meaning multiple words for each param)
-            if '"' in words:
-                entry = re.findall('"([^"]+)"', words)
-
-                # Item for key is list
-                if len(entry) == 3:
-
-                    # Key exists
-                    if entry[0] in cmds:
-                        entries = []
-                        for i in cmds[entry[0]]:
-                            entries.append(tuple((i[0], i[1])))
-                        entries.append(tuple([entry[1], entry[2]]))
-                        cmds[entry[0]] = entries
-                    else:
-                        cmds[entry[0]] = [(entry[1], entry[2])]
-
-                # Item for key is string
+        if len(words) == 2:
+            if words[0].lower() not in cmds:
+                builtin = list(itertools.chain.from_iterable([x.aliases for x in self.bot.commands])) + [x.name for x in self.bot.commands]
+                if words[0] not in builtin:
+                    try:
+                        cmds[words[0].lower()] = words[1]
+                        with open('config/commands.json', 'w') as commands:
+                            commands.truncate()
+                            json.dump(cmds, commands, indent=4, sort_keys=True)
+                        await edit(ctx, content=f"\N{HEAVY CHECK MARK} Successfully added ``{words[1]}`` to ``{words[0]}``", ttl=5)
+                    except Exception as e:
+                        with open('config/commands.json', 'w') as commands:
+                            commands.truncate()
+                            json.dump(save, commands, indent=4, sort_keys=True)
+                        await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong.Exception: ``{e}``", ttl=20)
                 else:
-                    cmds[entry[0]] = entry[1]
-
-            # No quotes so spaces seperate params
+                    await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} ``{words[0]}`` is already a command and can't be used because of that.", ttl=5)
             else:
-
-                # Item for key is list
-                if len(words.split(' ')) == 3:
-                    entry = words.split(' ', 2)
-
-                    # Key exists
-                    if entry[0] in cmds:
-                        entries = []
-                        for i in cmds[entry[0]]:
-                            entries.append(tuple((i[0], i[1])))
-                        entries.append(tuple([entry[1], entry[2]]))
-                        cmds[entry[0]] = entries
-                    else:
-                        cmds[entry[0]] = [(entry[1], entry[2])]
-
-                # Item for key is string
-                else:
-                    entry = words.split(' ', 1)
-                    cmds[entry[0]] = entry[1]
-
-            msg = await ctx.send('Successfully added ``%s`` to ``%s``' % (entry[1], entry[0]))
-
-        except Exception as e:
-            with open('config/commands.json', 'w') as commands:
-                commands.truncate()
-                json.dump(save, commands, indent=4)
-            msg = await ctx.send('Error, seomthing went wrong. Exception: ``%s``' % e)
-
-        # Update commands.json
-        with open('config/commands.json', 'w') as commands:
-            commands.truncate()
-            json.dump(cmds, commands, indent=4)
-        await ctx.message.delete()
-        await asyncio.sleep(2)
-        await msg.delete()
+                await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} Key ``{words[0]}`` already in use.", ttl=5)
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} You need a Key and a Value eg. ``add testkey testvalue``", ttl=5)
 
     # Remove a custom command
     @commands.command(aliases=["Remove"])
-    async def remove(self, ctx, *, msg: str):
-        words = msg.strip()
-
+    async def remove(self, ctx, key: str):
+        """Remove a Custom Command."""
+        key = key.strip('"')
         with open('config/commands.json', 'r') as commands:
             cmds = json.load(commands)
             save = cmds
-
-        try:
-
-            # If there are quotes in the message (meaning multiple words for each param)
-            success = False
-            if '"' in words:
-                entry = re.findall('"([^"]+)"', words)
-
-                # Item for key is list
-                if len(entry) == 2:
-
-                    # Key exists
-                    if entry[0] in cmds:
-                        for i in cmds[entry[0]]:
-                            if entry[1] == i[0]:
-                                cmds[entry[0]].remove(i)
-                                msg = await ctx.send('Successfully removed ``%s`` from ``%s``' % (entry[1], entry[0]))
-                                success = True
-                    else:
-                        if entry[0] in cmds:
-                            del cmds[entry[0]]
-                            success = True
-                            msg = await ctx.send('Successfully removed ``%s`` from ``%s``' % (entry[1], entry[0]))
-
-                # Item for key is string
-                else:
-                    if entry[0] in cmds:
-                        oldValue = cmds[entry[0]]
-                        del cmds[entry[0]]
-                        success = True
-                        msg = await ctx.send('Successfully removed ``%s`` from ``%s``' % (oldValue, entry[0]))
-
-            # No quotes so spaces seperate params
+        builtin = list(itertools.chain.from_iterable([x.aliases for x in self.bot.commands])) + [x.name for x in self.bot.commands]
+        if key in builtin:
+            await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} You can't remove the builtin command ``{key}``", ttl=5)
+        else:
+            if key.lower() in cmds:
+                try:
+                    value = cmds[key.lower()]
+                    del cmds[key.lower()]
+                    with open('config/commands.json', 'w') as commands:
+                        commands.truncate()
+                        json.dump(cmds, commands, indent=4, sort_keys=True)
+                    await edit(ctx, content=f"\N{HEAVY CHECK MARK} Successfully removed ``{key}`` with value ``{value}``", ttl=5)
+                except Exception as e:
+                    with open('config/commands.json', 'w') as commands:
+                        commands.truncate()
+                        json.dump(save, commands, indent=4, sort_keys=True)
+                    await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong.Exception: ``{e}``", ttl=20)
             else:
-
-                # Item for key is list
-                if len(words.split(' ')) == 2:
-                    entry = words.split(' ')
-
-                    # Key exists
-                    if entry[0] in cmds:
-                        for i in cmds[entry[0]]:
-                            if entry[1] == i[0]:
-                                cmds[entry[0]].remove(i)
-                                msg = await ctx.send('Successfully removed ``%s`` from ``%s``' % (entry[1], entry[0]))
-                                success = True
-                    else:
-                        if entry[0] in cmds:
-                            del cmds[entry[0]]
-                            success = True
-                            msg = await ctx.send('Successfully removed ``%s`` from %``s``' % (entry[1], entry[0]))
-
-                # Item for key is string
-                else:
-                    entry = words.split(' ', 1)
-                    if entry[0] in cmds:
-                        oldValue = cmds[entry[0]]
-                        del cmds[entry[0]]
-                        success = True
-                        msg = await ctx.send('Successfully removed ``%s`` from ``%s``' % (oldValue, entry[0]))
-
-            if not success:
-                msg = await ctx.send('Could not find specified command.')
-
-        except Exception as e:
-            with open('config/commands.json', 'w') as commands:
-                commands.truncate()
-                json.dump(save, commands, indent=4)
-            msg = await ctx.send('Error, something went wrong. Exception: ``%s``' % e)
-
-        # Update commands.json
-        with open('config/commands.json', 'w') as commands:
-            commands.truncate()
-            json.dump(cmds, commands, indent=4)
-        await ctx.message.delete()
-        await asyncio.sleep(2)
-        await msg.delete()
+                await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} Couldn't find ``{key}`` in Custom Commands", ttl=5)
 
 
 def setup(bot):
-    bot.add_cog(Customcmds(bot))
+    bot.add_cog(CustomCommands(bot))
