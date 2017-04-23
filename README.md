@@ -4,7 +4,7 @@
 [<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=shield">](https://discordapp.com/invite/DJK8h3n)
 
 For any kind of suggestions, feedback, support or just to hang out, I'll gladly welcome you on my [Server](https://discord.gg/DJK8h3n).
-If you enquire problems while setting up the selfbot, come by and I am sure we'll find a solution.
+If you encounter problems while setting up the selfbot, come by and I am sure we'll find a solution.
 
 # IgneelDxD's Discord SelfBot
 #### This Project uses the rewrite version of [discord.py](https://github.com/Rapptz/discord.py/tree/rewrite) as well as [Python 3.6](https://www.python.org/downloads/release/python-360/). Please keep this in mind when using the bot.
@@ -24,7 +24,7 @@ Disclaimer: Use this on your own risk. If you get banned somewhere because of us
   - Prune a Member's Messages of a certain type or your own if necessary.
   - Show Permissions of a Member.
 - Mention Logging
-  - Set a Channel on your own Server to log all your mentions and Keywords to.
+  - Set a Channel on your own Server to log all your mentions and Keywords too.
   - Add Keywords to your logger to trigger it in whole Servers or specific Channels.
   - Don't like a user/channel? Simply add them to your blacklist and you'll never log them again.
 - Information:
@@ -52,16 +52,17 @@ Disclaimer: Use this on your own risk. If you get banned somewhere because of us
   - add reaction text with a command.
   - convert a message to Alphanumeric Emotes.
 - Debug
-  - Use Python within of a channel.
+  - Use Python within a channel.
 
 
 
 1. [Setup](#setup)
-2. [Commands](#commands)
-3. [Custom Commands](#custom-commands)
-4. [Mention Logger](#mention-logger)
-5. [Google API](#google-api)
-6. [Acknowledgements](#acknowledgements)
+2. [Running the Bot](#running-the-bot)
+3. [Commands](#commands)
+4. [Custom Commands](#custom-commands)
+5. [Mention Logger](#mention-logger)
+6. [Google API](#google-api)
+7. [Acknowledgements](#acknowledgements)
 
 ## Setup
 Clone this repo or download it as Zip and move/unpack it to the location where you wanna have it.
@@ -103,6 +104,8 @@ Now after this is done, open the config file and start adding your information. 
   - Click the last point to copy the id and paste it to ``log_channel``. It should look like ``"log_channel": 123456789123456789,``. Do **not** use quotes here as we need it as number, not as Text.
 
 
+## Running the Bot
+### Coming
 
 ## Commands
 ### Coming
