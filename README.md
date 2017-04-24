@@ -6,6 +6,7 @@
 
 
 For any kind of suggestions, feedback, support or just to hang out, I'll gladly welcome you on my [Server](https://discord.gg/DJK8h3n).
+
 If you encounter problems while setting up the SelfBot, come by and I am sure we'll find a solution.
 
 [<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=banner2">](https://discord.gg/DJK8h3n)

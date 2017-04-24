@@ -58,7 +58,7 @@ class Misc:
         else:
             em = discord.Embed(colour=discord.Color.purple())
             em.add_field(name="Options", value=choices, inline=False)
-            em.add_field(name="Choice", value="<:robot:273922151856209923> | My Answer is ``{}``".format(choice))
+            em.add_field(name="Choice", value="<:clyde:273922151856209923> | My Answer is ``{}``".format(choice))
             await edit(ctx, embed=em)
 
     # 8ball
