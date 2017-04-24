@@ -3,6 +3,7 @@ import discord
 import os
 import platform
 import psutil
+import re
 
 from discord import utils
 from discord.ext import commands
@@ -13,6 +14,7 @@ class Tools:
 
     def __init__(self, bot):
         self.bot = bot
+        self.emoji_reg = re.compile(r'<:.+?:([0-9]{15,21})>')
 
     # Command usage stats
     @commands.command(aliases=["Cmdstats"])
