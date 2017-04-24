@@ -37,19 +37,6 @@ discordConsole.setLevel(logging.ERROR)
 discordConsole.setFormatter(consoleFormatter)
 logger.addHandler(discordConsole)
 
-extensions = ['cogs.cmds',
-              'cogs.cogs',
-              'cogs.debug',
-              'cogs.google',
-              'cogs.info',
-              'cogs.log',
-              'cogs.mal',
-              'cogs.misc',
-              'cogs.mod',
-              'cogs.msg',
-              'cogs.tools'
-              ]
-
 bot = commands.Bot(command_prefix=read_config('prefix'), description='''IgneelDxD's Selfbot''', self_bot=True)
 
 
@@ -140,10 +127,19 @@ async def status(bot):
 
 # Load Extensions / Logger / Runbot
 if __name__ == '__main__':
-    for extension in extensions:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            log.warning('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
+    try:
+        bot.load_extension("cogs.cogs")
+    except Exception as e:
+        log.error('Failed to load extension cogs.cogs\n{}: {}'.format(type(e).__name__, e))
+        log.error("Bot automatically shut down. Cogs extension is needed!")
+        with open('quit.txt', 'w') as re:
+            re.write('quit')
+        os._exit(0)
+    for extension in os.listdir("cogs"):
+        if extension.endswith('.py') and not extension == "cogs.py":
+            try:
+                bot.load_extension("cogs." + extension.rstrip(".py"))
+            except Exception as e:
+                log.warning('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
     bot.loop.create_task(status(bot))
     bot.run(read_config('token'), bot=False)
