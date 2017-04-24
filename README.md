@@ -1,10 +1,14 @@
 [<img src="https://img.shields.io/badge/discord.py-rewrite-blue.svg?style=flat-square">](https://github.com/Rapptz/discord.py/tree/rewrite)
 [<img src="https://img.shields.io/badge/python-3.6-brightgreen.svg?style=flat-square">](https://www.python.org/downloads/release/python-360/)
 [<img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square">](https://github.com/IgneelDxD/Discord-SelfBot/blob/master/LICENSE)
-[<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=shield">](https://discordapp.com/invite/DJK8h3n)
+[<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=shield">](https://discord.gg/DJK8h3n)
+[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=I%20just%20found%20@IgneelDxD%27s%20awesome%20Discord%20SelfBot,%20check%20it%20out!%20https://github.com/IgneelDxD/Discord-SelfBot&source=webclient)
+
 
 For any kind of suggestions, feedback, support or just to hang out, I'll gladly welcome you on my [Server](https://discord.gg/DJK8h3n).
 If you encounter problems while setting up the SelfBot, come by and I am sure we'll find a solution.
+
+[<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=banner2">](https://discord.gg/DJK8h3n)
 
 # IgneelDxD's Discord SelfBot
 #### This Project uses the rewrite version of [discord.py](https://github.com/Rapptz/discord.py/tree/rewrite) as well as [Python 3.6](https://www.python.org/downloads/release/python-360/). Please keep this in mind when using the bot.
@@ -12,6 +16,16 @@ If you encounter problems while setting up the SelfBot, come by and I am sure we
 This SelfBot has a lot of useful features like a bunch of Moderation commands as well as fun commands or a Mention logger.
 
 Disclaimer: Use this on your own risk. If you get banned somewhere because of using it I won't take responsibility.
+
+> ### Table of Contents
+> 1. [Features](#features)
+> 2. [Setup](#setup)
+> 3. [Running the Bot](#running-the-bot)
+> 4. [Commands](#commands)
+> 5. [Custom Commands](#custom-commands)
+> 6. [Mention Logger](#mention-logger)
+> 7. [Google API](#google-api)
+> 8. [Acknowledgements](#acknowledgements)
 
 ## Features
 - Moderation (Works only if you have the permissions to use it on a Server)
@@ -53,16 +67,6 @@ Disclaimer: Use this on your own risk. If you get banned somewhere because of us
   - convert a message to Alphanumeric Emotes.
 - Debug
   - Use Python within a channel.
-
-
-
-1. [Setup](#setup)
-2. [Running the Bot](#running-the-bot)
-3. [Commands](#commands)
-4. [Custom Commands](#custom-commands)
-5. [Mention Logger](#mention-logger)
-6. [Google API](#google-api)
-7. [Acknowledgements](#acknowledgements)
 
 ## Setup
 Clone this repo or download it as Zip and move/unpack it to the location where you wanna have it.
