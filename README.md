@@ -2,7 +2,7 @@
 [<img src="https://img.shields.io/badge/python-3.6-brightgreen.svg?style=flat-square">](https://www.python.org/downloads/release/python-360/)
 [<img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square">](https://github.com/IgneelDxD/Discord-SelfBot/blob/master/LICENSE)
 [<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=shield">](https://discord.gg/DJK8h3n)
-[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=I%20just%20found%20@IgneelDxD%27s%20awesome%20Discord%20SelfBot,%20check%20it%20out!%20https://github.com/IgneelDxD/Discord-SelfBot&source=webclient)
+[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=I%20just%20found%20@IgneelDxD%27s%20awesome%20Discord%20SelfBot,%20check%20it%20out!%20https://igneeldxd.github.io/Discord-SelfBot/&source=webclient)
 
 
 For any kind of suggestions, feedback, support or just to hang out, I'll gladly welcome you on my [Server](https://discord.gg/DJK8h3n).
@@ -12,7 +12,7 @@ If you encounter problems while setting up the SelfBot, come by and I am sure we
 [<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=banner2">](https://discord.gg/DJK8h3n)
 
 # IgneelDxD's Discord SelfBot
-#### This Project uses the rewrite version of [discord.py](https://github.com/Rapptz/discord.py/tree/rewrite) as well as [Python 3.6](https://www.python.org/downloads/release/python-360/). Please keep this in mind when using the bot.
+#### This Project uses the rewrite version of [discord.py](https://github.com/Rapptz/discord.py/tree/rewrite) as well as [Python 3.6](https://www.python.org/downloads/release/python-360/) or higher. Please keep this in mind when using the bot.
 
 This SelfBot has a lot of useful features like a bunch of Moderation commands as well as fun commands or a Mention logger.
 
@@ -22,11 +22,13 @@ Disclaimer: Use this on your own risk. If you get banned somewhere because of us
 > 1. [Features](#features)
 > 2. [Setup](#setup)
 > 3. [Running the Bot](#running-the-bot)
-> 4. [Commands](#commands)
-> 5. [Custom Commands](#custom-commands)
-> 6. [Mention Logger](#mention-logger)
-> 7. [Google API](#google-api)
-> 8. [Acknowledgements](#acknowledgements)
+> 4. [Hosting](#hosting-on-a-linux-vps)
+> 5. [Commands](#commands)
+> 6. [Custom Commands](#custom-commands)
+> 7. [Mention Logger](#mention-logger)
+> 8. [Adding Your Own Stuff](#adding-your-own-stuff)
+> 9. [Google API](#google-api)
+> 10. [Acknowledgements](#acknowledgements)
 
 ## Features
 - Moderation (Works only if you have the permissions to use it on a Server)
@@ -110,16 +112,45 @@ Now after this is done, open the config file and start adding your information. 
 
 
 ## Running the Bot
-### Coming
+> Mind that this description is written for ``Windows``, it shouldn't differ too much on other Systems thought.
+
+> You can skip any step if your System already fulfills the step.
+
+### Installing Python
+As mentioned above we need to install Python 3.6 or higher, anything below won't work with this SelfBot.
+1. Go and download anything above 3.6.0 [here](https://www.python.org/downloads/).
+2. Once selected the Version you like/need, click onto ``Download`` and scroll down to ``Files``.
+3. Select your System. You can find that in ``System Information`` or similar.
+4. Then run the installer and pay attention to select ``Add Python ** to PATH`` like [here](https://i.imgur.com/sNW1jvG.png) and finish with ``Install Now``.
+5. After finishing the install open your Command-Line (Windows + R, cmd.exe, enter) or PowerShell and type ``python -V``.
+6. If you see the Version you just installed before you are set to go ([image](https://i.imgur.com/tDvZkKh.png).
+
+### Installing Git
+1. Download the latest [Git](https://git-scm.com/downloads) Version for your System.
+2. Once downloaded start the installation.
+3. On [this](https://i.imgur.com/GBtdTav.png) step pay attention to select ``Windows Command Prompt``.
+4. Go through the installation and adjust it to your likings. The default settings should be enough thought.
+
+
+### Starting the Bot
+1. Go to the folder you unpacked in [Setup](#setup).
+2. Open the ``loop.py`` and replace ``python3.6`` with python or how you named the command.
+3. Hold ``shift`` and right-click onto anything within the folder aside of the files
+4. On [this](https://i.imgur.com/OPCZVDg.png) menu then select ``Open Command Prompt / PowerShell window here``
+5. Type ``pip install -r .\requirements.txt`` into the console and let it install all dependencies we need.
+6. Then type ``python loop.py`` or again replace python with your version and wait for it to login.
+7. This may take up to a minute or more, depending on your connection speed.
+8. Have fun using the bot. Check [Commands](#commands), [Custom Commands](#custom-commands) and [Mention Logger](#mention-logger) to see what you can do.
+
+## Hosting on a Linux VPS
 
 ## Commands
-### Coming
 
 ## Custom Commands
-### Soon
 
 ## Mention Logger
-### TM
+
+## Adding Your Own Stuff
 
 ## Google API
 

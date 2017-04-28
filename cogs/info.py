@@ -24,8 +24,8 @@ class Info:
     async def about(self, ctx):
         """Infos about the SelfBot."""
         embed = discord.Embed()
-        embed.set_author(name="Igneel's SelfBot", url="https://github.com/IgneelDxD/Discord-SelfBot")
-        embed.description = "https://github.com/IgneelDxD/Discord-SelfBot\nThis is a Selfbot written by IgneelDxD\nFor support or feedback you can join my [Server](https://discord.gg/DJK8h3n)"
+        embed.set_author(name="Igneel's SelfBot", url="https://igneeldxd.github.io/Discord-SelfBot/")
+        embed.description = "https://igneeldxd.github.io/Discord-SelfBot/\nThis is a Selfbot written by IgneelDxD\nFor support or feedback you can join my [Server](https://discord.gg/DJK8h3n)"
         embed.colour = discord.Color.purple()
 
         async with aiohttp.ClientSession() as cs:
