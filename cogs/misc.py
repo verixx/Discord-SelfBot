@@ -8,7 +8,7 @@ import re
 
 from discord.ext import commands
 from random import choice
-from .utils.checks import edit
+from .utils.helper import edit
 
 log = logging.getLogger('LOG')
 

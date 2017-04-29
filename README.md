@@ -112,7 +112,7 @@ Now after this is done, open the config file and start adding your information. 
 
 
 ## Running the Bot
-> Mind that this description is written for ``Windows``, it shouldn't differ too much on other Systems thought.
+> Mind that this description is written for ``Windows``, it shouldn't differ too much on other Systems though.
 
 > You can skip any step if your System already fulfills the step.
 
@@ -123,13 +123,13 @@ As mentioned above we need to install Python 3.6 or higher, anything below won't
 3. Select your System. You can find that in ``System Information`` or similar.
 4. Then run the installer and pay attention to select ``Add Python ** to PATH`` like [here](https://i.imgur.com/sNW1jvG.png) and finish with ``Install Now``.
 5. After finishing the install open your Command-Line (Windows + R, cmd.exe, enter) or PowerShell and type ``python -V``.
-6. If you see the Version you just installed before you are set to go ([image](https://i.imgur.com/tDvZkKh.png).
+6. If you see the Version you just installed before you are set to go ([image](https://i.imgur.com/tDvZkKh.png)).
 
 ### Installing Git
 1. Download the latest [Git](https://git-scm.com/downloads) Version for your System.
 2. Once downloaded start the installation.
 3. On [this](https://i.imgur.com/GBtdTav.png) step pay attention to select ``Windows Command Prompt``.
-4. Go through the installation and adjust it to your likings. The default settings should be enough thought.
+4. Go through the installation and adjust it to your likings. The default settings should be enough though.
 
 
 ### Starting the Bot

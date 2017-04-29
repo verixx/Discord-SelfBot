@@ -8,6 +8,20 @@ from contextlib import redirect_stdout
 from discord.ext import commands
 from PythonGists import PythonGists
 from .utils.checks import edit, getUser
+###############
+# Imports for Eval/Debug, I hate errors.
+##############
+import asyncio
+import datetime
+import gc
+import json
+import psutil
+import random
+import re
+import time
+import urllib
+
+from bs4 import BeautifulSoup
 
 
 class Debug:
@@ -15,6 +29,34 @@ class Debug:
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None
+        # I don't allow those errors to trigger me lol
+        self.env = {
+                    "asyncio": asyncio,
+                    "datetime": datetime,
+                    "gc": gc,
+                    "json": json,
+                    "psutil": psutil,
+                    "random": random,
+                    "re": re,
+                    "time": time,
+                    "urllib": urllib,
+                    "BeautifulSoup": BeautifulSoup,
+                    "discord": discord,
+                    "edit": edit,
+                    "getAgo": getAgo,
+                    "getChannel": getChannel,
+                    "getColor": getColor,
+                    "getGuild": getGuild,
+                    "getRole": getRole,
+                    "getTimeDiff": getTimeDiff,
+                    "getUser": getUser,
+                    "getWithoutInvoke": getWithoutInvoke,
+                    "permEmbed": permEmbed,
+                    "read_config": read_config,
+                    "read_log": read_log,
+                    "save_config": save_config,
+                    "save_log": save_log
+                   }
 
     # DEBUG
     @commands.command(aliases=["Debug", "d", "D"])
@@ -26,18 +68,17 @@ class Debug:
         env = {
             'bot': self.bot,
             'say': ctx.send,
-            'edit': ctx.message.edit,
             'ctx': ctx,
             'message': ctx.message,
-            'guild': ctx.message.guild,
-            'server': ctx.message.guild,
-            'channel': ctx.message.channel,
+            'guild': ctx.guild,
+            'server': ctx.guild,
+            'channel': ctx.channel,
             'author': ctx.message.author,
             'me': ctx.message.author,
-            'self': self,
-            'user': getUser,
-            'discord': discord
+            'self': self
         }
+
+        env.update(self.env)
         env.update(globals())
         try:
             result = eval(code, env)
@@ -70,19 +111,18 @@ class Debug:
         env = {
             'bot': self.bot,
             'say': ctx.send,
-            'edit': ctx.message.edit,
             'ctx': ctx,
             'message': ctx.message,
-            'guild': ctx.message.guild,
-            'server': ctx.message.guild,
-            'channel': ctx.message.channel,
+            'guild': ctx.guild,
+            'server': ctx.guild,
+            'channel': ctx.channel,
             'author': ctx.message.author,
             'me': ctx.message.author,
             'self': self,
-            'user': getUser,
             '_': self._last_result
         }
 
+        env.update(self.env)
         env.update(globals())
 
         body = self.cleanup_code(body)

@@ -7,7 +7,9 @@ import re
 
 from discord import utils
 from discord.ext import commands
-from .utils.checks import edit, getColor, getRole, getTimeDiff, getWithoutInvoke, save_config
+from .utils.gets import getColor, getRole, getTimeDiff, getWithoutInvoke
+from .utils.helper import edit
+from .utils.save import save_config
 
 
 class Tools:

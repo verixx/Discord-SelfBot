@@ -5,7 +5,8 @@ import logging
 
 from discord import utils
 from discord.ext import commands
-from .utils.checks import edit, getChannel, getColor, getRole, getUser, getWithoutInvoke
+from .utils.gets import getChannel, getColor, getRole, getUser, getWithoutInvoke
+from .utils.helper import edit
 
 log = logging.getLogger('LOG')
 

@@ -3,10 +3,10 @@ import datetime
 import discord
 import logging
 import os
-import time
 import traceback
 
-from cogs.utils.checks import edit, read_config, read_log
+from cogs.utils.helper import edit
+from cogs.utils.save import read_config, read_log
 from collections import Counter
 from discord.ext import commands
 
@@ -47,14 +47,20 @@ async def on_ready():
     log.info('Logged in as')
     log.info(str(bot.user) + '(' + str(bot.user.id) + ')')
     log.info('------')
-    bot.uptime = datetime.datetime.utcnow()
-    bot.message_count = 0
-    bot.commands_triggered = Counter()
-    bot.socket_stats = Counter()
-    bot.icount = 0
-    bot.mention_count = 0
-    bot.mention_count_name = 0
-    bot.refresh_time = time.time()
+    if not hasattr(bot, 'uptime'):
+        bot.uptime = datetime.datetime.utcnow()
+    if not hasattr(bot, 'message_count'):
+        bot.message_count = 0
+    if not hasattr(bot, 'commands_triggered'):
+        bot.commands_triggered = Counter()
+    if not hasattr(bot, 'socket_stats'):
+        bot.socket_stats = Counter()
+    if not hasattr(bot, 'icount'):
+        bot.icount = 0
+    if not hasattr(bot, 'mention_count'):
+        bot.mention_count = 0
+    if not hasattr(bot, 'mention_count_name'):
+        bot.mention_count_name = 0
 
     bot.gamename = read_config('gamestatus')
     bot.mal_un = read_config('mal_username')
@@ -64,6 +70,7 @@ async def on_ready():
     bot.google_api_key = read_config('google_api_key')
     bot.custom_search_engine = read_config('custom_search_engine')
     bot.prefix = read_config('prefix')
+
     bot.setlog = read_config('setlog')
     bot.log_guild = read_log('guild')
     bot.log_block_user = read_log('block-user')
@@ -71,6 +78,7 @@ async def on_ready():
     bot.log_key = read_log('key')
     bot.log_block_key = read_log('block-key')
     bot.log_channel = read_log('channel')
+
     if os.path.isfile('restart.txt'):
         with open('restart.txt', 'r') as re:
             await bot.get_channel(int(re.readline())).send(':wave: Back Running!', delete_after=2)

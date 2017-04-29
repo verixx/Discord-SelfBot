@@ -2,7 +2,9 @@ import discord
 import logging
 
 from discord.ext import commands
-from .utils.checks import edit, getChannel, getGuild, getUser, getWithoutInvoke, save_config, save_log
+from .utils.gets import getChannel, getGuild, getUser, getWithoutInvoke
+from .utils.helper import edit
+from .utils.save import save_config, save_log
 
 log = logging.getLogger('LOG')
 

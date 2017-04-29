@@ -1,6 +1,7 @@
 import aiohttp
 import asyncio
 import discord
+import logging
 import spice_api as spice
 import gc
 
@@ -8,7 +9,9 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 from lxml import etree
 from urllib.parse import parse_qs
-from .utils.checks import edit, permEmbed
+from .utils.helper import edit, permEmbed
+
+log = logging.getLogger('LOG')
 
 
 class MyAnimeList:

@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 from discord_webhooks import Webhook
 from random import randint
-from .utils.checks import permEmbed
+from .utils.helper import permEmbed
 
 log = logging.getLogger('LOG')
 
@@ -41,7 +41,7 @@ class OnMessage:
                           'unflip': '┬─┬﻿ ノ( ゜-゜ノ)',
                           'lenny': '( ͡° ͜ʖ ͡°)',
                           'fite': '(ง’̀-‘́)ง'
-                         }
+                          }
 
     async def on_message(self, message):
         if self.bot.is_ready():

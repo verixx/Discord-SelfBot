@@ -4,7 +4,7 @@ import os
 import sys
 
 from discord.ext import commands
-from .utils.checks import edit
+from .utils.helper import edit
 
 log = logging.getLogger('LOG')
 

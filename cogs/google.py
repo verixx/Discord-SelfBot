@@ -6,7 +6,7 @@ import json
 from discord.ext import commands
 from lxml import etree
 from urllib.parse import parse_qs
-from .utils.checks import edit, permEmbed
+from .utils.helper import edit, permEmbed
 
 
 class Google:
