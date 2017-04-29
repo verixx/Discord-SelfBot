@@ -58,11 +58,18 @@ class MyAnimeList:
         return content
 
     def getMal(self, i, _type):
-        creds = spice.init_auth(self.bot.mal_un, self.bot.mal_pw)
+        try:
+            creds = spice.init_auth(self.bot.mal_un, self.bot.mal_pw)
+        except Exception as e:
+            creds = None
+            log.warning('{}: {}'.format(type(e).__name__, e))
+            return Exception
         return spice.search_id(int(i), spice.get_medium(_type), creds)
 
     def parse_content(self, i, _type):
         mal = self.getMal(i, _type)
+        if mal is Exception:
+            return mal
         synopsis = BeautifulSoup(mal.synopsis, 'lxml').get_text().replace('[i]', '').replace('[/i]', '')
         synnew = ''
         for i in synopsis.split('.'):
@@ -113,13 +120,16 @@ class MyAnimeList:
             else:
                 em = await self.loop.run_in_executor(None, self.parse_content, self.malid, 'anime')
                 gc.collect()
-                try:
-                    if permEmbed(ctx.message):
-                        await edit(ctx, embed=em)
-                    else:
-                        await edit(ctx, content='https://myanimelist.net/anime/{}' + content)
-                except:
-                    await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
+                if em is Exception:
+                    await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Invalid credentials; rejected by MAL.', ttl=3)
+                else:
+                    try:
+                        if permEmbed(ctx.message):
+                            await edit(ctx, embed=em)
+                        else:
+                            await edit(ctx, content='https://myanimelist.net/anime/{}' + content)
+                    except:
+                        await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Whoops a Wumpus made and error while getting your Embed', ttl=3)
 
     # MyAnimelist Manga
     @commands.command(aliases=["Manga"])
@@ -137,13 +147,16 @@ class MyAnimeList:
             else:
                 em = await self.loop.run_in_executor(None, self.parse_content, self.malid, 'manga')
                 gc.collect()
-                try:
-                    if permEmbed(ctx.message):
-                        await edit(ctx, embed=em)
-                    else:
-                        await edit(ctx, content='https://myanimelist.net/anime/{}' + content)
-                except:
-                    await edit(ctx, content='Error!, Embed might have failed you', ttl=3)
+                if em is Exception:
+                    await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Invalid credentials; rejected by MAL.', ttl=3)
+                else:
+                    try:
+                        if permEmbed(ctx.message):
+                            await edit(ctx, embed=em)
+                        else:
+                            await edit(ctx, content='https://myanimelist.net/manga/{}' + content)
+                    except:
+                        await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Whoops a Wumpus made and error while getting your Embed', ttl=3)
 
 
 def setup(bot):
