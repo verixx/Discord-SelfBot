@@ -131,18 +131,23 @@ As mentioned above we need to install Python 3.6 or higher, anything below won't
 3. On [this](https://i.imgur.com/GBtdTav.png) step pay attention to select ``Windows Command Prompt``.
 4. Go through the installation and adjust it to your likings. The default settings should be enough though.
 
-
-### Starting the Bot
+### Starting the Bot Automatically
 1. Go to the folder you unpacked in [Setup](#setup).
-2. Open the ``loop.py`` and replace ``python3.6`` with python or how you named the command.
-3. Hold ``shift`` and right-click onto anything within the folder aside of the files
-4. On [this](https://i.imgur.com/OPCZVDg.png) menu then select ``Open Command Prompt / PowerShell window here``
-5. Type ``pip install -r .\requirements.txt`` into the console and let it install all dependencies we need.
-6. Then type ``python loop.py`` or again replace python with your version and wait for it to login.
-7. This may take up to a minute or more, depending on your connection speed.
-8. Have fun using the bot. Check [Commands](#commands), [Custom Commands](#custom-commands) and [Mention Logger](#mention-logger) to see what you can do.
+2. Click on the ``run.bat``
+3. Logging in may take up to a minute or more, depending on your connection speed.
+4. Have fun using the bot. Check [Commands](#commands), [Custom Commands](#custom-commands) and [Mention Logger](#mention-logger) to see what you can do.
 
-## Hosting on a Linux VPS
+### Starting the Bot Manually
+1. Go to the folder you unpacked in [Setup](#setup).
+2. Hold ``shift`` and right-click onto anything within the folder aside of the files
+3. On [this](https://i.imgur.com/OPCZVDg.png) menu then select ``Open Command Prompt / PowerShell window here``
+4. Type ``pip install -r .\requirements.txt`` into the console and let it install all dependencies we need.
+5. Then type ``python loop.py`` and wait for it to login.
+6. This may take up to a minute or more, depending on your connection speed.
+7. Have fun using the bot. Check [Commands](#commands), [Custom Commands](#custom-commands) and [Mention Logger](#mention-logger) to see what you can do.
+
+## Hosting on Linux
+### Installing Python
 
 ## Commands
 
