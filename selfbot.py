@@ -70,6 +70,7 @@ async def on_ready():
     bot.google_api_key = read_config('google_api_key')
     bot.custom_search_engine = read_config('custom_search_engine')
     bot.prefix = read_config('prefix')
+    bot.embed_color = read_config('embed_color')
 
     bot.setlog = read_config('setlog')
     bot.log_guild = read_log('guild')

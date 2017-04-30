@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 from discord_webhooks import Webhook
 from random import randint
-from .utils.helper import permEmbed
+from .utils.helper import embedColor, permEmbed
 
 log = logging.getLogger('LOG')
 
@@ -61,7 +61,7 @@ class OnMessage:
                         log.info('In {1}:{0.content}'.format(message, destination))
                         if response[0] == 'embed':
                             if permEmbed(message):
-                                await message.edit(content=response[2], embed=discord.Embed(colour=discord.Color.purple()).set_image(url=response[1]))
+                                await message.edit(content=response[2], embed=discord.Embed(colour=embedColor(self)).set_image(url=response[1]))
                             else:
                                 await message.edit(content='{0}\n{1}'.format(response[2], response[1]))
                         else:

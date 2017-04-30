@@ -8,7 +8,7 @@ import re
 from discord import utils
 from discord.ext import commands
 from .utils.gets import getColor, getRole, getTimeDiff, getWithoutInvoke
-from .utils.helper import edit
+from .utils.helper import edit, embedColor
 from .utils.save import save_config
 
 
@@ -48,7 +48,7 @@ class Tools:
         before = datetime.datetime.utcnow()
         await (await self.bot.ws.ping())
         ping = (datetime.datetime.utcnow() - before) * 1000
-        pong = discord.Embed(title='Pong!', colour=discord.Color.purple())
+        pong = discord.Embed(title='Pong!', colour=embedColor(self))
         pong.add_field(name="Response Time:", value='{:.2f}ms'.format(ping.total_seconds()))
         pong.set_thumbnail(url='http://i.imgur.com/SKEmkvf.png')
         await edit(ctx, embed=pong, ttl=ttl)
@@ -58,7 +58,7 @@ class Tools:
     async def uptime(self, ctx):
         """Show how long the Bot is running already."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=discord.Color.purple())
+        embed = discord.Embed(title='\N{CLOCK FACE THREE OCLOCK} UPTIME', colour=embedColor(self))
         embed.add_field(name='﻿ ', value=getTimeDiff(self.bot.uptime), inline=False)
         embed.set_thumbnail(url='http://i.imgur.com/mfxd06f.gif')
         await edit(ctx, embed=embed, ttl=ttl)
@@ -71,7 +71,7 @@ class Tools:
         unique_online = len(dict((m.id, m) for m in self.bot.get_all_members() if m.status != discord.Status.offline))
         voice = sum(len(g.voice_channels) for g in self.bot.guilds)
         text = sum(len(g.text_channels) for g in self.bot.guilds)
-        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Bot Info', colour=discord.Color.purple())
+        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Bot Info', colour=embedColor(self))
         embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME',
                         value=getTimeDiff(self.bot.uptime), inline=True)
         embed.add_field(name='\N{INBOX TRAY} Messages Received',
@@ -107,7 +107,7 @@ class Tools:
         mepro = process.memory_percent()
         prosys = psutil.cpu_percent()
         sys = '%s %s' % (platform.linux_distribution(full_distribution_name=1)[0].title(), platform.linux_distribution(full_distribution_name=1)[1])
-        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Host Info', colour=discord.Color.purple())
+        embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Host Info', colour=embedColor(self))
         embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME',
                         value=getTimeDiff(datetime.datetime.fromtimestamp(int(process.create_time())), datetime.datetime.now()))
         embed.add_field(name='\N{DESKTOP COMPUTER} SYSTEM',
@@ -153,7 +153,7 @@ class Tools:
                 if message.id != ctx.message.id and search in message.content:
                     mess = message
         if mess is not None:
-            em = discord.Embed(description=mess.clean_content, timestamp=mess.created_at, colour=0x33CC66)
+            em = discord.Embed(description=mess.clean_content, timestamp=mess.created_at, colour=embedColor(self))
             em.set_author(name=mess.author.display_name, icon_url=mess.author.avatar_url)
             await edit(ctx, content=content, embed=em)
         else:
@@ -192,7 +192,7 @@ class Tools:
             else:
                 emo = utils.get(self.bot.emojis, id=int(e[0]))
                 if emo:
-                    em = discord.Embed(colour=discord.Color.purple())
+                    em = discord.Embed(colour=embedColor(self))
                     em.set_image(url=emo.url)
                     await edit(ctx, embed=em)
         else:

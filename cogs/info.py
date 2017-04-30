@@ -9,7 +9,7 @@ from dateutil import parser
 from discord import utils
 from discord.ext import commands
 from .utils.gets import getAgo, getChannel, getGuild, getRole, getUser, getWithoutInvoke
-from .utils.helper import edit
+from .utils.helper import edit, embedColor
 
 log = logging.getLogger('LOG')
 
@@ -48,7 +48,7 @@ class Info:
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem:
             em = discord.Embed(timestamp=ctx.message.created_at)
-            em.colour = mem.colour if ctx.guild else discord.Color.purple()
+            em.colour = mem.colour if ctx.guild else embedColor(self)
             em.add_field(name='User ID', value=mem.id, inline=True)
             if ctx.guild:
                 if mem.game:
@@ -94,7 +94,7 @@ class Info:
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem is not None:
             em = discord.Embed(timestamp=ctx.message.created_at)
-            em.colour = mem.colour if ctx.guild else discord.Color.purple()
+            em.colour = mem.colour if ctx.guild else embedColor(self)
             em.set_image(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
             await edit(ctx, embed=em, ttl=ttl)
@@ -236,13 +236,13 @@ class Info:
                 emo = utils.get(self.bot.emojis, id=int(e[0]))
                 if emo:
                     date = emo.created_at.__format__('%d/%m/%Y')
-                    e = discord.Embed(title='Custom Emote', colour=discord.Color.purple())
+                    e = discord.Embed(title='Custom Emote', colour=embedColor(self))
                     e.description = '**Name: **{1}\n**ID: **{2}\n**Server: **{0}\n**Created at: **{3}, {4}\n**Image: **[link]({5})'.format(emo.guild.name, emo.name, emo.id, date, getAgo(emo.created_at), emo.url)
                     e.set_thumbnail(url=emo.url)
                     await edit(ctx, embed=e)
         else:
             split = '\n'.join(emote).split('\n')
-            e = discord.Embed(title='Unicode Emote {}'.format(emote), colour=discord.Color.purple())
+            e = discord.Embed(title='Unicode Emote {}'.format(emote), colour=embedColor(self))
             desc = ''
             if len(split) > 1:
                 desc += '**Parts:**\n'

@@ -8,5 +8,6 @@
   "prefix":["/"],
   "mal_username":"",
   "mal_password":"",
-  "setlog":"off"
+  "setlog":"off",
+  "embed_color":""
 }

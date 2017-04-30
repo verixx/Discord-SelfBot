@@ -89,7 +89,8 @@ Now after this is done, open the config file and start adding your information. 
   "mal_password":"",
   "webhook_token":"",
   "log_channel": ,
-  "setlog":"off"
+  "setlog":"off",
+  "embed_color":""
 }
 ```
 
@@ -109,6 +110,7 @@ Now after this is done, open the config file and start adding your information. 
   - Go into **settings**, select **Appearance** and toggle **Developer Mode**
   - Then go to your log channel and right-click on the name in your channel selector.
   - Click the last point to copy the id and paste it to ``log_channel``. It should look like ``"log_channel": 123456789123456789,``. Do **not** use quotes here as we need it as number, not as Text.
+- ``embed_color`` - This can be a lot of things. Even empty! If you leave it empty, every command that uses this will get a random color per call. You can insert several different values thought. A web color like ``purple`` or RGB values in the format of ``(155, 89, 182)`` or ``155, 89, 182`` or HEX values like ``9b59b6`` or ``#9b59b6`` or ``0x9b59b6``.
 
 
 ## Running the Bot

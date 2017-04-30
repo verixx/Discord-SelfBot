@@ -1,5 +1,9 @@
 import asyncio
+import discord
 import logging
+import random
+
+from .gets import getColor
 
 log = logging.getLogger('LOG')
 
@@ -37,3 +41,12 @@ def permFile(message):
 # Check for perms of links and attached files
 def permEmbed(message):
     return message.channel.permissions_for(message.author).embed_links
+
+
+# Check for perms of links and attached files
+def embedColor(self):
+    if self.bot.embed_color == "" or getColor(self.bot.embed_color) is None:
+        color = discord.Color(random.randint(0, 0xFFFFFF))
+    else:
+        color = int((getColor(self.bot.embed_color).hex_l.strip('#')), 16)
+    return color

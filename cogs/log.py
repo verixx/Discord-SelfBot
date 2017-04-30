@@ -3,7 +3,7 @@ import logging
 
 from discord.ext import commands
 from .utils.gets import getChannel, getGuild, getUser, getWithoutInvoke
-from .utils.helper import edit
+from .utils.helper import edit, embedColor
 from .utils.save import save_config, save_log
 
 log = logging.getLogger('LOG')
@@ -113,7 +113,7 @@ class Logging:
     async def show(self, ctx):
         """Show Info about logged things."""
         ttl = None if ctx.message.content.endswith(' stay') else 20
-        em = discord.Embed(title='Logging Info', colour=discord.Color.purple())
+        em = discord.Embed(title='Logging Info', colour=embedColor(self))
 
         keys = ', '.join(self.bot.log_key)
         if keys is not '':

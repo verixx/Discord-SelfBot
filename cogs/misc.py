@@ -8,7 +8,7 @@ import re
 
 from discord.ext import commands
 from random import choice
-from .utils.helper import edit
+from .utils.helper import edit, embedColor
 
 log = logging.getLogger('LOG')
 
@@ -56,7 +56,7 @@ class Misc:
         if len(choiceslist) < 2:
             await edit(ctx, content="2+ Options, separated with ``|``",  ttl=5)
         else:
-            em = discord.Embed(colour=discord.Color.purple())
+            em = discord.Embed(colour=embedColor(self))
             em.add_field(name="Options", value=choices, inline=False)
             em.add_field(name="Choice", value="<:clyde:273922151856209923> | My Answer is ``{}``".format(choice))
             await edit(ctx, embed=em)
@@ -95,7 +95,7 @@ class Misc:
                         definition = result['list'][pos]['definition']
                         example = result['list'][pos]['example']
                         defs = len(result['list'])
-                        embed = discord.Embed(title='Definition #{} out of {}'.format(pos + 1, defs), description=definition, colour=discord.Color.purple())
+                        embed = discord.Embed(title='Definition #{} out of {}'.format(pos + 1, defs), description=definition, colour=embedColor(self))
                         embed.set_author(name=search_terms, icon_url='https://i.imgur.com/bLf4CYz.png')
                         embed.add_field(name="Example:", value=example, inline=False)
                         await edit(ctx, embed=embed)
@@ -118,7 +118,7 @@ class Misc:
                         async with cs.get(search) as r:
                             result = json.loads(await r.text())
                             if result["data"] != []:
-                                await edit(ctx, embed=discord.Embed(color=discord.Color.purple()).set_image(url=result["data"][0]["images"]["original"]["url"]))
+                                await edit(ctx, embed=discord.Embed(color=embedColor(self)).set_image(url=result["data"][0]["images"]["original"]["url"]))
                             else:
                                 await edit(ctx, content="Your search terms gave no results.", ttl=3)
                 except:
@@ -166,7 +166,7 @@ class Misc:
     async def embed(self, ctx, *, msg: str):
         """Embed a Text."""
         try:
-            await edit(ctx, embed=discord.Embed(description=msg, colour=discord.Color.purple()))
+            await edit(ctx, embed=discord.Embed(description=msg, colour=embedColor(self)))
         except:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong", ttl=5)
 
@@ -178,7 +178,7 @@ class Misc:
             mimetype, encoding = mimetypes.guess_type(link[0])
             if mimetype and mimetype.startswith('image'):
                 try:
-                    await edit(ctx, embed=discord.Embed(colour=discord.Color.purple()).set_image(url=link[0]))
+                    await edit(ctx, embed=discord.Embed(colour=embedColor(self)).set_image(url=link[0]))
                 except:
                     await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong", ttl=5)
             else:

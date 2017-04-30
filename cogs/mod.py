@@ -6,7 +6,7 @@ import logging
 from discord import utils
 from discord.ext import commands
 from .utils.gets import getChannel, getColor, getRole, getUser, getWithoutInvoke
-from .utils.helper import edit
+from .utils.helper import edit, embedColor
 
 log = logging.getLogger('LOG')
 
@@ -98,7 +98,7 @@ class Moderation:
                 await member.edit(roles=roles)
                 log.info(f'Muted {member}')
 
-                e = discord.Embed(color=discord.Color.purple())
+                e = discord.Embed(color=embedColor(self))
                 e.set_author(name="\N{SPEAKER WITH CANCELLATION STROKE} Muted " + str(member))
                 await edit(ctx, embed=e)
             else:
@@ -120,7 +120,7 @@ class Moderation:
                 await member.edit(roles=roles)
                 log.info(f'Unmuted {member}')
 
-                e = discord.Embed(color=discord.Color.purple())
+                e = discord.Embed(color=embedColor(self))
                 e.set_author(name="\N{SPEAKER} Unmuted " + str(member))
                 await edit(ctx, embed=e)
             else:
@@ -141,7 +141,7 @@ class Moderation:
             except discord.HTTPException:
                 await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong while trying to kick...", ttl=5)
             else:
-                e = discord.Embed(color=discord.Color.purple())
+                e = discord.Embed(color=embedColor(self))
                 e.set_author(icon_url="https://cdn.discordapp.com/attachments/278603491520544768/301084579660300289/301063051296374794.png",
                              name="Kicked: " + str(member))
                 await edit(ctx, embed=e)
@@ -162,7 +162,7 @@ class Moderation:
                 except discord.HTTPException:
                     await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong while trying to ban...", ttl=5)
                 else:
-                    e = discord.Embed(color=discord.Color.purple())
+                    e = discord.Embed(color=embedColor(self))
                     e.set_author(icon_url="https://cdn.discordapp.com/attachments/278603491520544768/301087009408024580/273910007857414147.png",
                                  name="Banned: " + str(member))
                     await edit(ctx, embed=e)
@@ -183,7 +183,7 @@ class Moderation:
             except discord.HTTPException:
                 await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong while trying to ban...", ttl=5)
             else:
-                e = discord.Embed(color=discord.Color.purple())
+                e = discord.Embed(color=embedColor(self))
                 e.set_author(icon_url="https://cdn.discordapp.com/attachments/278603491520544768/301087009408024580/273910007857414147.png",
                              name="Soft Banned: " + str(member))
                 await edit(ctx, embed=e)
@@ -219,7 +219,7 @@ class Moderation:
             true = '\n'.join(name.replace('_', ' ').title() for name, value in ctx.channel.permissions_for(member) if value is True)
             false = '\n'.join(name.replace('_', ' ').title() for name, value in ctx.channel.permissions_for(member) if value is False)
 
-            e = discord.Embed(title="Permissions", color=discord.Color.purple(), timestamp=datetime.datetime.now())
+            e = discord.Embed(title="Permissions", color=embedColor(self), timestamp=datetime.datetime.now())
             e.set_author(name=member, icon_url=member.avatar_url)
             e.add_field(name="True", value=true, inline=False)
             e.add_field(name="False", value=false, inline=False)
@@ -296,7 +296,7 @@ class Moderation:
                 await channel.set_permissions(ctx.guild.default_role, overwrite=perms)
                 log.info(f'Locked down channel #{ctx.channel}')
 
-                e = discord.Embed(color=discord.Color.purple())
+                e = discord.Embed(color=embedColor(self))
                 e.set_author(name=f'Locked down channel #{ctx.channel}')
                 await edit(ctx, embed=e)
             else:
@@ -318,7 +318,7 @@ class Moderation:
                 await channel.set_permissions(ctx.guild.default_role, overwrite=perms)
                 log.info(f'Unlocked channel #{ctx.channel}')
 
-                e = discord.Embed(color=discord.Color.purple())
+                e = discord.Embed(color=embedColor(self))
                 e.set_author(name=f'Unlocked channel #{ctx.channel}')
                 await edit(ctx, embed=e)
             else:

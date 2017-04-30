@@ -104,7 +104,7 @@ def getRole(ctx, msg):
 def getColor(incolor):
     if len(incolor.split(',')) == 3:
         try:
-            incolor = incolor.split(',')
+            incolor = incolor.strip("()").split(',')
             if float(incolor[0]) > 1.0 or float(incolor[1]) > 1.0 or float(incolor[2]) > 1.0:
                 red = float(int(incolor[0]) / 255)
                 blue = float(int(incolor[1]) / 255)
@@ -125,6 +125,12 @@ def getColor(incolor):
         if outcolor is None:
             try:
                 outcolor = Color('#' + incolor)
+            except:
+                outcolor = None
+
+        if outcolor is None:
+            try:
+                outcolor = Color('#' + incolor[2:])
             except:
                 outcolor = None
     return outcolor
