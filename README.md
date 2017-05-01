@@ -155,6 +155,27 @@ As mentioned above we need to install Python 3.6 or higher, anything below won't
 
 ## Custom Commands
 
+## Quick Commands
+In the config folder you'll find the file ``quickcmds``. You can add there any quick command you want. This will react only if the exact key is said.
+
+Like if I say ``flip`` in chat the SelfBot will edit the message to ``(╯°□°）╯︵ ┻━┻``.
+
+![img](http://i.imgur.com/SCURead.gif)
+
+Here you see the base commands I added, you can add anything you want here of course. (command to do it while the bot is running #SoonTM)
+
+```json
+{
+  "shrug": "¯\\_(ツ)_/¯",
+  "flip": "(╯°□°）╯︵ ┻━┻",
+  "unflip": "┬─┬﻿ノ( ゜-゜ノ)",
+  "lenny": "( ͡° ͜ʖ ͡°)",
+  "fite": "(ง’̀-‘́)ง"
+}
+```
+
+Keep in mind that if you have a ``\`` in your text you need to do 2 of them. like you can see with *shrug*.
+
 ## Mention Logger
 
 ## Adding Your Own Stuff
