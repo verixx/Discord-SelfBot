@@ -11,6 +11,7 @@ log = logging.getLogger('LOG')
 # Edit thingy
 async def edit(ctx, content=None, embed=None, ttl=None):
     perms = ctx.channel.permissions_for(ctx.me).embed_links
+    ttl = None if ctx.message.content.endswith(' stay') else ttl
     try:
         if ttl and perms:
             await ctx.message.edit(content=content, embed=embed)

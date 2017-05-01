@@ -44,7 +44,6 @@ class Info:
     @commands.command(aliases=["User"])
     async def user(self, ctx):
         """Infos about a User/Member."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem:
             em = discord.Embed(timestamp=ctx.message.created_at)
@@ -82,7 +81,7 @@ class Info:
                              value='%s' % guildlist, inline=True)
             em.set_thumbnail(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
-            await edit(ctx, embed=em, ttl=ttl)
+            await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=5)
 
@@ -90,14 +89,13 @@ class Info:
     @commands.command(aliases=["Avi", "Avatar", "avatar"])
     async def avi(self, ctx):
         """Show the Avi of a User."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem is not None:
             em = discord.Embed(timestamp=ctx.message.created_at)
             em.colour = mem.colour if ctx.guild else embedColor(self)
             em.set_image(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
-            await edit(ctx, embed=em, ttl=ttl)
+            await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} User not found",  ttl=5)
 
@@ -106,7 +104,6 @@ class Info:
     @commands.guild_only()
     async def role(self, ctx):
         """Info about a role."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         role = getRole(ctx, getWithoutInvoke(ctx))
         if role is not None:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=role.colour)
@@ -123,7 +120,7 @@ class Info:
             em.add_field(name='Members [%s]' % len(role.members),
                          value='%s Online' % sum(1 for m in role.members if m.status != discord.Status.offline), inline=True)
             em.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(role.colour).strip("#"))
-            await edit(ctx, embed=em, ttl=ttl)
+            await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Role not found",  ttl=5)
 
@@ -132,7 +129,6 @@ class Info:
     @commands.guild_only()
     async def guild(self, ctx):
         """Infos about a Guild."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         if ctx.invoked_subcommand is None:
             serv = getGuild(ctx, getWithoutInvoke(ctx))
             if serv:
@@ -155,7 +151,7 @@ class Info:
                              value='%s Online' % sum(1 for m in serv.members if m.status != discord.Status.offline), inline=True)
                 em.add_field(name='Channels [%s]' % len(serv.channels),
                              value='%s Text | %s Voice' % (len(serv.text_channels), len(serv.voice_channels)), inline=True)
-                await edit(ctx, embed=em, ttl=ttl)
+                await edit(ctx, embed=em, ttl=20)
             else:
                 await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Guild not found",  ttl=5)
 
@@ -164,13 +160,12 @@ class Info:
     @commands.guild_only()
     async def roles(self, ctx):
         """Show the roles on a guild."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         serv = getGuild(ctx, getWithoutInvoke(ctx))
         if serv:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
             em.add_field(name='Roles [%s]' % (len(serv.roles) - 1),
                          value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
-            await edit(ctx, embed=em, ttl=ttl)
+            await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Guild not found",  ttl=5)
 
@@ -179,7 +174,6 @@ class Info:
     @commands.guild_only()
     async def channel(self, ctx):
         """Infos about a Channel."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
             em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
@@ -191,7 +185,7 @@ class Info:
                          value='{}\n{}'.format(channel.created_at.__format__('%d/%m/%Y'), getAgo(channel.created_at)), inline=True)
             em.add_field(name='Topic',
                          value=channel.topic if channel.topic != "" else "None",  inline=False)
-            await edit(ctx, embed=em, ttl=ttl)
+            await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found",  ttl=5)
 
@@ -200,7 +194,6 @@ class Info:
     @commands.guild_only()
     async def emotes(self, ctx):
         """Display all emotes avaiable on a Server."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         unique_emojis = set(ctx.message.guild.emojis)
         em = discord.Embed(timestamp=ctx.message.created_at, title='Emotes [%s]' % len(unique_emojis), colour=ctx.message.author.colour)
         if unique_emojis:
@@ -222,7 +215,7 @@ class Info:
                 em.add_field(name='﻿', value=i, inline=False)
         else:
             em.add_field(name='Emotes', value='Not Found \N{HEAVY EXCLAMATION MARK SYMBOL}', inline=False)
-        await edit(ctx, embed=em, ttl=ttl)
+        await edit(ctx, embed=em, ttl=20)
 
     # Info of Custom or Unicode Emotes
     @commands.command(aliases=["Emote"])

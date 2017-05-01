@@ -112,7 +112,6 @@ class Logging:
     @log.command(aliases=["Show"])
     async def show(self, ctx):
         """Show Info about logged things."""
-        ttl = None if ctx.message.content.endswith(' stay') else 20
         em = discord.Embed(title='Logging Info', colour=embedColor(self))
 
         keys = ', '.join(self.bot.log_key)
@@ -170,7 +169,7 @@ class Logging:
         if channel is not '':
             em.add_field(name="Blocked Channels[%s]" % len(self.bot.log_block_channel), value=channel, inline=False)
 
-        await edit(ctx, embed=em, ttl=ttl)
+        await edit(ctx, embed=em, ttl=20)
 
     @log.group(aliases=["Blacklist"])
     @commands.guild_only()
