@@ -1,33 +1,36 @@
 import discord
-import json
 import logging
 import mimetypes
 import re
 
 from datetime import datetime
 from discord_webhooks import Webhook
-from random import randint
 from .utils.helper import embedColor, permEmbed
+from .utils.save import read_json
 
 log = logging.getLogger('LOG')
 
 
 # Cumstom Commands with prefix
-def custom(prefix, content):
-    message = content.lower().replace(prefix, '')
-    with open('config/commands.json', 'r') as f:
-        commands = json.load(f)
-        for i in commands:
-            if i == message.split()[0]:
-                    mimetype, encoding = mimetypes.guess_type(commands[i])
-                    zwi = message.split(' ', 1)
-                    if len(zwi) != 2:
-                        zwi.append(' ')
-                    if mimetype and mimetype.startswith('image'):
-                        return 'embed', commands[i], zwi[len(zwi) - 1], str(i)
-                    else:
-                        return 'message', commands[i], zwi[len(zwi) - 1], str(i)
-        return None
+async def custom(self, prefix, message):
+    content = message.content.replace(prefix, "").split(' ', 1)
+    if len(content) != 2:
+        content.append(None)
+
+    commands = read_json("commands")
+    for i in commands:
+        if i == content[0]:
+            mimetype, encoding = mimetypes.guess_type(commands[i])
+            if mimetype and mimetype.startswith('image'):
+                if permEmbed(message):
+                    await message.edit(content=content[1], embed=discord.Embed(colour=embedColor(self)).set_image(url=commands[i]))
+                else:
+                    await message.edit(content='{0}\n{1}'.format(content[1], commands[i]))
+                return str(i)
+            else:
+                await message.edit(content='{0}\n{1}'.format(content[1], commands[i]))
+                return str(i)
+    return None
 
 
 class OnMessage:
@@ -36,12 +39,7 @@ class OnMessage:
         self.bot = bot
         self.webhook_class = Webhook(self.bot)
         self.request_webhook = self.webhook_class.request_webhook
-        self.quickcmds = {'shrug': '¯\_(ツ)_/¯',
-                          'flip': '(╯°□°）╯︵ ┻━┻',
-                          'unflip': '┬─┬﻿ ノ( ゜-゜ノ)',
-                          'lenny': '( ͡° ͜ʖ ͡°)',
-                          'fite': '(ง’̀-‘́)ง'
-                          }
+        self.quickcmds = read_json("quickcmds")
 
     async def on_message(self, message):
         if self.bot.is_ready():
@@ -54,23 +52,22 @@ class OnMessage:
                     self.bot.icount += 1
                 prefix = [x for x in self.bot.prefix if message.content.startswith(x)]
                 if prefix:
-                    response = custom(prefix[0], message.content)
+                    response = await custom(self, prefix[0], message)
                     if response:
-                        self.bot.commands_triggered[response[3]] += 1
-                        destination = 'DM with {0.channel.recipient}'.format(message) if isinstance(message.channel, discord.DMChannel) else '#{0.channel.name},({0.guild.name})'.format(message)
-                        log.info('In {1}:{0.content}'.format(message, destination))
-                        if response[0] == 'embed':
-                            if permEmbed(message):
-                                await message.edit(content=response[2], embed=discord.Embed(colour=embedColor(self)).set_image(url=response[1]))
-                            else:
-                                await message.edit(content='{0}\n{1}'.format(response[2], response[1]))
+                        self.bot.commands_triggered[response] += 1
+                        if isinstance(message.channel, discord.DMChannel):
+                            destination = 'DM with {0.channel.recipient}'.format(message)
                         else:
-                            await message.edit(content='{0}\n{1}'.format(response[2], response[1]))
+                            destination = '#{0.channel.name},({0.guild.name})'.format(message)
+                        log.info('In {1}:{0.content}'.format(message, destination))
                 else:
                     if message.content.lower().strip() in self.quickcmds.keys():
                         response = self.quickcmds[message.content.lower().strip()]
                         self.bot.commands_triggered[message.content.lower().strip()] += 1
-                        destination = 'DM with {0.channel.recipient}'.format(message) if isinstance(message.channel, discord.DMChannel) else '#{0.channel.name},({0.guild.name})'.format(message)
+                        if isinstance(message.channel, discord.DMChannel):
+                            destination = 'DM with {0.channel.recipient}'.format(message)
+                        else:
+                            destination = '#{0.channel.name},({0.guild.name})'.format(message)
                         log.info('In {1}:{0.content}'.format(message, destination))
                         await message.edit(content=response)
             elif (message.guild is not None) and (self.bot.setlog == 'on'):

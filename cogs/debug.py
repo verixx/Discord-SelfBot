@@ -9,7 +9,7 @@ from discord.ext import commands
 from PythonGists import PythonGists
 from .utils.gets import getAgo, getChannel, getColor, getGuild, getRole, getTimeDiff, getUser, getWithoutInvoke
 from .utils.helper import edit, permEmbed
-from .utils.save import read_config, read_log, save_config, save_log
+from .utils.save import delete_key, read_config, read_json, read_log, save_commands, save_config, save_log
 
 ###############
 # Imports for Eval/Debug, I hate errors.
@@ -55,8 +55,11 @@ class Debug:
                     "getUser": getUser,
                     "getWithoutInvoke": getWithoutInvoke,
                     "permEmbed": permEmbed,
+                    "delete_key": delete_key,
                     "read_config": read_config,
+                    "read_json": read_json,
                     "read_log": read_log,
+                    "save_commands": save_commands,
                     "save_config": save_config,
                     "save_log": save_log
                    }

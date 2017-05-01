@@ -7,48 +7,85 @@ loop = asyncio.get_event_loop()
 lock = asyncio.Lock()
 
 
-def read_config(searched):
-    with open('config/config.json', 'r') as f:
+def read_json(file_name):
+    with open('config/' + file_name + '.json', 'r') as f:
+        try:
+            cont = json.load(f)
+            return cont
+        except:
+            return None
+
+
+def reading_key(file_name, searched):
+    with open('config/' + file_name + '.json', 'r') as f:
         cont = json.load(f)
         try:
             return cont[searched]
         except:
             return None
+
+
+def read_config(searched):
+    return reading_key("config", searched)
 
 
 def read_log(searched):
-    with open('config/log.json', 'r') as f:
-        cont = json.load(f)
-        try:
-            return cont[searched]
-        except:
-            return None
+    return reading_key("log", searched)
 
 
 def saving(file_name, field, value):
-    with open('config/' + file_name, 'r') as q:
+    with open('config/' + file_name + '.json', 'r') as q:
         content = json.load(q)
         secure_content = content
-        with open('config/' + file_name, 'w') as f:
+        with open('config/' + file_name + '.json', 'w') as f:
             try:
                 content[field] = value
                 f.seek(0)
                 f.truncate()
                 json.dump(content, f, indent=4, separators=(',', ':'))
                 return True
-            except:
+            except Exception as e:
                 f.seek(0)
                 f.truncate()
                 json.dump(secure_content, f, indent=4, separators=(',', ':'))
                 log.error("An Error occurd while saving")
-                return False
+                return e
 
 
 async def save_config(field, value):
     with await lock:
-        await loop.run_in_executor(None, saving, 'config.json', field, value)
+        return await loop.run_in_executor(None, saving, 'config', field, value)
 
 
 async def save_log(field, value):
     with await lock:
-        await loop.run_in_executor(None, saving, 'log.json', field, value)
+        return await loop.run_in_executor(None, saving, 'log', field, value)
+
+
+async def save_commands(field, value):
+    with await lock:
+        return await loop.run_in_executor(None, saving, 'commands', field, value)
+
+
+def deleting_key(file_name, key):
+    with open('config/' + file_name + '.json', 'r') as q:
+        content = json.load(q)
+        secure_content = content
+        with open('config/' + file_name + '.json', 'w') as f:
+            try:
+                del content[key]
+                f.seek(0)
+                f.truncate()
+                json.dump(content, f, indent=4, separators=(',', ':'))
+                return True
+            except Exception as e:
+                f.seek(0)
+                f.truncate()
+                json.dump(secure_content, f, indent=4, separators=(',', ':'))
+                log.error("An Error occurd while saving")
+                return e
+
+
+async def delete_key(file_name, key):
+    with await lock:
+        return await loop.run_in_executor(None, deleting_key, file_name, key)
