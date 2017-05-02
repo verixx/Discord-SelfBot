@@ -1,4 +1,5 @@
 import aiohttp
+import datetime
 import discord
 import json
 import logging
@@ -45,7 +46,7 @@ class Info:
         """Infos about a User/Member."""
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem:
-            em = discord.Embed(timestamp=ctx.message.created_at)
+            em = discord.Embed(timestamp=datetime.datetime.now())
             em.colour = mem.colour if ctx.guild else embedColor(self)
             em.add_field(name='User ID', value=mem.id, inline=True)
             if ctx.guild:
@@ -90,7 +91,7 @@ class Info:
         """Show the Avi of a User."""
         mem = getUser(ctx, getWithoutInvoke(ctx))
         if mem is not None:
-            em = discord.Embed(timestamp=ctx.message.created_at)
+            em = discord.Embed(timestamp=datetime.datetime.now())
             em.colour = mem.colour if ctx.guild else embedColor(self)
             em.set_image(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
@@ -105,7 +106,7 @@ class Info:
         """Info about a role."""
         role = getRole(ctx, getWithoutInvoke(ctx))
         if role is not None:
-            em = discord.Embed(timestamp=ctx.message.created_at, colour=role.colour)
+            em = discord.Embed(timestamp=datetime.datetime.now(), colour=role.colour)
             em.add_field(name='Name',
                          value=role.name, inline=True)
             em.add_field(name='ID',
@@ -131,7 +132,7 @@ class Info:
         if ctx.invoked_subcommand is None:
             serv = getGuild(ctx, getWithoutInvoke(ctx))
             if serv:
-                em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
+                em = discord.Embed(timestamp=datetime.datetime.now(), colour=ctx.message.author.colour)
                 em.set_author(name=serv.name, icon_url='https://i.imgur.com/RHagTDg.png')
                 em.set_thumbnail(url=serv.icon_url)
                 em.add_field(name='Owner',
@@ -161,7 +162,7 @@ class Info:
         """Show the roles on a guild."""
         serv = getGuild(ctx, getWithoutInvoke(ctx))
         if serv:
-            em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
+            em = discord.Embed(timestamp=datetime.datetime.now(), colour=ctx.message.author.colour)
             em.add_field(name='Roles [%s]' % (len(serv.roles) - 1),
                          value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
             await edit(ctx, embed=em, ttl=20)
@@ -175,7 +176,7 @@ class Info:
         """Infos about a Channel."""
         channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
-            em = discord.Embed(timestamp=ctx.message.created_at, colour=ctx.message.author.colour)
+            em = discord.Embed(timestamp=datetime.datetime.now(), colour=ctx.message.author.colour)
             em.add_field(name='Name',
                          value=channel.name, inline=True)
             em.add_field(name='ID',
@@ -194,7 +195,7 @@ class Info:
     async def emotes(self, ctx):
         """Display all emotes avaiable on a Server."""
         unique_emojis = set(ctx.message.guild.emojis)
-        em = discord.Embed(timestamp=ctx.message.created_at, title='Emotes [%s]' % len(unique_emojis), colour=ctx.message.author.colour)
+        em = discord.Embed(timestamp=datetime.datetime.now(), title='Emotes [%s]' % len(unique_emojis), colour=ctx.message.author.colour)
         if unique_emojis:
             allWords = []
             splitmsg = ''

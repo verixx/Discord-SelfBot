@@ -148,6 +148,7 @@ class Misc:
     @commands.command(aliases=["React"])
     async def react(self, ctx):
         """React to a Message with Text."""
+        await ctx.message.delete()
         msg = getWithoutInvoke(ctx)
         split = msg.split()
         _id = None
@@ -160,7 +161,6 @@ class Misc:
             if (not _id and message.id != ctx.message.id) or (_id == message.id):
                 for i in reactions:
                     await message.add_reaction(i)
-        await ctx.message.delete()
 
     @commands.command(aliases=["Regional", "Regionals", "regionals"])
     async def regional(self, ctx, *, msg: str):
