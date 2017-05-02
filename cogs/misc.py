@@ -8,6 +8,7 @@ import re
 
 from discord.ext import commands
 from random import choice
+from .utils.gets import getWithoutInvoke
 from .utils.helper import edit, embedColor
 
 log = logging.getLogger('LOG')
@@ -30,6 +31,7 @@ class Misc:
                           'V': '\N{REGIONAL INDICATOR SYMBOL LETTER V}', 'W': '\N{REGIONAL INDICATOR SYMBOL LETTER W}', 'X': '\N{REGIONAL INDICATOR SYMBOL LETTER X}',
                           'Y': '\N{REGIONAL INDICATOR SYMBOL LETTER Y}', 'Z': '\N{REGIONAL INDICATOR SYMBOL LETTER Z}'}
         self.numbers = {'0': '0⃣', '1': '1⃣', '2': '2⃣', '3': '3⃣', '4': '4⃣', '5': '5⃣', '6': '6⃣', '7': '7⃣', '8': '8⃣', '9': '9⃣'}
+        self.emoji_reg = re.compile(r'<:.+?:([0-9]{15,21})>')
         self.link = re.compile(r'^(?:http|ftp)s?://'
                                r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
                                r'localhost|'
@@ -129,19 +131,31 @@ class Misc:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Specify Search", ttl=3)
 
     def to_reginals(self, content, react):
-        regional_list = []
-        for x in list(content):
-            if x.isalpha():
-                regional_list.append(self.regionals[x.upper()])
-            elif x.isdigit():
-                regional_list.append(self.numbers[x])
-            elif react is False:
-                regional_list.append(x)
-        return regional_list
+        emote_list = []
+        for i in content.split(" "):
+            if self.emoji_reg.findall(i):
+                print(self.emoji_reg.findall(i)[0])
+                print(self.bot.get_emoji(int(self.emoji_reg.findall(i)[0])))
+                emote_list.append(self.bot.get_emoji(int(self.emoji_reg.findall(i)[0])))
+            else:
+                for x in list(i):
+                    if x.isalpha():
+                        emote_list.append(self.regionals[x.upper()])
+                    elif x.isdigit():
+                        emote_list.append(self.numbers[x])
+                    elif react is False:
+                        emote_list.append(x)
+        return emote_list
 
     @commands.command(aliases=["React"])
-    async def react(self, ctx, msg: str, _id: int = None):
+    async def react(self, ctx):
         """React to a Message with Text."""
+        msg = getWithoutInvoke(ctx)
+        if len(msg.split()) > 1 and msg.split()[len(msg.split())-1].isdigit():
+            _id = int(msg.split()[len(msg.split())-1])
+            msg = msg[:len(msg.split()[len(msg.split())-1])]
+        else:
+            _id = None
         reactions = self.to_reginals(msg, True)
         if not _id:
             async for message in ctx.message.channel.history(limit=2):
@@ -159,8 +173,14 @@ class Misc:
     async def regional(self, ctx, *, msg: str):
         """Convert a Text to emotes."""
         regional_list = self.to_reginals(msg, False)
-        regional_output = ' '.join(regional_list)
-        await edit(ctx, content=regional_output)
+        regional_output = []
+        for i in regional_list:
+            regional_output.append(" ")
+            if isinstance(i, discord.Emoji):
+                regional_output.append(str(i))
+            else:
+                regional_output.append(i)
+        await edit(ctx, content=''.join(regional_output))
 
     @commands.command(aliases=["Embed"])
     async def embed(self, ctx, *, msg: str):
