@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import discord
 import logging
+import re
 
 from discord import utils
 from discord.ext import commands
@@ -23,7 +24,7 @@ class Moderation:
             await edit(ctx, content='Cleaned `{}` messages out of `{}` checked.'.format(len(deleted), limit), ttl=5)
             log.info('Pruned {} messages out of {} checked'.format(len(deleted), limit))
         else:
-            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Don't forget to give the amount you wanna delte".format(len(deleted), limit), ttl=5)
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Don't forget to give the amount you wanna delte", ttl=5)
 
     # Purge group
     @commands.group(aliases=['purge', 'Purge', 'Clean'])
@@ -63,10 +64,28 @@ class Moderation:
         await self.do_purge(ctx, search, lambda e: e.author == member)
 
     # remove your own message, works everywhere not like all other purges.
-    @clean.command(aliases=['Mine'])
+    @clean.command(aliases=['Mine', 'self', 'Self'])
     async def mine(self, ctx, search: int = None):
         """Remove all Messages sent by me."""
         await self.do_purge(ctx, search, lambda e: e.author == ctx.author)
+
+    # Remove reactions
+    @clean.command(aliases=['Reactions'])
+    async def reactions(self, ctx, search: int = None):
+        """Remove all Reactions on messages."""
+        if search:
+            async for message in ctx.message.channel.history(limit=search):
+                await message.clear_reactions()
+            await edit(ctx, content=f"\N{HEAVY CHECK MARK} Cleaned the last {search} Messages", ttl=5)
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Don't forget to give the amount you wanna delte", ttl=5)
+
+    # Remove emotes
+    @clean.command(aliases=['Emotes'])
+    async def emotes(self, ctx, search: int = None):
+        """Remove all Messages with emotes."""
+        custom_emoji = re.compile(r'<:(\w+):(\d+)>')
+        await self.do_purge(ctx, search, lambda e: custom_emoji.search(e.content))
 
     # Mute a Member
     @commands.command(aliases=['Mute'])

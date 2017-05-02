@@ -22,7 +22,7 @@ Disclaimer: Use this on your own risk. If you get banned somewhere because of us
 > 1. [Features](#features)
 > 2. [Setup](#setup)
 > 3. [Running the Bot](#running-the-bot)
-> 4. [Hosting](#hosting-on-a-linux-vps)
+> 4. [Hosting](#hosting-on-linux)
 > 5. [Commands](#commands)
 > 6. [Custom Commands](#custom-commands)
 > 7. [Mention Logger](#mention-logger)
@@ -149,11 +149,13 @@ As mentioned above we need to install Python 3.6 or higher, anything below won't
 7. Have fun using the bot. Check [Commands](#commands), [Custom Commands](#custom-commands) and [Mention Logger](#mention-logger) to see what you can do.
 
 ## Hosting on Linux
-### Installing Python
+### WIP
 
 ## Commands
+### WIP
 
 ## Custom Commands
+### WIP
 
 ## Quick Commands
 In the config folder you'll find the file ``quickcmds``. You can add there any quick command you want. This will react only if the exact key is said.
@@ -177,8 +179,10 @@ Here you see the base commands I added, you can add anything you want here of co
 Keep in mind that if you have a ``\`` in your text you need to do 2 of them. like you can see with *shrug*.
 
 ## Mention Logger
+### WIP
 
 ## Adding Your Own Stuff
+### WIP
 
 ## Google API
 
