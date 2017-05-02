@@ -134,8 +134,6 @@ class Misc:
         emote_list = []
         for i in content.split(" "):
             if self.emoji_reg.findall(i):
-                print(self.emoji_reg.findall(i)[0])
-                print(self.bot.get_emoji(int(self.emoji_reg.findall(i)[0])))
                 emote_list.append(self.bot.get_emoji(int(self.emoji_reg.findall(i)[0])))
             else:
                 for x in list(i):

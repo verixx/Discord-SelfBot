@@ -6,7 +6,6 @@ import re
 import unicodedata
 
 from dateutil import parser
-from discord import utils
 from discord.ext import commands
 from .utils.gets import getAgo, getChannel, getGuild, getRole, getUser, getWithoutInvoke
 from .utils.helper import edit, embedColor
@@ -226,7 +225,7 @@ class Info:
             if len(e) > 1:
                 await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
             else:
-                emo = utils.get(self.bot.emojis, id=int(e[0]))
+                emo = self.bot.get_emoji(int(e[0]))
                 if emo:
                     date = emo.created_at.__format__('%d/%m/%Y')
                     e = discord.Embed(title='Custom Emote', colour=embedColor(self))
