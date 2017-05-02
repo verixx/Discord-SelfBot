@@ -149,22 +149,17 @@ class Misc:
     async def react(self, ctx):
         """React to a Message with Text."""
         msg = getWithoutInvoke(ctx)
-        if len(msg.split()) > 1 and msg.split()[len(msg.split())-1].isdigit():
-            _id = int(msg.split()[len(msg.split())-1])
-            msg = msg[:len(msg.split()[len(msg.split())-1])]
-        else:
-            _id = None
+        split = msg.split()
+        _id = None
+        if len(split) > 1 and split[-1].isdigit():
+            _id = int(split[-1])
+            msg = msg.strip(str(_id))
         reactions = self.to_reginals(msg, True)
-        if not _id:
-            async for message in ctx.message.channel.history(limit=2):
-                if message.id != ctx.message.id:
-                    for i in reactions:
-                        await message.add_reaction(i)
-        else:
-            async for message in ctx.message.channel.history(limit=25):
-                if message.id == _id:
-                    for i in reactions:
-                        await message.add_reaction(i)
+        limit = 25 if _id else 2
+        async for message in ctx.message.channel.history(limit=limit):
+            if (not _id and message.id != ctx.message.id) or (_id == message.id):
+                for i in reactions:
+                    await message.add_reaction(i)
         await ctx.message.delete()
 
     @commands.command(aliases=["Regional", "Regionals", "regionals"])
