@@ -64,8 +64,8 @@ class Moderation:
         await self.do_purge(ctx, search, lambda e: e.author == member)
 
     # remove your own message, works everywhere not like all other purges.
-    @clean.command(aliases=['Mine', 'self', 'Self'])
-    async def mine(self, ctx, search: int = None):
+    @clean.command(aliases=['Me', 'self', 'Self'])
+    async def me(self, ctx, search: int = None):
         """Remove all Messages sent by me."""
         await self.do_purge(ctx, search, lambda e: e.author == ctx.author)
 
