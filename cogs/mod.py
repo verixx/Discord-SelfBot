@@ -149,12 +149,12 @@ class Moderation:
     @commands.command(aliases=['Kick'])
     @commands.has_permissions(kick_members=True)
     @commands.guild_only()
-    async def kick(self, ctx):
+    async def kick(self, ctx, member: str, *, reason: str=None):
         """Kick a Member."""
-        member = getUser(ctx, getWithoutInvoke(ctx))
+        member = getUser(ctx, member)
         if member:
             try:
-                await ctx.guild.kick(member)
+                await ctx.guild.kick(member, reason=reason)
             except discord.Forbidden:
                 await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Missing permissions to kick this Member", ttl=5)
             except discord.HTTPException:
@@ -169,33 +169,32 @@ class Moderation:
     @commands.command(aliases=['Ban'])
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
-    async def ban(self, ctx):
+    async def ban(self, ctx, member: str, *, reason: str=None):
         """Ban a Member."""
-        if ctx.invoked_subcommand is None:
-            member = getUser(ctx, getWithoutInvoke(ctx))
-            if member:
-                try:
-                    await ctx.guild.ban(member)
-                except discord.Forbidden:
-                    await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Missing permissions to ban this Member", ttl=5)
-                except discord.HTTPException:
-                    await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong while trying to ban...", ttl=5)
-                else:
-                    e = discord.Embed(color=embedColor(self))
-                    e.set_author(icon_url="https://cdn.discordapp.com/attachments/278603491520544768/301087009408024580/273910007857414147.png",
-                                 name="Banned: " + str(member))
-                    await edit(ctx, embed=e)
+        member = getUser(ctx, member)
+        if member:
+            try:
+                await ctx.guild.ban(member, reason=reason)
+            except discord.Forbidden:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Missing permissions to ban this Member", ttl=5)
+            except discord.HTTPException:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong while trying to ban...", ttl=5)
+            else:
+                e = discord.Embed(color=embedColor(self))
+                e.set_author(icon_url="https://cdn.discordapp.com/attachments/278603491520544768/301087009408024580/273910007857414147.png",
+                             name="Banned: " + str(member))
+                await edit(ctx, embed=e)
 
     # SoftBan a Member (ban, delelte messagea and unban)
     @commands.command(aliases=['Softban'])
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
-    async def softban(self, ctx):
+    async def softban(self, ctx, member: str, *, reason: str=None):
         """Softban a Member(Kick and delete Messages)"""
-        member = getUser(ctx, getWithoutInvoke(ctx))
+        member = getUser(ctx, member)
         if member:
             try:
-                await ctx.guild.ban(member)
+                await ctx.guild.ban(member, reason=reason)
                 await ctx.guild.unban(member)
             except discord.Forbidden:
                 await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Missing permissions to ban this Member", ttl=5)
