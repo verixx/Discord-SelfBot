@@ -43,6 +43,54 @@ class Logging:
         """Show Logging Status."""
         await edit(ctx, content='<:robot:273922151856209923> Mention logging is currently ``%s``' % self.bot.setlog, ttl=3)
 
+    # Clean ids, on clean command or log show.
+    async def do_clean(self):
+        # clean guild
+        guilds = self.bot.log_guild
+        for x in guilds:
+            if discord.utils.find(lambda g: x == g.id, self.bot.guilds) is None:
+                guilds.remove(x)
+                log.info('Removed Guild with the ID: {} from log entry "guild" due to not finding it.'.format(x))
+        if guilds != self.bot.log_guild:
+            self.bot.log_guild = guilds
+            await save_log('guild', guilds)
+
+        # Clean blocked channels
+        b_channels = self.bot.log_block_channel
+        for x in b_channels:
+            if discord.utils.find(lambda c: x == c.id, self.bot.get_all_channels()) is None:
+                b_channels.remove(x)
+                log.info('Removed Channel with the ID: {} from log entry "block-channel" due to not finding it.'.format(x))
+        if b_channels != self.bot.log_block_channel:
+            self.bot.log_block_channel = b_channels
+            await save_log('block-channel', b_channels)
+
+        # Clean channels
+        l_channels = self.bot.log_channel
+        for x in l_channels:
+            if discord.utils.find(lambda c: x == c.id, self.bot.get_all_channels()) is None:
+                l_channels.remove(x)
+                log.info('Removed Channel with the ID: {} from log entry "channel" due to not finding it.'.format(x))
+        if l_channels != self.bot.log_channel:
+            self.bot.log_channel = l_channels
+            await save_log('channel', l_channels)
+
+        # Clean Users
+        users = self.bot.log_block_user
+        for x in users:
+            if discord.utils.find(lambda u: x == u.id, self.bot.users) is None:
+                users.remove(x)
+                log.info('Removed User with the ID: {} from log entry "block-user" due to not finding it.'.format(x))
+        if users != self.bot.log_block_user:
+            self.bot.log_block_user = users
+            await save_log('block-user', users)
+
+    @log.command(aliases=["Clean"])
+    async def clean(self, ctx):
+        """Remove logged ids that you don't see anymore"""
+        await self.do_clean()
+        await edit(ctx, content="\N{HEAVY CHECK MARK} cleaned Blacklist!", ttl=5)
+
     # Add Key-Word to Logger
     @log.command(aliases=["Key"])
     async def key(self, ctx, msg: str):
@@ -112,6 +160,8 @@ class Logging:
     @log.command(aliases=["Show"])
     async def show(self, ctx):
         """Show Info about logged things."""
+        await self.do_clean()
+
         em = discord.Embed(title='Logging Info', colour=embedColor(self))
 
         keys = ', '.join(self.bot.log_key)
@@ -152,14 +202,6 @@ class Logging:
         blocked = ', '.join(self.bot.log_block_key)
         if blocked is not '':
             em.add_field(name="Blocked Words[%s] " % len(self.bot.log_block_key), value=blocked)
-
-        blocked_users = self.bot.log_block_user
-        for x in blocked_users:
-            if discord.utils.find(lambda u: x == u.id, ctx.bot.users) is None:
-                blocked_users.remove(x)
-                self.bot.log_block_user = blocked_users
-                await save_log('block-user', blocked_users)
-                log.info('Removed User with the ID: {} from Blacklist due to not finding it.'.format(x))
 
         users = ', '.join(str(u) for u in self.bot.users if u.id in self.bot.log_block_user)
         if users is not '':
