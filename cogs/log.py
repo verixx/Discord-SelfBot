@@ -268,7 +268,7 @@ class Logging:
             log.info('Removed Channel "{}" in Guild "{}" on leave from logger'.format(channel.name, channel.guild.name))
 
     # Automatically remove channel if it get's deleted
-    async def on_channel_delete(self, channel):
+    async def on_guild_channel_delete(self, channel):
         block_channels = self.bot.log_block_channel
         if channel.id in block_channels:
             block_channels.remove(channel.id)
