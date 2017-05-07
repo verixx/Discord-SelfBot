@@ -108,7 +108,7 @@ async def before_invoke(ctx):
         destination = f'Group {ctx.channel}'
     else:
         destination = f'#{ctx.channel.name},({ctx.guild.name})'
-    log.info(f'In {destination}:{ctx.message.content}')
+    log.info('In {}: {}'.format(destination, ctx.message.content.strip(ctx.prefix)))
 
 
 @bot.event

@@ -41,6 +41,16 @@ class OnMessage:
         self.request_webhook = self.webhook_class.request_webhook
         self.quickcmds = read_json("quickcmds")
 
+    async def log_command(self, ctx, command):
+        self.bot.commands_triggered[command] += 1
+        if isinstance(ctx.channel, discord.DMChannel):
+            destination = f'Gr with {ctx.channel.recipient}'
+        elif isinstance(ctx.channel, discord.GroupChannel):
+            destination = f'Group {ctx.channel}'
+        else:
+            destination = f'#{ctx.channel.name},({ctx.guild.name})'
+        log.info(f'In {destination}: {command}')
+
     async def on_message(self, message):
         if self.bot.is_ready():
             # Increase Message Count
@@ -50,26 +60,15 @@ class OnMessage:
             if message.author.id == self.bot.user.id:
                 if hasattr(self.bot, 'icount'):
                     self.bot.icount += 1
-                prefix = [x for x in self.bot.prefix if message.content.startswith(x)]
-                if prefix:
-                    response = await custom(self, prefix[0], message)
+                ctx = await self.bot.get_context(message)
+                if ctx.prefix:
+                    response = await custom(self, ctx.prefix, message)
                     if response:
-                        self.bot.commands_triggered[response] += 1
-                        if isinstance(message.channel, discord.DMChannel):
-                            destination = 'DM with {0.channel.recipient}'.format(message)
-                        else:
-                            destination = '#{0.channel.name},({0.guild.name})'.format(message)
-                        log.info('In {1}:{0.content}'.format(message, destination))
+                        await self.log_command(ctx, response)
                 else:
                     if message.content.lower().strip() in self.quickcmds.keys():
-                        response = self.quickcmds[message.content.lower().strip()]
-                        self.bot.commands_triggered[message.content.lower().strip()] += 1
-                        if isinstance(message.channel, discord.DMChannel):
-                            destination = 'DM with {0.channel.recipient}'.format(message)
-                        else:
-                            destination = '#{0.channel.name},({0.guild.name})'.format(message)
-                        log.info('In {1}:{0.content}'.format(message, destination))
-                        await message.edit(content=response)
+                        await self.log_command(ctx, message.content.lower().strip())
+                        await message.edit(content=self.quickcmds[message.content.lower().strip()])
             elif (message.guild is not None) and (self.bot.setlog == 'on'):
                 if message.author.id in self.bot.log_block_user:
                     return
