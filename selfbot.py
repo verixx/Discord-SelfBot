@@ -99,15 +99,16 @@ async def on_command_error(error, ctx):
 
 
 # Increase use count and log to logger
-@bot.event
-async def on_command(ctx):
+@bot.before_invoke
+async def before_invoke(ctx):
     bot.commands_triggered[ctx.command.qualified_name] += 1
-    message = ctx.message
-    if isinstance(message.channel, discord.DMChannel):
-        destination = 'DM with {0.channel.recipient}'.format(message)
+    if isinstance(ctx.channel, discord.DMChannel):
+        destination = f'Gr with {ctx.channel.recipient}'
+    elif isinstance(ctx.channel, discord.GroupChannel):
+        destination = f'Group {ctx.channel}'
     else:
-        destination = '#{0.channel.name},({0.guild.name})'.format(message)
-    log.info('In {1}:{0.content}'.format(message, destination))
+        destination = f'#{ctx.channel.name},({ctx.guild.name})'
+    log.info(f'In {destination}:{ctx.message.content}')
 
 
 @bot.event

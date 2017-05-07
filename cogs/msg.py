@@ -105,12 +105,9 @@ class OnMessage:
                     if notify:
                         content = message.clean_content if len(message.clean_content) < 1020 else message.clean_content[:1020] + '...'
                         em.set_author(name=message.author, icon_url=message.author.avatar_url)
-                        em.add_field(name='In',
-                                     value="#%s, ``%s``" % (message.channel, message.guild), inline=False)
-                        em.add_field(name='At',
-                                     value=datetime.now().__format__('%A, %d. %B %Y @ %H:%M:%S'), inline=False)
-                        em.add_field(name='Message',
-                                     value=content, inline=False)
+                        em.add_field(name='In', value="#%s, ``%s``" % (message.channel, message.guild), inline=False)
+                        em.add_field(name='At', value=datetime.now().__format__('%A, %d. %B %Y @ %H:%M:%S'), inline=False)
+                        em.add_field(name='Message', value=content, inline=False)
                         em.set_thumbnail(url=message.author.avatar_url)
                         token = self.bot.webhook_token[42:]
                         if token and not mention:

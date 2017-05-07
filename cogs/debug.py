@@ -160,7 +160,7 @@ class Debug:
                 ret = await func()
         except Exception as e:
             value = stdout.getvalue()
-            await self.do_send(ctx=ctx, description="SelfBot Python Eval Error", value=value + traceback.format_exc(), filename='eval.py')
+            await self.do_send(ctx=ctx, description="SelfBot Python Eval Error", value=str(value) + str(traceback.format_exc()), filename='eval.py')
         else:
             value = stdout.getvalue()
             try:
@@ -170,10 +170,10 @@ class Debug:
 
             if ret is None:
                 if value:
-                    await self.do_send(ctx=ctx, description="SelfBot Python Eval", value=value, filename='eval.py')
+                    await self.do_send(ctx=ctx, description="SelfBot Python Eval", value=str(value), filename='eval.py')
             else:
                 self._last_result = ret
-                await self.do_send(ctx=ctx, description="SelfBot Python Eval", value=value + ret, filename='eval.py')
+                await self.do_send(ctx=ctx, description="SelfBot Python Eval", value=str(value) + str(ret), filename='eval.py')
 
     @commands.command(aliases=["Repl"])
     async def repl(self, ctx):
@@ -239,14 +239,14 @@ class Debug:
                         result = await result
             except Exception as e:
                 value = stdout.getvalue()
-                await self.do_send(ctx=ctx, description="SelfBot Python REPL Error", value=value + traceback.format_exc(), filename='repl.py')
+                await self.do_send(ctx=ctx, description="SelfBot Python REPL Error", value=str(value) + str(traceback.format_exc()), filename='repl.py')
             else:
                 value = stdout.getvalue()
                 if result is not None:
-                    await self.do_send(ctx=ctx, description="SelfBot Python REPL", value=value + result, filename='repl.py')
+                    await self.do_send(ctx=ctx, description="SelfBot Python REPL", value=str(value) + str(result), filename='repl.py')
                     variables['_'] = result
                 elif value:
-                    await self.do_send(ctx=ctx, description="SelfBot Python REPL", value=value, filename='repl.py')
+                    await self.do_send(ctx=ctx, description="SelfBot Python REPL", value=str(value), filename='repl.py')
 
 
 def setup(bot):

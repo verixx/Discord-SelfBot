@@ -69,22 +69,14 @@ class Tools:
         voice = sum(len(g.voice_channels) for g in self.bot.guilds)
         text = sum(len(g.text_channels) for g in self.bot.guilds)
         embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Bot Info', colour=embedColor(self))
-        embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME',
-                        value=getTimeDiff(self.bot.uptime), inline=True)
-        embed.add_field(name='\N{INBOX TRAY} Messages Received',
-                        value=(self.bot.message_count - self.bot.icount), inline=True)
-        embed.add_field(name='\N{OUTBOX TRAY} Messages Sent',
-                        value=self.bot.icount, inline=True)
-        embed.add_field(name='\N{SPEAKING HEAD IN SILHOUETTE} Members [%s]' % len(self.bot.users),
-                        value='%s Online' % unique_online, inline=True)
-        embed.add_field(name='\N{SPIRAL NOTE PAD} Channels [%s]' % (text + voice),
-                        value='%s Text | %s Voice' % (text, voice), inline=True)
-        embed.add_field(name='\N{TICKET} Guilds',
-                        value=len(self.bot.guilds))
-        embed.add_field(name='\N{BELL} Mentions [%s]' % (self.bot.mention_count + self.bot.mention_count_name),
-                        value='%s Pings | %s Names' % (self.bot.mention_count, self.bot.mention_count_name), inline=True)
-        embed.add_field(name='\N{SPEECH BALLOON} Commands Used',
-                        value=sum(self.bot.commands_triggered.values()), inline=True)
+        embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME', value=getTimeDiff(self.bot.uptime), inline=True)
+        embed.add_field(name='\N{INBOX TRAY} Messages Received', value=(self.bot.message_count - self.bot.icount), inline=True)
+        embed.add_field(name='\N{OUTBOX TRAY} Messages Sent', value=self.bot.icount, inline=True)
+        embed.add_field(name='\N{SPEAKING HEAD IN SILHOUETTE} Members [%s]' % len(self.bot.users), value='%s Online' % unique_online, inline=True)
+        embed.add_field(name='\N{SPIRAL NOTE PAD} Channels [%s]' % (text + voice), value='%s Text | %s Voice' % (text, voice), inline=True)
+        embed.add_field(name='\N{TICKET} Guilds', value=len(self.bot.guilds))
+        embed.add_field(name='\N{BELL} Mentions [%s]' % (self.bot.mention_count + self.bot.mention_count_name), value='%s Pings | %s Names' % (self.bot.mention_count, self.bot.mention_count_name), inline=True)
+        embed.add_field(name='\N{SPEECH BALLOON} Commands Used', value=sum(self.bot.commands_triggered.values()), inline=True)
         try:
             embed.add_field(name='\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS} Most Used',
                             value='%s [%s]' % (self.bot.commands_triggered.most_common()[0][0], self.bot.commands_triggered.most_common()[0][1]))
@@ -104,14 +96,10 @@ class Tools:
         prosys = psutil.cpu_percent()
         sys = '%s %s' % (platform.linux_distribution(full_distribution_name=1)[0].title(), platform.linux_distribution(full_distribution_name=1)[1])
         embed = discord.Embed(title='\N{ELECTRIC LIGHT BULB} Host Info', colour=embedColor(self))
-        embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME',
-                        value=getTimeDiff(datetime.datetime.fromtimestamp(int(process.create_time())), datetime.datetime.now()))
-        embed.add_field(name='\N{DESKTOP COMPUTER} SYSTEM',
-                        value='{0}, {1}'.format(platform.system(), sys, platform.release()))
-        embed.add_field(name='\N{FLOPPY DISK} MEMORY',
-                        value='{:.2f} MiB / {:.2f} MiB\nBot uses: {:.2f}%'.format(memory_usage, avai, mepro))
-        embed.add_field(name='\N{DVD} CPU',
-                        value='{:.2f}%'.format(prosys))
+        embed.add_field(name='\N{CLOCK FACE THREE OCLOCK} UPTIME', value=getTimeDiff(datetime.datetime.fromtimestamp(int(process.create_time())), datetime.datetime.now()))
+        embed.add_field(name='\N{DESKTOP COMPUTER} SYSTEM', value='{0}, {1}'.format(platform.system(), sys, platform.release()))
+        embed.add_field(name='\N{FLOPPY DISK} MEMORY', value='{:.2f} MiB / {:.2f} MiB\nBot uses: {:.2f}%'.format(memory_usage, avai, mepro))
+        embed.add_field(name='\N{DVD} CPU', value='{:.2f}%'.format(prosys))
         await edit(ctx, embed=embed, ttl=20)
 
     # Change Gamestatus - blank is no game

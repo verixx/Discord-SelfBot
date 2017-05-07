@@ -52,33 +52,24 @@ class Info:
             if ctx.guild:
                 if mem.game:
                     em.description = 'Playing **%s**' % mem.game
-                em.add_field(name='Status',
-                             value=mem.status, inline=True)
-                em.add_field(name='Nick',
-                             value=mem.nick, inline=True)
-                em.add_field(name='In Voice',
-                             value=mem.voice,  inline=True)
+                em.add_field(name='Status', value=mem.status, inline=True)
+                em.add_field(name='Nick', value=mem.nick, inline=True)
+                em.add_field(name='In Voice', value=mem.voice,  inline=True)
             if not mem.bot:
                 pro = await mem.profile()
-                em.add_field(name='Partnership',
-                             value=str(mem.relationship.type)[17:].title() if mem.relationship is not None else None,  inline=True)
-                em.add_field(name='Nitro',
-                             value='{}\n{}'.format(pro.premium_since.__format__('%d/%m/%Y'), getAgo(pro.premium_since)) if pro.premium is True else None,  inline=True)
-            em.add_field(name='Account Created',
-                         value='%s\n%s' % (mem.created_at.__format__('%d/%m/%Y'), getAgo(mem.created_at)), inline=True)
+                em.add_field(name='Partnership', value=str(mem.relationship.type)[17:].title() if mem.relationship is not None else None,  inline=True)
+                em.add_field(name='Nitro', value='{}\n{}'.format(pro.premium_since.__format__('%d/%m/%Y'), getAgo(pro.premium_since)) if pro.premium is True else None,  inline=True)
+            em.add_field(name='Account Created', value='%s\n%s' % (mem.created_at.__format__('%d/%m/%Y'), getAgo(mem.created_at)), inline=True)
             if ctx.guild:
-                em.add_field(name='Join Date',
-                             value='%s\n%s' % (mem.joined_at.__format__('%d/%m/%Y'), getAgo(mem.joined_at)), inline=True)
+                em.add_field(name='Join Date', value='%s\n%s' % (mem.joined_at.__format__('%d/%m/%Y'), getAgo(mem.joined_at)), inline=True)
 
                 rolelist = ', '.join(r.name for r in mem.roles)
                 if rolelist[11:]:
-                    em.add_field(name='Roles [%s]' % (len(mem.roles) - 1),
-                                 value=rolelist[11:], inline=True)
+                    em.add_field(name='Roles [%s]' % (len(mem.roles) - 1), value=rolelist[11:], inline=True)
 
             guildlist = ', '.join(g.name for g in self.bot.guilds if g.get_member(mem.id))
             if (mem.id is not ctx.message.author.id) and guildlist:
-                em.add_field(name='Shared Guilds [%s]' % len(guildlist.split(',')),
-                             value='%s' % guildlist, inline=True)
+                em.add_field(name='Shared Guilds [%s]' % len(guildlist.split(',')), value='%s' % guildlist, inline=True)
             em.set_thumbnail(url=mem.avatar_url)
             em.set_author(name=mem, icon_url='https://i.imgur.com/RHagTDg.png')
             await edit(ctx, embed=em, ttl=20)
@@ -107,18 +98,12 @@ class Info:
         role = getRole(ctx, getWithoutInvoke(ctx))
         if role is not None:
             em = discord.Embed(timestamp=datetime.datetime.now(), colour=role.colour)
-            em.add_field(name='Name',
-                         value=role.name, inline=True)
-            em.add_field(name='ID',
-                         value=role.id, inline=True)
-            em.add_field(name='Created On',
-                         value='{}\n{}'.format(role.created_at.__format__('%d/%m/%Y'), getAgo(role.created_at)), inline=True)
-            em.add_field(name='Color',
-                         value='{}\n{}'.format(str(role.colour).upper(), str(role.colour.to_tuple())[1:-1]), inline=True)
-            em.add_field(name='Mentionable',
-                         value=role.mentionable,  inline=True)
-            em.add_field(name='Members [%s]' % len(role.members),
-                         value='%s Online' % sum(1 for m in role.members if m.status != discord.Status.offline), inline=True)
+            em.add_field(name='Name', value=role.name, inline=True)
+            em.add_field(name='ID', value=role.id, inline=True)
+            em.add_field(name='Created On', value='{}\n{}'.format(role.created_at.__format__('%d/%m/%Y'), getAgo(role.created_at)), inline=True)
+            em.add_field(name='Color', value='{}\n{}'.format(str(role.colour).upper(), str(role.colour.to_tuple())[1:-1]), inline=True)
+            em.add_field(name='Mentionable', value=role.mentionable,  inline=True)
+            em.add_field(name='Members [%s]' % len(role.members), value='%s Online' % sum(1 for m in role.members if m.status != discord.Status.offline), inline=True)
             em.set_thumbnail(url='http://www.colorhexa.com/%s.png' % str(role.colour).strip("#"))
             await edit(ctx, embed=em, ttl=20)
         else:
@@ -130,25 +115,18 @@ class Info:
         """Infos about a Guild."""
         serv = getGuild(ctx, getWithoutInvoke(ctx))
         if serv:
-            em = discord.Embed(timestamp=datetime.datetime.now(), colour=ctx.message.author.colour)
+            em = discord.Embed(timestamp=datetime.datetime.now())
+            em.colour = ctx.message.author.colour if ctx.guild else embedColor(self)
             em.set_author(name=serv.name, icon_url='https://i.imgur.com/RHagTDg.png')
             em.set_thumbnail(url=serv.icon_url)
-            em.add_field(name='Owner',
-                         value='%s' % serv.owner,  inline=True)
-            em.add_field(name='Created On',
-                         value='{}\n{}'.format(serv.created_at.__format__('%d/%m/%Y'), getAgo(serv.created_at)), inline=True)
-            em.add_field(name='Region',
-                         value=serv.region, inline=True)
-            em.add_field(name='ID',
-                         value=serv.id, inline=True)
-            em.add_field(name='Verification Level',
-                         value=serv.verification_level, inline=True)
-            em.add_field(name='2FA Requirement',
-                         value="True" if serv.mfa_level == 1 else "False", inline=True)
-            em.add_field(name='Members [%s]' % serv.member_count,
-                         value='%s Online' % sum(1 for m in serv.members if m.status != discord.Status.offline), inline=True)
-            em.add_field(name='Channels [%s]' % len(serv.channels),
-                         value='%s Text | %s Voice' % (len(serv.text_channels), len(serv.voice_channels)), inline=True)
+            em.add_field(name='Owner', value='%s' % serv.owner,  inline=True)
+            em.add_field(name='Created On', value='{}\n{}'.format(serv.created_at.__format__('%d/%m/%Y'), getAgo(serv.created_at)), inline=True)
+            em.add_field(name='Region', value=serv.region, inline=True)
+            em.add_field(name='ID', value=serv.id, inline=True)
+            em.add_field(name='Verification Level', value=serv.verification_level, inline=True)
+            em.add_field(name='2FA Requirement', value="True" if serv.mfa_level == 1 else "False", inline=True)
+            em.add_field(name='Members [%s]' % serv.member_count, value='%s Online' % sum(1 for m in serv.members if m.status != discord.Status.offline), inline=True)
+            em.add_field(name='Channels [%s]' % len(serv.channels), value='%s Text | %s Voice' % (len(serv.text_channels), len(serv.voice_channels)), inline=True)
             await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Guild not found",  ttl=5)
@@ -161,28 +139,24 @@ class Info:
         serv = getGuild(ctx, getWithoutInvoke(ctx))
         if serv:
             em = discord.Embed(timestamp=datetime.datetime.now(), colour=ctx.message.author.colour)
-            em.add_field(name='Roles [%s]' % (len(serv.roles) - 1),
-                         value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
+            em.add_field(name='Roles [%s]' % (len(serv.roles) - 1), value=', '.join(r.name for r in serv.role_hierarchy)[:-11], inline=False)
             await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, "\N{HEAVY EXCLAMATION MARK SYMBOL} Guild not found",  ttl=5)
 
     # Channel on Server
     @commands.command(aliases=["Channel"])
-    @commands.guild_only()
     async def channel(self, ctx):
         """Infos about a Channel."""
         channel = getChannel(ctx, getWithoutInvoke(ctx))
         if channel:
-            em = discord.Embed(timestamp=datetime.datetime.now(), colour=ctx.message.author.colour)
-            em.add_field(name='Name',
-                         value=channel.name, inline=True)
-            em.add_field(name='ID',
-                         value=channel.id, inline=True)
-            em.add_field(name='Created On',
-                         value='{}\n{}'.format(channel.created_at.__format__('%d/%m/%Y'), getAgo(channel.created_at)), inline=True)
-            em.add_field(name='Topic',
-                         value=channel.topic if channel.topic != "" else "None",  inline=False)
+            em = discord.Embed(timestamp=datetime.datetime.now())
+            em.colour = ctx.message.author.colour if ctx.guild else embedColor(self)
+            em.set_author(name=channel.name, icon_url='https://i.imgur.com/RHagTDg.png')
+            em.add_field(name='ID', value=channel.id, inline=True)
+            em.add_field(name='Created On', value='{}, {}'.format(channel.created_at.__format__('%d/%m/%Y'), getAgo(channel.created_at)), inline=True)
+            if not isinstance(ctx.channel, discord.GroupChannel):
+                em.add_field(name='Topic', value=channel.topic if channel.topic != "" else "None",  inline=False)
             await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found",  ttl=5)
