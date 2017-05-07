@@ -154,7 +154,7 @@ class Logging:
                 await save_log('channel', channels)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to logger' % channel,  ttl=5)
         else:
-            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Chnnael found',  ttl=5)
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Channel found',  ttl=5)
 
     # Show Logging Infosconfig
     @log.command(aliases=["Show"])
@@ -261,7 +261,7 @@ class Logging:
                 await save_log('block-channel', channels)
                 await edit(ctx, content='\N{HEAVY CHECK MARK} Added Channel with ID ``%s`` to blacklist' % channel,  ttl=5)
         else:
-            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Chnnael found',  ttl=5)
+            await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} No Channel found',  ttl=5)
 
     # Blacklist user
     @blacklist.command(aliases=["User"])

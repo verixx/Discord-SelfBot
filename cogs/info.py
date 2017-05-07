@@ -218,7 +218,7 @@ class Info:
         await edit(ctx, embed=em, ttl=20)
 
     # Info of Custom or Unicode Emotes
-    @commands.command(aliases=["Emote"])
+    @commands.command(aliases=["Emote", "Emoji", "emoji"])
     async def emote(self, ctx, emote: str):
         """Infos about Emotes."""
         e = self.emoji_reg.findall(ctx.message.content)
