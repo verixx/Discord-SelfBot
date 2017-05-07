@@ -239,14 +239,14 @@ class Debug:
                         result = await result
             except Exception as e:
                 value = stdout.getvalue()
-                await self.do_send(ctx=ctx, description="SelfBot Python Eval Error", value=value + traceback.format_exc(), filename='repl.py')
+                await self.do_send(ctx=ctx, description="SelfBot Python REPL Error", value=value + traceback.format_exc(), filename='repl.py')
             else:
                 value = stdout.getvalue()
                 if result is not None:
-                    await self.do_send(ctx=ctx, description="SelfBot Python Eval", value=value + result, filename='repl.py')
+                    await self.do_send(ctx=ctx, description="SelfBot Python REPL", value=value + result, filename='repl.py')
                     variables['_'] = result
                 elif value:
-                    await self.do_send(ctx=ctx, description="SelfBot Python Eval", value=value, filename='repl.py')
+                    await self.do_send(ctx=ctx, description="SelfBot Python REPL", value=value, filename='repl.py')
 
 
 def setup(bot):
