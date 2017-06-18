@@ -43,7 +43,7 @@ class Tools:
     # Ping Time
     @commands.command(aliases=["Ping"])
     async def ping(self, ctx):
-        """Time the websocket takes to rspond."""
+        """Time the websocket takes to respond."""
         before = datetime.datetime.utcnow()
         await (await self.bot.ws.ping())
         ping = (datetime.datetime.utcnow() - before) * 1000
