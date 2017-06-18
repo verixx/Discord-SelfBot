@@ -1,6 +1,8 @@
 import asyncio
 import json
 import logging
+import os
+import sys
 
 log = logging.getLogger('LOG')
 loop = asyncio.get_event_loop()
@@ -89,3 +91,14 @@ def deleting_key(file_name, key):
 async def delete_key(file_name, key):
     with await lock:
         return await loop.run_in_executor(None, deleting_key, file_name, key)
+
+
+def check_existence(filename):
+    if not os.path.isfile('config/' + filename + '.json'):
+        if os.path.isfile('config/' + filename + '.json.example'):
+            os.rename('config/' + filename + '.json.example', 'config/' + filename + '.json')
+            log.warning(f"Renamed {filename}.json.example to {filename}.json, you should go end check that everything is set up correctly")
+        else:
+            log.error(f"File {filename} is missing, shutting down the bot.")
+            python = sys.executable
+            os.execl(python, python, *sys.argv)

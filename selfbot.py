@@ -6,9 +6,12 @@ import os
 import traceback
 
 from cogs.utils.helper import edit
-from cogs.utils.save import read_config, read_log
+from cogs.utils.save import check_existence, read_config, read_log
 from collections import Counter
 from discord.ext import commands
+
+check_existence('quickcmds')
+check_existence('commands')
 
 # Logging
 log = logging.getLogger('LOG')
@@ -88,7 +91,7 @@ async def on_ready():
 
 # Command Errors
 @bot.event
-async def on_command_error(error, ctx):
+async def on_command_error(ctx, error):
     if isinstance(error, commands.NoPrivateMessage):
         await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only usable on Servers', ttl=5)
     elif isinstance(error, commands.CheckFailure):
