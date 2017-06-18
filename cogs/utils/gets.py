@@ -45,7 +45,10 @@ def getUser(ctx, msg):
     elif 1 == len(ctx.message.mentions):
         return ctx.message.mentions[0]
     elif not ctx.guild:
-        return utils.find(lambda m: msg.lower() in m.name.lower(), ctx.bot.users)
+        if utils.find(lambda m: msg.lower() in m.name.lower(), ctx.bot.users):
+            return utils.find(lambda m: msg.lower() in m.name.lower(), ctx.bot.users)
+        elif ctx.get_user(int(msg)):
+            return ctx.get_user(int(msg))
     elif msg.isdigit():
         return ctx.guild.get_member(int(msg))
     elif ctx.message.guild.get_member_named(msg):
