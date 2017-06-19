@@ -3,11 +3,9 @@ import discord
 import os
 import platform
 import psutil
-import re
 
-from discord import utils
 from discord.ext import commands
-from .utils.gets import getColor, getRole, getTimeDiff, getWithoutInvoke
+from .utils.gets import getColor, getEmote, getRole, getTimeDiff, getWithoutInvoke
 from .utils.helper import edit, embedColor
 from .utils.save import save_config
 
@@ -16,7 +14,6 @@ class Tools:
 
     def __init__(self, bot):
         self.bot = bot
-        self.emoji_reg = re.compile(r'<:.+?:([0-9]{15,21})>')
 
     # Command usage stats
     @commands.command(aliases=["Cmdstats"])
@@ -168,16 +165,11 @@ class Tools:
     @commands.command(aliases=["Jumbo"])
     async def jumbo(self, ctx):
         """Display your favorite emotes in large."""
-        e = self.emoji_reg.findall(ctx.message.content)
-        if e:
-            if len(e) > 1:
-                await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
-            else:
-                emo = utils.get(self.bot.emojis, id=int(e[0]))
-                if emo:
-                    em = discord.Embed(colour=embedColor(self))
-                    em.set_image(url=emo.url)
-                    await edit(ctx, embed=em)
+        emote = getEmote(ctx, getWithoutInvoke(ctx))
+        if emote:
+            em = discord.Embed(colour=embedColor(self))
+            em.set_image(url=emote.url)
+            await edit(ctx, embed=em)
         else:
             await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only Emotes...', ttl=3)
 

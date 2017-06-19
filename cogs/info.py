@@ -3,12 +3,11 @@ import datetime
 import discord
 import json
 import logging
-import re
 import unicodedata
 
 from dateutil import parser
 from discord.ext import commands
-from .utils.gets import getAgo, getChannel, getGuild, getRole, getUser, getWithoutInvoke
+from .utils.gets import getAgo, getChannel, getEmote, getGuild, getRole, getUser, getWithoutInvoke
 from .utils.helper import edit, embedColor
 
 log = logging.getLogger('LOG')
@@ -18,7 +17,6 @@ class Info:
 
     def __init__(self, bot):
         self.bot = bot
-        self.emoji_reg = re.compile(r'<:.+?:([0-9]{15,21})>')
 
     # About this Selfbot
     @commands.command(aliases=["About"])
@@ -193,18 +191,13 @@ class Info:
     @commands.command(aliases=["Emote", "Emoji", "emoji"])
     async def emote(self, ctx, emote: str):
         """Infos about Emotes."""
-        e = self.emoji_reg.findall(ctx.message.content)
-        if e:
-            if len(e) > 1:
-                await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only One Emote...', ttl=3)
-            else:
-                emo = self.bot.get_emoji(int(e[0]))
-                if emo:
-                    date = emo.created_at.__format__('%d/%m/%Y')
-                    e = discord.Embed(title='Custom Emote', colour=embedColor(self))
-                    e.description = '**Name: **{1}\n**ID: **{2}\n**Server: **{0}\n**Created at: **{3}, {4}\n**Image: **[link]({5})'.format(emo.guild.name, emo.name, emo.id, date, getAgo(emo.created_at), emo.url)
-                    e.set_thumbnail(url=emo.url)
-                    await edit(ctx, embed=e)
+        emote = getEmote(ctx, getWithoutInvoke(ctx))
+        if emote:
+            date = emote.created_at.__format__('%d/%m/%Y')
+            e = discord.Embed(title='Custom Emote', colour=embedColor(self))
+            e.description = '**Name: **{1}\n**ID: **{2}\n**Server: **{0}\n**Created at: **{3}, {4}\n**Image: **[link]({5})'.format(emote.guild.name, emote.name, emote.id, date, getAgo(emote.created_at), emote.url)
+            e.set_thumbnail(url=emote.url)
+            await edit(ctx, embed=e)
         else:
             split = '\n'.join(emote).split('\n')
             e = discord.Embed(title='Unicode Emote {}'.format(emote), colour=embedColor(self))

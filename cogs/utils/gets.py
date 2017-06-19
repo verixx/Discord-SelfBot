@@ -1,10 +1,11 @@
 import datetime
+import re
 
 from colour import Color
 from discord import utils
 
 
-# Get Message without inokation prefix and space after invokation
+# Get Message without invokation prefix and space after invokation
 def getWithoutInvoke(ctx):
     message = ctx.message.content
     if message.endswith(' stay'):
@@ -137,3 +138,13 @@ def getColor(incolor):
             except:
                 outcolor = None
     return outcolor
+
+
+# Find Emote
+def getEmote(ctx, content):
+    emoji_reg = re.compile(r'<:.+?:([0-9]{15,21})>').findall(content)
+    if emoji_reg:
+        return ctx.bot.get_emoji(int(emoji_reg[0]))
+    elif content.strip().isdigit():
+        return ctx.bot.get_emoji(int(content.strip()))
+    return None
