@@ -80,7 +80,7 @@ async def on_ready():
         log.warning("Uloaded Mal commands because of missing credentials \n Check your config.json..")
 
     if bot.google_api_key == '' or bot.google_api_key is None or bot.custom_search_engine == '' or bot.custom_search_engine is None:
-        bot.unload_extension("cogs.mal")
+        bot.remove_command("i")
         log.warning("Uloaded Google Image command because of missing key/search engine String \n Check your config.json..")
 
     if bot.mention_channel is None or bot.webhook_token == '' or bot.webhook_token is None:
