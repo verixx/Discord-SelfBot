@@ -65,6 +65,7 @@ async def on_ready():
     if not hasattr(bot, 'mention_count_name'):
         bot.mention_count_name = 0
 
+    bot.prefix = read_config('prefix')
     bot.gamename = read_config('gamestatus')
     bot.mal_un = read_config('mal_username')
     bot.mal_pw = read_config('mal_password')
@@ -72,8 +73,19 @@ async def on_ready():
     bot.webhook_token = read_config('webhook_token')
     bot.google_api_key = read_config('google_api_key')
     bot.custom_search_engine = read_config('custom_search_engine')
-    bot.prefix = read_config('prefix')
     bot.embed_color = read_config('embed_color')
+
+    if bot.mal_un == '' or bot.mal_un is None or bot.mal_pw == '' or bot.mal_pw is None:
+        bot.unload_extension("cogs.mal")
+        log.warning("Uloaded Mal commands because of missing credentials \n Check your config.json..")
+
+    if bot.google_api_key == '' or bot.google_api_key is None or bot.custom_search_engine == '' or bot.custom_search_engine is None:
+        bot.unload_extension("cogs.mal")
+        log.warning("Uloaded Google Image command because of missing key/search engine String \n Check your config.json..")
+
+    if bot.mention_channel is None or bot.webhook_token == '' or bot.webhook_token is None:
+        bot.unload_extension("cogs.msg")
+        log.warning("Uloaded Mention logger because of missing log channel or webhook token. \n Check your config.json..")
 
     bot.setlog = read_config('setlog')
     bot.log_guild = read_log('guild')
@@ -106,12 +118,26 @@ async def on_command_error(ctx, error):
 async def before_invoke(ctx):
     bot.commands_triggered[ctx.command.qualified_name] += 1
     if isinstance(ctx.channel, discord.DMChannel):
-        destination = f'Gr with {ctx.channel.recipient}'
+        destination = f'PM with {ctx.channel.recipient}'
     elif isinstance(ctx.channel, discord.GroupChannel):
         destination = f'Group {ctx.channel}'
     else:
         destination = f'#{ctx.channel.name},({ctx.guild.name})'
     log.info('In {}: {}'.format(destination, ctx.message.content.strip(ctx.prefix)))
+
+
+@bot.event
+async def on_message(message):
+    if bot.is_ready():
+        # Increase Message Count
+        if hasattr(bot, 'message_count'):
+            bot.message_count += 1
+        # Increase User Message Count
+        if message.author.id == bot.user.id:
+            if hasattr(bot, 'icount'):
+                bot.icount += 1
+
+    await bot.process_commands(message)
 
 
 @bot.event

@@ -1,8 +1,10 @@
+import discord
 import itertools
 import logging
+import mimetypes
 
 from discord.ext import commands
-from .utils.helper import edit
+from .utils.helper import edit, embedColor, permEmbed
 from .utils.save import delete_key, read_json, save_commands
 
 log = logging.getLogger('LOG')
@@ -12,6 +14,7 @@ class CustomCommands:
 
     def __init__(self, bot):
         self.bot = bot
+        self.quickcmds = read_json("quickcmds")
 
     # List all custom commands without links
     @commands.group(aliases=["Cmds"])
@@ -97,6 +100,65 @@ class CustomCommands:
                     await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} Something went wrong.Exception: ``{delete}``", ttl=20)
             else:
                 await edit(ctx, content=f"\N{HEAVY EXCLAMATION MARK SYMBOL} Couldn't find ``{key}`` in Custom Commands", ttl=5)
+
+    async def log_command(self, ctx, command):
+        self.bot.commands_triggered[command] += 1
+        if isinstance(ctx.channel, discord.DMChannel):
+            destination = f'PM with {ctx.channel.recipient}'
+        elif isinstance(ctx.channel, discord.GroupChannel):
+            destination = f'Group {ctx.channel}'
+        else:
+            destination = f'#{ctx.channel.name},({ctx.guild.name})'
+        log.info(f'In {destination}: {command}')
+
+    # Cumstom Commands with prefix
+    async def custom(self, prefix, message):
+        content = message.content.replace(prefix, "").split(' ', 1)
+        if len(content) != 2:
+            content.append(None)
+
+        commands = read_json("commands")
+        for i in commands:
+            if i == content[0]:
+                mimetype, encoding = mimetypes.guess_type(commands[i])
+                if mimetype and mimetype.startswith('image'):
+                    if permEmbed(message):
+                        await message.edit(content=content[1], embed=discord.Embed(colour=embedColor(self)).set_image(url=commands[i]))
+                    else:
+                        await message.edit(content='{0}\n{1}'.format(content[1], commands[i]))
+                    return str(i)
+                else:
+                    await message.edit(content='{0}\n{1}'.format(content[1], commands[i]))
+                    return str(i)
+        return None
+
+    async def on_message(self, message):
+        if self.bot.is_ready() and self.bot.user.id == message.author.id:
+            ctx = await self.bot.get_context(message)
+            if ctx.prefix:
+                response = await self.custom(ctx.prefix, message)
+                if response:
+                    await self.log_command(ctx, response)
+            elif message.content.lower().strip() in self.quickcmds.keys():
+                await self.log_command(ctx, message.content.lower().strip())
+                await message.edit(content=self.quickcmds[message.content.lower().strip()])
+            else:
+                content = message.content.split(" ")
+                new_content = []
+                for i in content:
+                    if i.startswith(".") and i[1:].lower() in self.quickcmds.keys():
+                        new_content.append(self.quickcmds[i[1:].lower()])
+                        await self.log_command(ctx, i[1:].lower())
+                    else:
+                        new_content.append(i)
+                if content != new_content:
+                    await message.edit(content=" ".join(x for x in new_content))
+
+    async def on_message_edit(self, before, after):
+        if before.author.id == self.bot.user.id:
+            if before.content != after.content:
+                del before
+                await self.on_message(after)
 
 
 def setup(bot):
