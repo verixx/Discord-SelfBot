@@ -5,7 +5,7 @@ import platform
 import psutil
 
 from discord.ext import commands
-from .utils.gets import getColor, getEmote, getRole, getTimeDiff, getWithoutInvoke
+from .utils.gets import getChannel, getColor, getEmote, getGuild, getRole, getTimeDiff, getUser, getWithoutInvoke
 from .utils.helper import edit, embedColor
 from .utils.save import save_config
 
@@ -172,6 +172,59 @@ class Tools:
             await edit(ctx, embed=em)
         else:
             await edit(ctx, content='\N{HEAVY EXCLAMATION MARK SYMBOL} Only Emotes...', ttl=3)
+
+    # ID command
+    @commands.group(aliases=["Id"])
+    async def id(self, ctx):
+        """Get the ID of a Server, Channel, Emote, User"""
+        if ctx.invoked_subcommand is None:
+            content = getWithoutInvoke(ctx)
+            if getUser(ctx, content):
+                await edit(ctx, content="The User ID is ``{}``".format(getUser(ctx, content).id))
+            elif getChannel(ctx, content):
+                await edit(ctx, content="The Channel ID is ``{}``".format(getChannel(ctx, content).id))
+            elif getGuild(ctx, getWithoutInvoke(ctx)):
+                await edit(ctx, content="The Guild ID is ``{}``".format(getGuild(ctx, content).id))
+            elif getEmote(ctx, content):
+                await edit(ctx, content="The Emote ID is ``{}``".format(getEmote(ctx, content).id))
+            else:
+                await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} No User, Channel, Guild or Emote found", ttl=3)
+
+    @id.command(aliases=["User"])
+    async def user(self, ctx):
+        "Get a user ID"
+        content = getWithoutInvoke(ctx)
+        if getUser(ctx, content):
+            await edit(ctx, content="The User ID is ``{}``".format(getUser(ctx, content).id))
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} No User found", ttl=3)
+
+    @id.command(aliases=["Channel"])
+    async def channel(self, ctx):
+        "Get a channel ID"
+        content = getWithoutInvoke(ctx)
+        if getChannel(ctx, content):
+            await edit(ctx, content="The Channel ID is ``{}``".format(getChannel(ctx, content).id))
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} No Channel found", ttl=3)
+
+    @id.command(aliases=["Guild", "Server", "server"])
+    async def guild(self, ctx):
+        "Get a Guild ID"
+        content = getWithoutInvoke(ctx)
+        if getGuild(ctx, content):
+            await edit(ctx, content="The Guild ID is ``{}``".format(getGuild(ctx, content).id))
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} No Guild found", ttl=3)
+
+    @id.command(aliases=["Emote"])
+    async def emote(self, ctx):
+        "Get an Emote ID"
+        content = getWithoutInvoke(ctx)
+        if getEmote(ctx, content):
+            await edit(ctx, content="The Emote ID is ``{}``".format(getEmote(ctx, content).id))
+        else:
+            await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} No Emote found", ttl=3)
 
 
 def setup(bot):
