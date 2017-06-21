@@ -7,7 +7,7 @@ import traceback
 from contextlib import redirect_stdout
 from discord.ext import commands
 from PythonGists import PythonGists
-from .utils.gets import getAgo, getChannel, getColor, getGuild, getRole, getTimeDiff, getUser, getWithoutInvoke
+from .utils.gets import getAgo, getChannel, getColor, getEmote, getGuild, getRole, getTimeDiff, getUser, getWithoutInvoke
 from .utils.helper import edit, permEmbed
 from .utils.save import delete_key, read_config, read_json, read_log, save_commands, save_config, save_log
 
@@ -50,6 +50,7 @@ class Debug:
                     "getAgo": getAgo,
                     "getChannel": getChannel,
                     "getColor": getColor,
+                    "getEmote": getEmote,
                     "getGuild": getGuild,
                     "getRole": getRole,
                     "getTimeDiff": getTimeDiff,
@@ -70,8 +71,6 @@ class Debug:
     async def debug(self, ctx, *, code: str):
         """Single line Python debug.."""
         code = code.strip('` ')
-        python = '```ocaml\n>>> Input: {}\n{}\n```'
-        result = None
         env = {
             'bot': self.bot,
             'say': ctx.send,
@@ -92,13 +91,11 @@ class Debug:
             if inspect.isawaitable(result):
                 result = await result
         except Exception as e:
-            await edit(ctx, content=python.format(code, '>>> %s' % type(e).__name__ + ': ' + str(e)))
+            await ctx.message.add_reaction('\N{HEAVY MULTIPLICATION X}')
+            await self.do_send(ctx=ctx, description="SelfBot Python Debug", value=str(type(e).__name__) + ': ' + str(e), filename='debug.py')
             return
-        if len(str(code) + '>>> Output:' + str(result)) > 2000:
-            link = PythonGists.Gist(description='SelfBot Python Debug', content=str(result), name='debug.py')
-            await edit(ctx, content=python.format(code, '>>> Output: See link below..') + '\n<{}>'.format(link))
-        else:
-            await edit(ctx, content=python.format(code, '>>> Output: %s' % result))
+        await ctx.message.add_reaction('\N{HEAVY CHECK MARK}')
+        await self.do_send(ctx=ctx, description="SelfBot Python Debug", value=str(result), filename='debug.py')
 
     def cleanup_code(self, content):
         if content.startswith('```') and content.endswith('```'):
@@ -160,11 +157,12 @@ class Debug:
                 ret = await func()
         except Exception as e:
             value = stdout.getvalue()
+            await ctx.message.add_reaction('\N{HEAVY MULTIPLICATION X}')
             await self.do_send(ctx=ctx, description="SelfBot Python Eval Error", value=str(value) + str(traceback.format_exc()), filename='eval.py')
         else:
             value = stdout.getvalue()
             try:
-                await ctx.message.add_reaction('\u2705')
+                await ctx.message.add_reaction('\N{HEAVY CHECK MARK}')
             except:
                 pass
 
