@@ -91,10 +91,16 @@ class Debug:
             if inspect.isawaitable(result):
                 result = await result
         except Exception as e:
-            await ctx.message.add_reaction('\N{HEAVY MULTIPLICATION X}')
+            try:
+                await ctx.message.add_reaction('\N{HEAVY MULTIPLICATION X}')
+            except:
+                pass
             await self.do_send(ctx=ctx, description="SelfBot Python Debug", value=str(type(e).__name__) + ': ' + str(e), filename='debug.py')
             return
-        await ctx.message.add_reaction('\N{HEAVY CHECK MARK}')
+        try:
+            await ctx.message.add_reaction('\N{HEAVY CHECK MARK}')
+        except:
+            pass
         await self.do_send(ctx=ctx, description="SelfBot Python Debug", value=str(result), filename='debug.py')
 
     def cleanup_code(self, content):
@@ -157,7 +163,10 @@ class Debug:
                 ret = await func()
         except Exception as e:
             value = stdout.getvalue()
-            await ctx.message.add_reaction('\N{HEAVY MULTIPLICATION X}')
+            try:
+                await ctx.message.add_reaction('\N{HEAVY MULTIPLICATION X}')
+            except:
+                pass
             await self.do_send(ctx=ctx, description="SelfBot Python Eval Error", value=str(value) + str(traceback.format_exc()), filename='eval.py')
         else:
             value = stdout.getvalue()
