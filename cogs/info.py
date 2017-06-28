@@ -155,6 +155,13 @@ class Info:
             em.add_field(name='Created On', value='{}, {}'.format(channel.created_at.__format__('%d/%m/%Y'), getAgo(channel.created_at)), inline=True)
             if not isinstance(ctx.channel, discord.GroupChannel):
                 em.add_field(name='Topic', value=channel.topic if channel.topic != "" else "None",  inline=False)
+                em.add_field(name='NSFW', value='False' if bool(channel.is_nsfw()) is False else 'True', inline=True)
+                em.add_field(name='Members [%s]' % len(channel.members), value='%s Online' % sum(1 for m in channel.members if m.status != discord.Status.offline), inline=True)
+            else:
+                if channel.icon is not None:
+                    em.set_thumbnail(url=channel.icon_url)
+                em.add_field(name='Owner', value=channel.owner, inline=True)
+                em.add_field(name='Members', value=', '.join(c.name for c in channel.recipients), inline=True)
             await edit(ctx, embed=em, ttl=20)
         else:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Channel not found",  ttl=5)
