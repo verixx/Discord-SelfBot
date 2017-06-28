@@ -174,21 +174,17 @@ class Info:
         unique_emojis = set(ctx.message.guild.emojis)
         em = discord.Embed(timestamp=datetime.datetime.now(), title='Emotes [%s]' % len(unique_emojis), colour=ctx.message.author.colour)
         if unique_emojis:
-            allWords = []
-            splitmsg = ''
-            count = 0
-            for blocks in unique_emojis:
-                if (len(splitmsg + str(blocks) + ' ')) <= 1024:
-                    splitmsg += str(blocks) + ' '
-                    count += 1
-                    if count == len(unique_emojis):
-                        allWords.append(splitmsg)
+            fields = []
+            field = ''
+            for i, emote in enumerate(unique_emojis, 1):
+                if (len(field + str(emote) + ' ')) <= 1024:
+                    field += str(emote) + ' '
+                    if i == len(unique_emojis):
+                        fields.append(field)
                 else:
-                    allWords.append(splitmsg)
-                    splitmsg = ''
-                    splitmsg += str(blocks) + ' '
-                    count += 1
-            for i in allWords:
+                    fields.append(field)
+                    field = str(emote) + ' '
+            for i in fields:
                 em.add_field(name='﻿', value=i, inline=False)
         else:
             em.add_field(name='Emotes', value='Not Found \N{HEAVY EXCLAMATION MARK SYMBOL}', inline=False)
