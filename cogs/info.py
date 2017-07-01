@@ -194,12 +194,12 @@ class Info:
     @commands.command(aliases=["Emote", "Emoji", "emoji"])
     async def emote(self, ctx, emote: str):
         """Infos about Emotes."""
-        emote = getEmote(ctx, getWithoutInvoke(ctx))
-        if emote:
-            date = emote.created_at.__format__('%d/%m/%Y')
+        custom_emote = getEmote(ctx, getWithoutInvoke(ctx))
+        if custom_emote:
+            date = custom_emote.created_at.__format__('%d/%m/%Y')
             e = discord.Embed(title='Custom Emote', colour=embedColor(self))
-            e.description = '**Name: **{1}\n**ID: **{2}\n**Server: **{0}\n**Created at: **{3}, {4}\n**Image: **[link]({5})'.format(emote.guild.name, emote.name, emote.id, date, getAgo(emote.created_at), emote.url)
-            e.set_thumbnail(url=emote.url)
+            e.description = '**Name: **{1}\n**ID: **{2}\n**Server: **{0}\n**Created at: **{3}, {4}\n**Image: **[link]({5})'.format(custom_emote.guild.name, custom_emote.name, custom_emote.id, date, getAgo(custom_emote.created_at), custom_emote.url)
+            e.set_thumbnail(url=custom_emote.url)
             await edit(ctx, embed=e)
         else:
             split = '\n'.join(emote).split('\n')
