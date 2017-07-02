@@ -120,7 +120,7 @@ class Misc:
                         async with cs.get(search) as r:
                             result = json.loads(await r.text())
                             if result["data"] != []:
-                                await edit(ctx, embed=discord.Embed(color=embedColor(self)).set_image(url=result["data"][0]["images"]["original"]["url"]))
+                                await edit(ctx, embed=discord.Embed(color=embedColor(self)).set_image(url=result["data"][0]["images"]["original"]["url"].split("?response")[0]))
                             else:
                                 await edit(ctx, content="Your search terms gave no results.", ttl=3)
                 except:
