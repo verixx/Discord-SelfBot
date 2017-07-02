@@ -41,13 +41,13 @@ class Tools:
     @commands.command(aliases=["Ping"])
     async def ping(self, ctx):
         """Time the websocket takes to respond."""
-        before = datetime.datetime.utcnow()
-        await (await self.bot.ws.ping())
-        ping = (datetime.datetime.utcnow() - before) * 1000
         pong = discord.Embed(title='Pong!', colour=embedColor(self))
-        pong.add_field(name="Response Time:", value='{:.2f}ms'.format(ping.total_seconds()))
         pong.set_thumbnail(url='http://i.imgur.com/SKEmkvf.png')
-        await edit(ctx, embed=pong, ttl=10)
+        before = datetime.datetime.utcnow()
+        ping_msg = await ctx.send(embed=pong)
+        ping = (datetime.datetime.utcnow() - before) * 1000
+        pong.add_field(name="Response Time:", value='{:.2f}ms'.format(ping.total_seconds()))
+        await ping_msg.edit(embed=pong, delete_after=10)
 
     # Time Since Bot is running
     @commands.command(aliases=["Uptime"])
