@@ -216,7 +216,10 @@ class Google:
                 result = json.loads(await resp.text())
                 em = discord.Embed(colour=discord.Color.blue())
                 if permEmbed(ctx.message):
-                    await edit(ctx, content=None, embed=em.set_image(url=result['items'][0]['link']))
+                    link = result['items'][0]['link']
+                    if ".gif?" in link:
+                        link = result['items'][0]['link'].split(".gif?")[0] + ".gif"
+                    await edit(ctx, content=None, embed=em.set_image(url=link))
                 else:
                     await edit(ctx, content=result['items'][0]['link'])
 
