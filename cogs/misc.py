@@ -29,7 +29,7 @@ class Misc:
                           'P': '\N{REGIONAL INDICATOR SYMBOL LETTER P}', 'Q': '\N{REGIONAL INDICATOR SYMBOL LETTER Q}', 'R': '\N{REGIONAL INDICATOR SYMBOL LETTER R}',
                           'S': '\N{REGIONAL INDICATOR SYMBOL LETTER S}', 'T': '\N{REGIONAL INDICATOR SYMBOL LETTER T}', 'U': '\N{REGIONAL INDICATOR SYMBOL LETTER U}',
                           'V': '\N{REGIONAL INDICATOR SYMBOL LETTER V}', 'W': '\N{REGIONAL INDICATOR SYMBOL LETTER W}', 'X': '\N{REGIONAL INDICATOR SYMBOL LETTER X}',
-                          'Y': '\N{REGIONAL INDICATOR SYMBOL LETTER Y}', 'Z': '\N{REGIONAL INDICATOR SYMBOL LETTER Z}'}
+                          'Y': '\N{REGIONAL INDICATOR SYMBOL LETTER Y}', 'Z': '\N{REGIONAL INDICATOR SYMBOL LETTER Z}', '!': '\u2757', '?': '\u2753', '+': '\u2795', '-': '\u2796'}
         self.numbers = {'0': '0⃣', '1': '1⃣', '2': '2⃣', '3': '3⃣', '4': '4⃣', '5': '5⃣', '6': '6⃣', '7': '7⃣', '8': '8⃣', '9': '9⃣'}
         self.emoji_reg = re.compile(r'<:.+?:([0-9]{15,21})>')
         self.link = re.compile(r'^(?:http|ftp)s?://'
@@ -130,14 +130,14 @@ class Misc:
         else:
             await edit(ctx, content="\N{HEAVY EXCLAMATION MARK SYMBOL} Specify Search", ttl=3)
 
-    def to_reginals(self, content, react):
+    def to_regionals(self, content, react):
         emote_list = []
         for i in content.split(" "):
             if self.emoji_reg.findall(i):
                 emote_list.append(self.bot.get_emoji(int(self.emoji_reg.findall(i)[0])))
             else:
                 for x in list(i):
-                    if x.isalpha():
+                    if x.isalpha() or x in ('!', '?', '-', '+'):
                         emote_list.append(self.regionals[x.upper()])
                     elif x.isdigit():
                         emote_list.append(self.numbers[x])
@@ -149,23 +149,20 @@ class Misc:
     async def react(self, ctx):
         """React to a Message with Text."""
         await ctx.message.delete()
-        msg = getWithoutInvoke(ctx)
-        split = msg.split()
-        _id = None
-        if len(split) > 1 and split[-1].isdigit():
-            _id = int(split[-1])
-            msg = msg.strip(str(_id))
-        reactions = self.to_reginals(msg, True)
-        limit = 25 if _id else 2
+        reg = re.match(r'(\d{18})(?: )(.+)|(.+)', getWithoutInvoke(ctx))
+        _id = reg.group(1)
+        msg = reg.group(2) if reg.group(2) else reg.group(3)
+        limit = 50 if _id else 1
+        reactions = self.to_regionals(str(msg), True)
         async for message in ctx.message.channel.history(limit=limit):
-            if (not _id and message.id != ctx.message.id) or (_id == message.id):
+            if (not _id and message.id != ctx.message.id) or (int(_id) == message.id):
                 for i in reactions:
                     await message.add_reaction(i)
 
     @commands.command(aliases=["Regional", "Regionals", "regionals"])
     async def regional(self, ctx, *, msg: str):
         """Convert a Text to emotes."""
-        regional_list = self.to_reginals(msg, False)
+        regional_list = self.to_regionals(msg, False)
         regional_output = []
         for i in regional_list:
             regional_output.append(" ")
