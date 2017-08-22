@@ -1,15 +1,8 @@
 [<img src="https://img.shields.io/badge/discord.py-rewrite-blue.svg?style=flat-square">](https://github.com/Rapptz/discord.py/tree/rewrite)
 [<img src="https://img.shields.io/badge/python-3.6-brightgreen.svg?style=flat-square">](https://www.python.org/downloads/release/python-360/)
 [<img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square">](https://github.com/IgneelDxD/Discord-SelfBot/blob/master/LICENSE)
-[<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=shield">](https://discord.gg/DJK8h3n)
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=I%20just%20found%20@IgneelDxD%27s%20awesome%20Discord%20SelfBot,%20check%20it%20out!%20https://igneeldxd.github.io/Discord-SelfBot/&source=webclient)
 
-
-For any kind of suggestions, feedback, support or just to hang out, I'll gladly welcome you on my [Server](https://discord.gg/DJK8h3n).
-
-If you encounter problems while setting up the SelfBot, come by and I am sure we'll find a solution.
-
-[<img src="https://canary.discordapp.com/api/guilds/266907735432495104/widget.png?style=banner2">](https://discord.gg/DJK8h3n)
 
 # IgneelDxD's Discord SelfBot
 #### This Project uses the rewrite version of [discord.py](https://github.com/Rapptz/discord.py/tree/rewrite) as well as [Python 3.6](https://www.python.org/downloads/release/python-360/) or higher. Please keep this in mind when using the bot.
