@@ -19,7 +19,7 @@ class MyAnimeList:
     def __init__(self, bot):
         self.bot = bot
         self.malid = None
-        self.loop = asyncio.get_event_loop()
+        self.loop = bot.loop
 
     async def get_google_entries(self, query, search):
         params = {
